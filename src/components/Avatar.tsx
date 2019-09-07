@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
-import AvatarImage from 'assets/avatar.png';
+import tempAvatar from 'assets/avatar.png';
 import { userApi } from 'utils/api';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'store/reducer';
@@ -17,10 +17,10 @@ interface IProps {
 
 const Avatar = styled.div<{ url: string | null; page: 'user' | 'userEdit' }>`
   position: relative;
-  border-radius: 25%;
+  border-radius: ${props => props.theme.borderRadius.avatar};
   border: 1px solid ${props => props.theme.colors.secondary};
   background-image: ${props =>
-    props.url ? `url(${props.url})` : `url(${AvatarImage})`};
+    props.url ? `url(${props.url})` : `url(${tempAvatar})`};
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

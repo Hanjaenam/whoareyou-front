@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useInput, useApi } from 'hooks';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'store/reducer';
 import Input from 'components/Common/Input';
-import UserAvatar from 'components/UserAvatar';
+import UserAvatar from 'components/Avatar';
 import Button from 'components/Common/Button';
 import { userApi } from 'utils/api';
 import { patchUser } from 'store/user/actions';
@@ -51,7 +51,7 @@ const Label = styled.label`
 const TextArea = styled.textarea`
   padding: ${props => props.theme.gap.small};
   border: 1px solid ${props => props.theme.colors.secondary};
-  border-radius: ${props => props.theme.borderRadius};
+  border-radius: ${props => props.theme.borderRadius.basic};
   font-size: ${props => props.theme.fontSize.medium};
 `;
 
@@ -61,6 +61,7 @@ export default () => {
   const introduce = useInput(user.introduce === null ? '' : user.introduce);
   const dispatch = useDispatch();
   const { loading, process } = useApi(userApi.patch);
+  const [t, s] = useState(false);
 
   const onClick = () =>
     process({ name: username.value, introduce: introduce.value }).then(() => {
@@ -93,9 +94,11 @@ export default () => {
         <Button
           theme="withBg"
           padding="small"
-          disabled={disabled()}
-          loading={loading}
-          onClick={onClick}
+          // disabled={disabled()}
+          // loading={loading}
+          loading={t}
+          // onClick={onClick}
+          onClick={() => s(true)}
         >
           확인
         </Button>

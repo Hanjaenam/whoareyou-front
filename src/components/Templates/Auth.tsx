@@ -40,7 +40,6 @@ const Right = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: ${props => props.theme.colors.bg};
   > div {
     max-width: 550px;
     width: 95%;
@@ -61,7 +60,7 @@ const Main = styled.main`
   margin: 0 auto;
   background-color: white;
   border: 1px solid ${props => props.theme.colors.secondary};
-  border-radius: ${props => props.theme.borderRadius};
+  border-radius: ${props => props.theme.borderRadius.basic};
   padding: ${props => props.theme.gap.huge};
   position: relative;
   display: grid;

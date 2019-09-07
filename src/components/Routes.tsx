@@ -1,6 +1,6 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import { LogIn, Register, FindPassword, Article, User, UserEdit } from 'pages';
+import { LogIn, Register, FindPassword, Home, User, UserEdit } from 'pages';
 import { useSelector } from 'react-redux';
 import { AppState } from 'store/reducer';
 
@@ -8,7 +8,7 @@ export default () => {
   const isLogged = useSelector((state: AppState) => state.user.email) !== '';
   return isLogged ? (
     <Switch>
-      <Route exact path="/" component={Article} />
+      <Route exact path="/" component={Home} />
       <Route path="/user/:id/edit" component={UserEdit} />
       <Route path="/user/:id" component={User} />
       <Redirect from="*" to="/" />
@@ -17,7 +17,7 @@ export default () => {
     <Switch>
       <Route exact path="/" component={LogIn} />
       <Route path="/register" component={Register} />
-      <Route path="/article" component={Article} />
+      <Route path="/article" component={Home} />
       <Route path="/findPassword" component={FindPassword} />
       <Redirect from="*" to="/" />
     </Switch>

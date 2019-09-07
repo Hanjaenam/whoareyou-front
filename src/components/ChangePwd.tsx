@@ -4,8 +4,8 @@ import { useApi, useInputWithSet } from 'hooks';
 import { userApi } from 'utils/api';
 import { setMessage } from 'store/notification/actions';
 import { useDispatch } from 'react-redux';
-import Button from './Common/Button';
-import Input from './Common/Input';
+import Button from 'components/Common/Button';
+import Input from 'components/Common/Input';
 
 const Container = styled.div`
   flex: 1;
@@ -145,7 +145,12 @@ export default () => {
       </LabelContainer>
       <ButtonContainer>
         <Left />
-        <Button disabled={disabled()} loading={loading} onClick={onClick}>
+        <Button
+          theme="withBg"
+          disabled={disabled()}
+          loading={loading}
+          onClick={onClick}
+        >
           확인
         </Button>
       </ButtonContainer>

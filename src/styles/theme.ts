@@ -1,7 +1,10 @@
 import { DefaultTheme } from 'styled-components';
 
 const myTheme: DefaultTheme = {
-  borderRadius: '3px',
+  borderRadius: {
+    basic: '3px',
+    avatar: '25%',
+  },
   breakpoints: {
     sm: '576px',
     md: '768px',
@@ -22,7 +25,7 @@ const myTheme: DefaultTheme = {
       g = '0',
       b = '0',
     }: { r?: string; g?: string; b?: string } = {}) =>
-      `rgb(${236 + Number(r)}, ${239 + Number(g)}, ${242 + Number(b)})`,
+      `rgb(${242 + Number(r)}, ${245 + Number(g)}, ${248 + Number(b)})`,
   },
   fontSize: {
     tiny: '0.7rem',
@@ -56,10 +59,12 @@ const myTheme: DefaultTheme = {
     min: {
       input: '330px',
     },
-    aside: '12rem',
+    aside: '10rem',
   },
   height: {
     header: '56px',
+    smallHeader: '42px',
+    nav: '29px',
   },
 };
 

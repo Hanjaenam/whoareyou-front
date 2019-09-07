@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import AuthTemplate from 'components/Templates/Auth';
 import Button from 'components/Common/Button';
 import Input from 'components/Common/Input';
-import VerifyKey from 'components/VerifyKey';
+import VerifyKey from 'components/Auth/VerifyKey';
 import { useInput, useApi, useCleanNotification } from 'hooks';
 import { Link } from 'react-router-dom';
 import { authApi } from 'utils/api';
@@ -65,7 +65,12 @@ export default () => {
             {...password}
             onKeyUp={e => (e.keyCode === 13 ? onRegister() : null)}
           />
-          <Button disabled={disabled()} onClick={onRegister} loading={loading}>
+          <Button
+            theme="withBg"
+            disabled={disabled()}
+            onClick={onRegister}
+            loading={loading}
+          >
             회원가입
           </Button>
           <Span>

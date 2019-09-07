@@ -6,16 +6,23 @@ import {
   ButtonCustom,
 } from 'types/mixinsButton';
 
-const _disabled = css`
+const _disabled = (theme: 'withBg' | 'noBg' | 'border') => css`
   cursor: not-allowed;
-  background-color: ${props => props.theme.colors.main};
-  opacity: 0.3;
-  > span {
-    color: white;
-    svg path {
-      color: white;
-    }
-  }
+  ${props =>
+    theme !== 'noBg'
+      ? css`
+          background-color: ${props.theme.colors.main};
+          opacity: 0.3;
+          > span {
+            color: white;
+          }
+          > svg {
+            color: white;
+          }
+        `
+      : css`
+          opacity: 0.3;
+        `}
 `;
 
 const _loading = css`
@@ -29,9 +36,9 @@ const _loading = css`
   /* loading element : <div><span></span></div> -> span포함되어있음 loading 색상이 변경되는 걸 피하기 위해 */
   > span {
     opacity: 0;
-    svg {
-      opacity: 0;
-    }
+  }
+  > svg {
+    opacity: 0;
   }
 `;
 
@@ -42,7 +49,7 @@ export const basic = (
 ) => css`
   position: relative;
   cursor: pointer;
-  border-radius: ${props => props.theme.borderRadius};
+  border-radius: ${props => props.theme.borderRadius.basic};
   padding: ${props => props.theme.gap[padding]};
   display: flex;
   align-items: center;
@@ -50,117 +57,126 @@ export const basic = (
 `;
 
 export const withBg = (
-  { color, disabled, loading }: ButtonBg = {
+  { color, disabled, loading, padding }: ButtonBg = {
     color: 'main',
     disabled: false,
     loading: false,
+    padding: 'small',
   },
-) => {
-  if (disabled) return _disabled;
-  if (loading) return _loading;
-  return css`
-    background-color: ${props => props.theme.colors[color]};
-    > span {
-      color: white;
-      svg path {
-        color: white;
-      }
-    }
-    &:hover {
-      opacity: 0.9;
-    }
-    &:active {
-      opacity: 1;
-    }
-  `;
-};
+) => css`
+${basic({ padding })}
+${disabled && _disabled('withBg')}
+${loading && _loading}
+  background-color: ${props => props.theme.colors[color]};
+  > span {
+    color: white;
+  }
+  > svg {
+    color: white;
+  }
+  ${
+    disabled || loading
+      ? null
+      : css`
+          &:hover {
+            opacity: 0.9;
+          }
+          &:active {
+            opacity: 1;
+          }
+        `
+  }
+`;
 
 export const noBg = (
-  { color, disabled, loading }: ButtonBg = {
+  { color, disabled, loading, padding }: ButtonBg = {
     color: 'main',
     disabled: false,
     loading: false,
+    padding: 'small',
   },
-) => {
-  if (disabled) return _disabled;
-  if (loading) return _loading;
-  return css`
-    &:hover {
-      background-color: ${props => props.theme.colors[color]};
-      /* loading element : <div><span></span></div> -> span포함되어있음 loading 색상이 변경되는 걸 피하기 위해 */
-      > span {
-        color: white;
-        svg path {
-          color: white;
+) => css`
+${basic({ padding })}
+${disabled && _disabled('noBg')}
+${loading && _loading}
+${
+  disabled || loading
+    ? null
+    : css`
+        &:hover {
+          background-color: ${props => props.theme.colors[color]};
+          /* loading element : <div><span></span></div> -> span포함되어있음 loading 색상이 변경되는 걸 피하기 위해 */
+          > span {
+            color: white;
+          }
+          > svg {
+            color: white;
+          }
         }
-      }
-    }
-    &:active {
-      transform: scale(0.98);
-    }
-  `;
-};
+        &:active {
+          transform: scale(0.98);
+        }
+      `
+}
+`;
 
 export const border = (
-  { color, disabled, loading }: ButtonBorder = {
+  { color, disabled, loading, padding }: ButtonBorder = {
     color: 'main',
     disabled: false,
     loading: false,
+    padding: 'small',
   },
-) => {
-  if (disabled) return _disabled;
-  if (loading) return _loading;
-  return css`
-    border: 1px solid ${props => props.theme.colors[color]};
-    &:hover {
-      background-color: ${props => props.theme.colors[color]};
-      span {
-        color: white;
-        svg path {
-          color: white;
-        }
-      }
-    }
-  `;
-};
+) => css`
+${disabled && _disabled('border')}
+${loading && _loading}
+${basic({ padding })}
+  border: 1px solid ${props => props.theme.colors[color]};
+  ${
+    disabled || loading
+      ? null
+      : css`
+          &:hover {
+            background-color: ${props => props.theme.colors[color]};
+            span {
+              color: white;
+            }
+            > svg {
+              color: white;
+            }
+          }
+        `
+  }
+`;
 
 export default (
   { padding, theme, color, loading, disabled }: ButtonCustom = {
-    padding: 'medium',
+    padding: 'small',
     theme: 'withBg',
     color: 'main',
     loading: false,
     disabled: false,
   },
 ) => {
-  const basicCss = css`
-    ${basic({ padding })};
-    ${loading && _loading};
-  `;
-
-  const withBgCss = withBg({ color, disabled, loading });
-  const noBgCss = noBg({ color, disabled, loading });
-  const borderCss = border({ color, disabled, loading });
+  const withBgCss = withBg({ color, disabled, loading, padding });
+  const noBgCss = noBg({ color, disabled, loading, padding });
+  const borderCss = border({ color, disabled, loading, padding });
 
   switch (theme) {
     case 'withBg':
       return css`
-        ${basicCss};
         ${withBgCss};
       `;
     case 'noBg':
       return css`
-        ${basicCss};
         ${noBgCss};
       `;
     case 'border':
       return css`
-        ${basicCss};
         ${borderCss};
       `;
     default:
       return css`
-        ${basicCss};
         ${withBgCss};
       `;
   }

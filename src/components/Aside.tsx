@@ -1,76 +1,53 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
-import { Link } from 'react-router-dom';
-import { sideLink } from 'styles/mixins/etc';
-import { useSelector } from 'react-redux';
-import { AppState } from 'store/reducer';
+import styled from 'styled-components';
+import { NavLink } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faClock } from '@fortawesome/free-regular-svg-icons';
+import { faFireAlt } from '@fortawesome/free-solid-svg-icons';
+import { LinkStyle } from 'styles/mixins/etc';
 
-interface IProps {
-  modal?: boolean;
-}
-
-const Container = styled.aside<{ contract: boolean; modal: boolean }>`
-  ${props =>
-    !props.modal &&
-    css`
-    width: ${props.theme.width.aside};
-    background-color: ${props.theme.colors.aside()};
-      /* contract가 true일 때는 크기를 축소시켜줍니다. */
-      ${props.contract &&
-        css`
-          width: auto;
-          ul {
-            li a {
-              padding: ${props.theme.gap.medium};
-            }
-          }
-        `}
-        @media screen and (max-width: ${props.theme.breakpoints.lg}) {
-          /* 1024px보다 웹 크기가 작으면 width는 고정으로 축소됩니다. -> contract가 변경되도 아무 반응이 없어집니다. */
-          width: auto;
-          ul {
-            li a {
-              padding: ${props.theme.gap.medium};
-            }
-          }
-        }
-        @media screen and (max-width: ${props.theme.breakpoints.sm}) {
-          ul li a {
-            display: none;
-          }
-        }
-  `};
+const Container = styled.aside`
+  position: fixed;
+  height: ${props => `calc(100vh - ${props.theme.height.header})`};
+  width: ${props => props.theme.width.aside};
+  background-color: ${props => props.theme.colors.aside()};
+  @media screen and (max-width: ${props => props.theme.breakpoints.lg}) {
+    display: none;
+  }
 `;
 
 const Menu = styled.ul``;
+
+const Icon = styled(FontAwesomeIcon)`
+  font-size: ${props => props.theme.fontSize.huge};
+  margin-right: ${props => props.theme.gap.medium};
+`;
 
 const Item = styled.li`
   display: block;
 `;
 
-const SLink = styled(Link)`
-  padding: ${props => props.theme.gap.medium} ${props => props.theme.gap.huge};
-  ${sideLink}
+const SLink = styled(NavLink)`
+  ${LinkStyle('aside')}
 `;
 
-const Aside = ({ modal = false }: IProps) => {
-  const contract = useSelector(
-    (state: AppState) => state.header.contract.aside,
-  );
-  return (
-    <Container contract={contract} modal={modal}>
-      <Menu>
-        <Item>
-          <SLink to="/">최신</SLink>
-        </Item>
-        <Item>
-          <SLink to="/tag">인기</SLink>
-        </Item>
-        {/* <Item>
-<SLink to="/tag">구독</SLink>
-</Item> */}
-      </Menu>
-    </Container>
-  );
-};
+const Aside = () => (
+  <Container>
+    <Menu>
+      <Item>
+        <SLink to="/">
+          <Icon icon={faClock} />
+          최신
+        </SLink>
+      </Item>
+      <Item>
+        <SLink to="/tag">
+          <Icon icon={faFireAlt} />
+          인기
+        </SLink>
+      </Item>
+    </Menu>
+  </Container>
+);
+
 export default Aside;

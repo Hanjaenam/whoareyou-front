@@ -119,7 +119,12 @@ export default ({
         &nbsp;
         {resendLoading && <Loader />}
       </ReceivedEmailContainer>
-      <Button disabled={disabled()} onClick={verifyKey} loading={verifyLoading}>
+      <Button
+        theme="withBg"
+        disabled={disabled()}
+        onClick={verifyKey}
+        loading={verifyLoading}
+      >
         확인
       </Button>
     </ModifyButtonStyle>

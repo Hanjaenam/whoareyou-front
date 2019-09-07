@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 import AuthTemplate from 'components/Templates/Auth';
 import Button from 'components/Common/Button';
 import Input from 'components/Common/Input';
-import VerifyKey from 'components/VerifyKey';
+import VerifyKey from 'components/Auth/VerifyKey';
 import { Link } from 'react-router-dom';
 
 interface IProps {
@@ -30,7 +30,7 @@ const InputContainer = styled.div`
 const button = css`
   cursor: pointer;
   border: 1px solid ${props => props.theme.colors.secondary};
-  border-radius: ${props => props.theme.borderRadius};
+  border-radius: ${props => props.theme.borderRadius.basic};
   background-color: ${props => props.theme.colors.main};
   padding: ${props => props.theme.gap.medium};
 `;
@@ -127,7 +127,12 @@ export default ({
             {...password}
             onKeyUp={e => (e.keyCode === 13 ? onLogIn() : null)}
           />
-          <Button disabled={disabled()} onClick={onLogIn} loading={loading}>
+          <Button
+            theme="withBg"
+            disabled={disabled()}
+            onClick={onLogIn}
+            loading={loading}
+          >
             로그인
           </Button>
           <Text>

@@ -6,8 +6,9 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import Loader from './Loader';
 
 interface IProps {
+  className?: string;
   padding?: 'tiny' | 'small' | 'medium';
-  theme?: 'withBg' | 'noBg' | 'border';
+  theme: 'withBg' | 'noBg' | 'border';
   color?: 'main' | 'danger';
   loading?: boolean;
   disabled?: boolean;
@@ -38,9 +39,15 @@ const Text = styled.span`
   user-select: none;
 `;
 
+const Icon = styled(FontAwesomeIcon)`
+  font-size: 1rem;
+  user-select: none;
+`;
+
 export default ({
+  className,
   padding = 'small',
-  theme = 'withBg',
+  theme,
   color = 'main',
   children,
   disabled = false,
@@ -49,17 +56,12 @@ export default ({
   onClick,
 }: IProps) => (
   <Button
+    className={className}
     styles={{ padding, theme, color }}
     status={{ loading, disabled }}
     onClick={disabled || loading ? undefined : onClick}
   >
     {loading && <Loader />}
-    {icon === undefined ? (
-      <Text>{children}</Text>
-    ) : (
-      <Text>
-        <FontAwesomeIcon icon={icon} />
-      </Text>
-    )}
+    {icon === undefined ? <Text>{children}</Text> : <Icon icon={icon} />}
   </Button>
 );

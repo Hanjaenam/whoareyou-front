@@ -124,6 +124,7 @@ export default ({
           </ReceivedEmailContainer>
         )}
         <Button
+          theme="withBg"
           disabled={disabled() || (step === 2 && sendLoading)}
           loading={confirmLoading}
           onClick={onClick}
