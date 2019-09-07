@@ -1,0 +1,42 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    "airbnb",
+    "prettier",
+    "prettier/react"
+  ],
+  "plugins": ["react"],
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "globals": {
+    "Atomics": "readonly",
+    "SharedArrayBuffer": "readonly"
+  },
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "paths": ["src"],
+        "extensions": [".d.ts", ".ts", ".tsx"]
+      }
+    }
+  },
+  "rules": {
+    "react/jsx-filename-extension": [1, { "extensions": [".tsx"] }],
+    "@typescript-eslint/explicit-function-return-type": 0,
+    "@typescript-eslint/interface-name-prefix": 0,
+    "react/jsx-props-no-spreading": 0,
+    "no-nested-ternary": 0,
+    "no-underscore-dangle": 0,
+    "consistent-return": 0
+  }
+}
