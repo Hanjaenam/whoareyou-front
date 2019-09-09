@@ -2,7 +2,7 @@ import { ActionTypes, State } from './types';
 import { LOG_IN, PATCH, LOG_OUT } from './actions';
 
 const initialState: State = {
-  id: -1,
+  id: '',
   email: '',
   name: '',
   avatar: null,
@@ -16,7 +16,7 @@ const initialState: State = {
 export default (state = initialState, action: ActionTypes): State => {
   switch (action.type) {
     case LOG_IN: {
-      const { user, token } = action.payload;
+      const { token, ...user } = action.payload;
       if (token) window.localStorage.setItem('token', token);
       return user;
     }

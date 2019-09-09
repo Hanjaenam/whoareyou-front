@@ -43,9 +43,6 @@ export const authApi = {
 
 const UserAxios = axios.create({
   baseURL: '/api/user',
-  headers: {
-    authorization: `Bearer ${window.localStorage.getItem('token')}`,
-  },
 });
 
 export const userApi = {
@@ -53,19 +50,33 @@ export const userApi = {
     UserAxios({
       url: '/me',
       method: 'GET',
+      headers: {
+        authorization: `Token ${window.localStorage.getItem('token')}`,
+      },
     }),
-  delete: () => UserAxios({ url: '/', method: 'DELETE' }),
+  delete: () =>
+    UserAxios({
+      url: '/',
+      method: 'DELETE',
+      headers: {
+        authorization: `Token ${window.localStorage.getItem('token')}`,
+      },
+    }),
   patch: ({ name, introduce }: UserPatch) =>
     UserAxios({
       url: '/',
       method: 'PATCH',
       data: { name, introduce },
+      headers: {
+        authorization: `Token ${window.localStorage.getItem('token')}`,
+      },
     }),
   patchAvatar: ({ formData }: PatchAvatar) =>
     UserAxios({
       url: '/avatar',
       method: 'PATCH',
       headers: {
+        authorization: `Token ${window.localStorage.getItem('token')}`,
         'content-type': 'multipart/form-data',
       },
       data: formData,
@@ -75,6 +86,10 @@ export const userApi = {
     UserAxios({
       url: '/changePassword',
       method: 'PATCH',
+      headers: {
+        authorization: `Token ${window.localStorage.getItem('token')}`,
+        'content-type': 'multipart/form-data',
+      },
       data: { prePassword, newPassword },
     }),
 };

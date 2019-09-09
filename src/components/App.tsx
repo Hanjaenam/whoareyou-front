@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { HashRouter as Router } from 'react-router-dom';
 import { userApi } from 'utils/api';
 import { logIn } from 'store/user/actions';
+import { AxiosError } from 'axios';
 import { GetMeRes } from 'types/apiResponse';
 import Routes from './Routes';
 
@@ -14,11 +15,20 @@ export default () => {
 
   // 처음 들어올 때 get user
   useEffect(() => {
-    if (window.localStorage.getItem('token')) {
-      userApi.getMe().then(({ data }: GetMeRes | { data: '' }) => {
-        if (data !== '') dispatch(logIn({ user: data }));
-        setLoading(false);
-      });
+    const token = window.localStorage.getItem('token');
+    if (token) {
+      userApi
+        .getMe()
+        .then(({ data }: { data: GetMeRes }) => {
+          dispatch(logIn(data));
+          setLoading(false);
+        })
+        .catch((err: AxiosError) => {
+          if (err.response && err.response.status === 401) {
+            window.localStorage.removeItem('token');
+            setLoading(false);
+          }
+        });
     } else {
       setLoading(false);
     }

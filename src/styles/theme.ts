@@ -4,6 +4,7 @@ const myTheme: DefaultTheme = {
   borderRadius: {
     basic: '3px',
     avatar: '25%',
+    comment: '15px',
   },
   breakpoints: {
     sm: '576px',
@@ -20,11 +21,7 @@ const myTheme: DefaultTheme = {
     danger: '#E74C3D',
     info: '#f39c12',
     blue: '#3897f0',
-    aside: ({
-      r = '0',
-      g = '0',
-      b = '0',
-    }: { r?: string; g?: string; b?: string } = {}) =>
+    aside: ({ r = '0', g = '0', b = '0' }: { r?: string; g?: string; b?: string } = {}) =>
       `rgb(${242 + Number(r)}, ${245 + Number(g)}, ${248 + Number(b)})`,
   },
   fontSize: {
@@ -60,11 +57,19 @@ const myTheme: DefaultTheme = {
       input: '330px',
     },
     aside: '10rem',
+    article: {
+      container: '602px',
+      image: '600px',
+    },
   },
   height: {
+    articleContent: '60px',
     header: '56px',
     smallHeader: '42px',
     nav: '29px',
+  },
+  zIndex: {
+    header: 1,
   },
 };
 

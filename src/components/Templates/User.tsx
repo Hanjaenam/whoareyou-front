@@ -2,11 +2,11 @@ import React, { ReactNode } from 'react';
 import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
 import linkCss from 'styles/mixins/link';
-import UserAvatar from 'components/Avatar';
+import UserAvatar from 'components/User/Avatar';
 import { MainHeightAboveLg, mainHeightBelowLg } from 'styles/mixins/etc';
 
 interface IProps {
-  id: number;
+  id: string;
   name: string;
   introduce: string | null;
   avatar: string | null;
@@ -119,9 +119,7 @@ export default ({ id, avatar, name, introduce, children }: IProps) => (
             <Name>{name}</Name>
             <EditProfile to={`/user/${id}/edit`}>프로필 수정</EditProfile>
           </NameContainer>
-          <Introduce isNull={introduce === null}>
-            {introduce || '소개글이 없습니다...'}
-          </Introduce>
+          <Introduce isNull={introduce === null}>{introduce || '소개글이 없습니다...'}</Introduce>
         </TextContainer>
       </InfoContainer>
       <Nav>

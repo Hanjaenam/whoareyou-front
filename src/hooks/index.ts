@@ -9,9 +9,7 @@ const isDev = process.env.NODE_ENV;
 export const useInputWithSet = (defaultValue: useInputParams = '') => {
   const [value, setValue] = useState(defaultValue);
 
-  const _onChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
+  const _onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { target } = e;
     setValue(target.value);
   };
@@ -56,9 +54,38 @@ export const useApi = <T, K extends keyof T>(
         .catch((err: AxiosError) => {
           if (err.response && controlError.includes(err.response.status)) {
             setStatus(s => ({ ...s, loading: false, failure: true }));
-            dispatch(
-              setMessage({ type: 'danger', value: err.response.data.message }),
-            );
+            dispatch(setMessage({ type: 'danger', value: err.response.data.message }));
+          } else if (isDev === 'development') {
+            throw new Error(err.message);
+          }
+
+          return rej(err);
+        }),
+    );
+  };
+  return { ...status, process };
+};
+
+export const useApi2 = (api: () => AxiosPromise<any>) => {
+  const controlError = [400, 401, 403, 404, 409, 422];
+  const [status, setStatus] = useState<Status>({
+    loading: false,
+    success: false,
+    failure: false,
+  });
+  const dispatch = useDispatch();
+  const process = (): Promise<any> => {
+    setStatus(s => ({ ...s, loading: true }));
+    return new Promise<any>((res, rej) =>
+      api()
+        .then(value => {
+          setStatus(s => ({ ...s, loading: false, success: true }));
+          return res(value);
+        })
+        .catch((err: AxiosError) => {
+          if (err.response && controlError.includes(err.response.status)) {
+            setStatus(s => ({ ...s, loading: false, failure: true }));
+            dispatch(setMessage({ type: 'danger', value: err.response.data.message }));
           } else if (isDev === 'development') {
             throw new Error(err.message);
           }

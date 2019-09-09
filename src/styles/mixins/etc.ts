@@ -23,12 +23,10 @@ export const LinkStyle = (as: 'nav' | 'aside') => css`
   display: block;
   ${as === 'aside'
     ? css`
-        padding: ${props => props.theme.gap.medium}
-          ${props => props.theme.gap.huge};
+        padding: ${props => props.theme.gap.medium} ${props => props.theme.gap.huge};
         font-size: ${props => props.theme.fontSize.large};
         &:hover {
-          background-color: ${props =>
-            props.theme.colors.aside({ r: '-10', g: '-10', b: '-10' })};
+          background-color: ${props => props.theme.colors.aside({ r: '-10', g: '-10', b: '-10' })};
         }
         &:active {
           color: ${props => props.theme.colors.font};
@@ -54,3 +52,12 @@ export const LinkStyle = (as: 'nav' | 'aside') => css`
 export const MainHeightAboveLg = `calc(100vh - ${myTheme.height.header})`;
 
 export const mainHeightBelowLg = `calc(100vh - ${myTheme.height.header} - ${myTheme.height.nav})`;
+
+export const blueColorClick = css`
+  color: ${props => props.theme.colors.blue};
+  user-select: none;
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
+`;

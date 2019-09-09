@@ -1,5 +1,5 @@
-interface User {
-  id: number;
+export interface GetMeRes {
+  id: string;
   email: string;
   name: string;
   valid: boolean;
@@ -8,20 +8,10 @@ interface User {
   googleId: string | null;
   naverId: string | null;
   createdAt: string;
-  token: string;
 }
-
 export interface Message {
-  data: {
-    message: string;
-  };
+  message: string;
 }
-export interface LogInRes {
-  data: { user: User; token: string };
-}
-export interface GetMeRes {
-  data: User;
-}
-export interface PatchAvatarRes {
-  data: string;
+export interface LogInRes extends GetMeRes {
+  token: string;
 }

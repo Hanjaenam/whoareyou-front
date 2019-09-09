@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { useInput, useApi } from 'hooks';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'store/reducer';
 import Input from 'components/Common/Input';
-import UserAvatar from 'components/Avatar';
+import UserAvatar from 'components/User/Avatar';
 import Button from 'components/Common/Button';
 import { userApi } from 'utils/api';
 import { patchUser } from 'store/user/actions';
@@ -61,7 +61,6 @@ export default () => {
   const introduce = useInput(user.introduce === null ? '' : user.introduce);
   const dispatch = useDispatch();
   const { loading, process } = useApi(userApi.patch);
-  const [t, s] = useState(false);
 
   const onClick = () =>
     process({ name: username.value, introduce: introduce.value }).then(() => {
@@ -71,10 +70,7 @@ export default () => {
 
   const disabled = () => {
     const _introduce = user.introduce === null ? '' : user.introduce;
-    if (
-      (user.name === username.value && _introduce === introduce.value) ||
-      username.value === ''
-    )
+    if ((user.name === username.value && _introduce === introduce.value) || username.value === '')
       return true;
     return false;
   };
@@ -94,11 +90,9 @@ export default () => {
         <Button
           theme="withBg"
           padding="small"
-          // disabled={disabled()}
-          // loading={loading}
-          loading={t}
-          // onClick={onClick}
-          onClick={() => s(true)}
+          disabled={disabled()}
+          loading={loading}
+          onClick={onClick}
         >
           확인
         </Button>

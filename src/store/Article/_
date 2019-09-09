@@ -1,0 +1,12 @@
+export interface State {
+  id: string;
+  author: string;
+  authorAvt: string;
+  files: string[];
+  content: string;
+  favorite: number;
+  isLiked: boolean;
+  isBookmarked: boolean;
+  createdAt: string;
+  comment: [{ author: string; content: string }];
+}

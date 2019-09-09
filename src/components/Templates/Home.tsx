@@ -22,16 +22,12 @@ const Layout = styled.div<{ contract: boolean }>`
   flex: 1;
   display: flex;
   margin-top: ${props =>
-    props.contract
-      ? props.theme.height.smallHeader
-      : props.theme.height.header};
+    props.contract ? props.theme.height.smallHeader : props.theme.height.header};
   @media screen and (max-width: ${props => props.theme.breakpoints.lg}) {
     margin-top: ${props =>
-      `calc(${
-        props.contract
-          ? props.theme.height.smallHeader
-          : props.theme.height.header
-      } + ${props.theme.height.nav})`};
+      `calc(${props.contract ? props.theme.height.smallHeader : props.theme.height.header} + ${
+        props.theme.height.nav
+      })`};
   }
 `;
 

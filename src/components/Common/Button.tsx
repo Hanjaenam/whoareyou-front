@@ -14,7 +14,8 @@ interface IProps {
   disabled?: boolean;
   children?: string;
   icon?: IconProp;
-  onClick?: (e: React.MouseEvent) => void;
+  // Article-Author,index,Create / Header -> () => null
+  onClick: (e: React.MouseEvent) => void;
 }
 
 interface IButton {

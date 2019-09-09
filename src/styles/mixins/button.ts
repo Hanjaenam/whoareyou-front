@@ -1,12 +1,7 @@
 import { css } from 'styled-components';
-import {
-  ButtonBasic,
-  ButtonBg,
-  ButtonBorder,
-  ButtonCustom,
-} from 'types/mixinsButton';
+import { ButtonBasic, ButtonBg, ButtonBorder, ButtonCustom } from 'types/mixinsButton';
 
-const _disabled = (theme: 'withBg' | 'noBg' | 'border') => css`
+export const _disabled = (theme: 'withBg' | 'noBg' | 'border') => css`
   cursor: not-allowed;
   ${props =>
     theme !== 'noBg'
@@ -25,7 +20,7 @@ const _disabled = (theme: 'withBg' | 'noBg' | 'border') => css`
         `}
 `;
 
-const _loading = css`
+export const _loading = css`
   cursor: not-allowed;
   background-color: ${props => props.theme.colors.main};
   opacity: 0.3;

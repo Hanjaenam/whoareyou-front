@@ -6,6 +6,7 @@ declare module 'styled-components' {
     borderRadius: {
       basic: string;
       avatar: string;
+      comment: string;
     };
     breakpoints: {
       sm: string;
@@ -57,11 +58,14 @@ declare module 'styled-components' {
         input: string;
       };
       aside: string;
+      article: { container: string; image: string };
     };
     height: {
+      articleContent: string;
       header: string;
       smallHeader: string;
       nav: string;
     };
+    zIndex: { header: number };
   }
 }

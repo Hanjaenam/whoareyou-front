@@ -3,6 +3,8 @@ import {
   TOGGLE_VISIBLE_POPOVER,
   HIDE_USER_POPOVEER,
   SET_CONTRACT_HEADER,
+  TOGGLE_CREATE_ARTICLE,
+  HIDE_CREATE_ARTICLE,
 } from './actions';
 
 const initialState: State = {
@@ -11,6 +13,7 @@ const initialState: State = {
     asideModal: false,
   },
   contract: false,
+  createArticle: true,
 };
 export default (state = initialState, action: ActionTypes): State => {
   switch (action.type) {
@@ -28,6 +31,16 @@ export default (state = initialState, action: ActionTypes): State => {
       return {
         ...state,
         contract: action.payload,
+      };
+    case TOGGLE_CREATE_ARTICLE:
+      return {
+        ...state,
+        createArticle: !state.createArticle,
+      };
+    case HIDE_CREATE_ARTICLE:
+      return {
+        ...state,
+        createArticle: false,
       };
     default:
       return state;

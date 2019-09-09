@@ -3,8 +3,9 @@ import styled, { css } from 'styled-components';
 import AuthTemplate from 'components/Templates/Auth';
 import Button from 'components/Common/Button';
 import Input from 'components/Common/Input';
-import VerifyKey from 'components/Auth/VerifyKey';
+import VerifyKey from 'components/VerifyKey';
 import { Link } from 'react-router-dom';
+import Axios from 'axios';
 
 interface IProps {
   disabled: () => boolean;
@@ -108,14 +109,7 @@ const ButtonContainer = styled.div`
   grid-gap: ${props => props.theme.gap.medium};
 `;
 
-export default ({
-  disabled,
-  email,
-  loading,
-  onLogIn,
-  password,
-  requireVerify,
-}: IProps) => (
+export default ({ disabled, email, loading, onLogIn, password, requireVerify }: IProps) => (
   <AuthTemplate>
     {!requireVerify ? (
       <>
@@ -127,19 +121,14 @@ export default ({
             {...password}
             onKeyUp={e => (e.keyCode === 13 ? onLogIn() : null)}
           />
-          <Button
-            theme="withBg"
-            disabled={disabled()}
-            onClick={onLogIn}
-            loading={loading}
-          >
+          <Button theme="withBg" disabled={disabled()} onClick={onLogIn} loading={loading}>
             로그인
           </Button>
           <Text>
             처음이신가요?&nbsp;
             <SLink to="/register">회원가입</SLink>
             <span>&nbsp;or&nbsp;</span>
-            <SLink to="/article">둘러보기</SLink>
+            <SLink to="/latest">둘러보기</SLink>
           </Text>
           <Text>
             <SLink to="/findPassword">비밀번호를 잊으셨나요?</SLink>
@@ -150,17 +139,11 @@ export default ({
         </Separator>
         <ButtonContainer>
           <GoogleButton
-            onClick={() =>
-              window.open('http://localhost:4000/api/auth/google', '_self')
-            }
+            onClick={() => window.open('http://localhost:4000/api/auth/google', '_self')}
           >
             <span>Google</span>
           </GoogleButton>
-          <NaverButton
-            onClick={() =>
-              window.open('http://localhost:4000/api/auth/naver', '_self')
-            }
-          >
+          <NaverButton onClick={() => window.open('http://localhost:4000/api/auth/naver', '_self')}>
             <span>Naver</span>
           </NaverButton>
         </ButtonContainer>

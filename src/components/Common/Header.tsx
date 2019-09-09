@@ -7,15 +7,15 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useInput } from 'hooks';
 import { faSearch, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { AppState } from 'store/reducer';
-import { toggleVisiblePopover, hideUserPopover } from 'store/header/actions';
+import { toggleVisiblePopover, hideUserPopover, toggleCreateArticle } from 'store/header/actions';
 import Input from './Input';
-import UserPopover from '../Popover';
+import UserPopover from '../User/Popover';
 import HeaderNav from './HeaderNav';
 
 const Layout = styled.div`
   @media screen and (max-width: ${props => props.theme.breakpoints.lg}) {
     background-color: white;
-    z-index: 1;
+    z-index: ${props => props.theme.zIndex.header};
     position: fixed;
     border-bottom: 1px solid ${props => props.theme.colors.secondary};
   }
@@ -25,7 +25,7 @@ const Container = styled.header<{ contract: boolean }>`
   transition: height 0.2s;
   position: fixed;
   width: 100vw;
-  z-index: 1;
+  z-index: ${props => props.theme.zIndex.header};
   display: grid;
   grid-auto-flow: column;
   grid-template-columns: auto 1fr auto;
@@ -86,8 +86,8 @@ export default () => {
   const search = useInput('');
   const username = useSelector((state: AppState) => state.user.name);
   const visible = useSelector((state: AppState) => state.header.visible.userPopover);
-  const { contract } = useSelector((state: AppState) => state.header);
   const dispatch = useDispatch();
+  const { contract } = useSelector((state: AppState) => state.header);
 
   const hideUserPopoverHandler = () => visible && dispatch(hideUserPopover());
 
@@ -110,16 +110,18 @@ export default () => {
     <Layout>
       <Container contract={contract}>
         <Flex>
-          <CustomLink to="/">WhoAreYou</CustomLink>
+          <CustomLink to="/latest">WhoAreYou</CustomLink>
         </Flex>
         <Flex>
           <CustomInput padding="tiny" placeholder="검색" {...search} />
-          <Button theme="withBg" icon={faSearch} />
+          <Button theme="withBg" icon={faSearch} onClick={() => null} />
         </Flex>
         <Flex>
-          <Button icon={faPlus} theme="noBg" />
           {username && (
-            <UserContainer className="username">
+            <Button icon={faPlus} theme="noBg" onClick={() => dispatch(toggleCreateArticle())} />
+          )}
+          <UserContainer className="username">
+            {username ? (
               <Button
                 theme="noBg"
                 onClick={e => {
@@ -129,9 +131,11 @@ export default () => {
               >
                 {username}
               </Button>
-              <UserPopover />
-            </UserContainer>
-          )}
+            ) : (
+              <CustomLink to="/">로그인</CustomLink>
+            )}
+            <UserPopover />
+          </UserContainer>
         </Flex>
       </Container>
       <HeaderNav />

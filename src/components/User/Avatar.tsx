@@ -7,7 +7,6 @@ import { AppState } from 'store/reducer';
 import { useApi } from 'hooks';
 import { setMessage } from 'store/notification/actions';
 import { patchUser } from 'store/user/actions';
-import { PatchAvatarRes } from 'types/apiResponse';
 
 interface IProps {
   id?: string;
@@ -19,8 +18,7 @@ const Avatar = styled.div<{ url: string | null; page: 'user' | 'userEdit' }>`
   position: relative;
   border-radius: ${props => props.theme.borderRadius.avatar};
   border: 1px solid ${props => props.theme.colors.secondary};
-  background-image: ${props =>
-    props.url ? `url(${props.url})` : `url(${tempAvatar})`};
+  background-image: ${props => (props.url ? `url(${props.url})` : `url(${tempAvatar})`)};
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -101,9 +99,9 @@ export default ({ id, avatar, page }: IProps) => {
     if (image === null) return;
     const formData = new FormData();
     formData.append('avatar', image);
-    formData.append('id', userId.toString(10));
+    formData.append('id', userId);
     formData.append('name', name);
-    process({ formData }).then(({ data }: PatchAvatarRes) => {
+    process({ formData }).then(({ data }: { data: string }) => {
       dispatch(patchUser({ avatar: data }));
       dispatch(setMessage({ type: 'success', value: '수정되었습니다.' }));
     });
