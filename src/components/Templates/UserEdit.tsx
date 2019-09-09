@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'store/reducer';
 import { setEditType } from 'store/userEdit/actions';
+import { opacityEffect } from 'styles/mixins/etc';
 
 interface IProps {
   children: ReactNode;
@@ -16,7 +17,7 @@ const Container = styled.div`
   background-color: white;
   border: 1px solid ${props => props.theme.colors.secondary};
   margin-top: ${props => props.theme.gap.large};
-  border-radius: ${props => props.theme.borderRadius};
+  border-radius: ${props => props.theme.borderRadius.basic};
   @media screen and (max-width: ${props => props.theme.breakpoints.sm}) {
     width: 100%;
     border-left: 0;
@@ -40,23 +41,20 @@ const Item = styled.li`
 const Text = styled.p<{ active: boolean }>`
   user-select: none;
   padding: ${props => props.theme.gap.medium};
-  color: ${props => props.theme.colors.secondary};
   box-sizing: border-box;
   border-right: 2px solid transparent;
+  ${opacityEffect};
   ${props =>
     props.active
       ? css`
+          opacity: 1;
           color: ${props.theme.colors.font};
-          border-right: 2px solid ${props.theme.colors.main};
+          border-right: 3px solid ${props.theme.colors.main};
         `
       : css`
           &:hover {
             background-color: ${props.theme.colors.secondary};
-            color: ${props.theme.colors.font};
-            border-right: 2px solid ${props.theme.colors.main};
-          }
-          &:active {
-            opacity: 0.8;
+            border-right: 3px solid ${props.theme.colors.main};
           }
         `};
   @media screen and (max-width: ${props => props.theme.breakpoints.md}) {

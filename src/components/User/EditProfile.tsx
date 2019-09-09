@@ -4,7 +4,7 @@ import { useInput, useApi } from 'hooks';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'store/reducer';
 import Input from 'components/Common/Input';
-import UserAvatar from 'components/UserAvatar';
+import UserAvatar from 'components/User/Avatar';
 import Button from 'components/Common/Button';
 import { userApi } from 'utils/api';
 import { patchUser } from 'store/user/actions';
@@ -51,7 +51,7 @@ const Label = styled.label`
 const TextArea = styled.textarea`
   padding: ${props => props.theme.gap.small};
   border: 1px solid ${props => props.theme.colors.secondary};
-  border-radius: ${props => props.theme.borderRadius};
+  border-radius: ${props => props.theme.borderRadius.basic};
   font-size: ${props => props.theme.fontSize.medium};
 `;
 
@@ -70,10 +70,7 @@ export default () => {
 
   const disabled = () => {
     const _introduce = user.introduce === null ? '' : user.introduce;
-    if (
-      (user.name === username.value && _introduce === introduce.value) ||
-      username.value === ''
-    )
+    if ((user.name === username.value && _introduce === introduce.value) || username.value === '')
       return true;
     return false;
   };

@@ -2,10 +2,11 @@ import React, { ReactNode } from 'react';
 import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
 import linkCss from 'styles/mixins/link';
-import UserAvatar from 'components/UserAvatar';
+import UserAvatar from 'components/User/Avatar';
+import { MainHeightAboveLg, mainHeightBelowLg } from 'styles/mixins/etc';
 
 interface IProps {
-  id: number;
+  id: string;
   name: string;
   introduce: string | null;
   avatar: string | null;
@@ -15,7 +16,10 @@ interface IProps {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: ${MainHeightAboveLg};
+  @media screen and (max-width: ${props => props.theme.breakpoints.lg}) {
+    min-height: ${mainHeightBelowLg};
+  }
 `;
 
 const InfoContainer = styled.div`
@@ -107,23 +111,23 @@ const Children = styled.div`
 
 export default ({ id, avatar, name, introduce, children }: IProps) => (
   <Container>
-    <InfoContainer>
-      <UserAvatar avatar={avatar} page="user" />
-      <TextContainer>
-        <NameContainer>
-          <Name>{name}</Name>
-          <EditProfile to={`/user/${id}/edit`}>프로필 수정</EditProfile>
-        </NameContainer>
-        <Introduce isNull={introduce === null}>
-          {introduce || '소개글이 없습니다...'}
-        </Introduce>
-      </TextContainer>
-    </InfoContainer>
-    <Nav>
-      <Item>
-        <span>내 글</span>
-      </Item>
-    </Nav>
+    <div>
+      <InfoContainer>
+        <UserAvatar avatar={avatar} page="user" />
+        <TextContainer>
+          <NameContainer>
+            <Name>{name}</Name>
+            <EditProfile to={`/user/${id}/edit`}>프로필 수정</EditProfile>
+          </NameContainer>
+          <Introduce isNull={introduce === null}>{introduce || '소개글이 없습니다...'}</Introduce>
+        </TextContainer>
+      </InfoContainer>
+      <Nav>
+        <Item>
+          <span>내 글</span>
+        </Item>
+      </Nav>
+    </div>
     <Children>{children}</Children>
   </Container>
 );

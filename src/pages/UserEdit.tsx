@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import HomeTemplate from 'components/Templates/Home';
 import UserEditTemp from 'components/Templates/UserEdit';
-import UserEditProfile from 'components/UserEditProfile';
+import EditProfile from 'components/User/EditProfile';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'store/reducer';
-import ChangePwd from 'components/ChangePwd';
+import ChangePwd from 'components/User/ChangePwd';
 import { setEditType } from 'store/userEdit/actions';
 
 export default () => {
@@ -18,9 +18,7 @@ export default () => {
   );
   return (
     <HomeTemplate>
-      <UserEditTemp>
-        {editType === 'profile' ? <UserEditProfile /> : <ChangePwd />}
-      </UserEditTemp>
+      <UserEditTemp>{editType === 'profile' ? <EditProfile /> : <ChangePwd />}</UserEditTemp>
     </HomeTemplate>
   );
 };

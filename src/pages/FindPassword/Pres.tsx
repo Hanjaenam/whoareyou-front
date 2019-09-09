@@ -40,8 +40,7 @@ const Explain = styled.p`
 const ModifyButtonStyle = styled.div<{ step: number }>`
   display: flex;
   align-items: center;
-  justify-content: ${props =>
-    props.step === 2 ? 'space-between' : 'flex-end'};
+  justify-content: ${props => (props.step === 2 ? 'space-between' : 'flex-end')};
 `;
 
 const ReceivedEmailContainer = styled.div`
@@ -120,10 +119,11 @@ export default ({
               보안코드를 받지 못했나요?
             </NotReceivedEmail>
             &nbsp;
-            {sendLoading && <Loader color={myTheme.colors.secondary} />}
+            {sendLoading && <Loader color={myTheme.colors.secondary} position="relative" />}
           </ReceivedEmailContainer>
         )}
         <Button
+          theme="withBg"
           disabled={disabled() || (step === 2 && sendLoading)}
           loading={confirmLoading}
           onClick={onClick}

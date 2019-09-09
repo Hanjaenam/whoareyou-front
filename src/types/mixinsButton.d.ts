@@ -6,12 +6,14 @@ export interface ButtonBg {
   color: 'main' | 'danger';
   disabled: boolean;
   loading: boolean;
+  padding: 'tiny' | 'small' | 'medium';
 }
 
 export interface ButtonBorder {
   color: 'main' | 'danger';
   disabled: boolean;
   loading: boolean;
+  padding: 'tiny' | 'small' | 'medium';
 }
 
 export interface ButtonCustom {

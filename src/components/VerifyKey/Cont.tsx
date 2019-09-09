@@ -15,26 +15,19 @@ interface IProps {
 export default ({ email, type }: IProps) => {
   const secretKey = useInput();
   const dispatch = useDispatch();
-  const [send, setSend] = useState(type !== 'logIn');
-  const { process: processVerify, loading: verifyLoading } = useApi(
-    authApi.verifySecretKey,
-  );
-  const { process: processResend, loading: resendLoading } = useApi(
-    authApi.sendSecretKey,
-  );
+  const [isSended, setSend] = useState(type !== 'logIn');
+  const { process: processVerify, loading: verifyLoading } = useApi(authApi.verifySecretKey);
+  const { process: processResend, loading: resendLoading } = useApi(authApi.sendSecretKey);
 
   const disabled = () => secretKey.value === '' || resendLoading;
 
   const verifyKey = () =>
-    processVerify({ email, secret: secretKey.value }).then(
-      ({ data }: LogInRes) => {
-        dispatch(logIn(data));
-      },
+    processVerify({ email, secret: secretKey.value }).then(({ data }: { data: LogInRes }) =>
+      dispatch(logIn(data)),
     );
 
   const sendSecret = () => {
-    if (!window.confirm(`${email} 로 보안코드를 다시 전송하시겠습니까?`))
-      return;
+    if (!window.confirm(`${email} 로 보안코드를 다시 전송하시겠습니까?`)) return;
     processResend({ email, type: 'register' })
       .then(() => {
         dispatch(
@@ -50,7 +43,7 @@ export default ({ email, type }: IProps) => {
   return (
     <VerifyKey
       disabled={disabled}
-      send={send}
+      isSended={isSended}
       email={email}
       verifyKey={verifyKey}
       resendLoading={resendLoading}

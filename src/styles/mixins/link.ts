@@ -4,7 +4,7 @@ export default {
   basic: css`
     text-decoration: none;
     cursor: pointer;
-    border-radius: ${props => props.theme.borderRadius};
+    border-radius: ${props => props.theme.borderRadius.basic};
     padding: ${props => props.theme.gap.small};
     display: flex;
     align-items: center;

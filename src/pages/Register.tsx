@@ -4,7 +4,7 @@ import AuthTemplate from 'components/Templates/Auth';
 import Button from 'components/Common/Button';
 import Input from 'components/Common/Input';
 import VerifyKey from 'components/VerifyKey';
-import { useInput, useApi, useCleanNotification } from 'hooks';
+import { useInput, useApi } from 'hooks';
 import { Link } from 'react-router-dom';
 import { authApi } from 'utils/api';
 import { useDispatch } from 'react-redux';
@@ -30,23 +30,20 @@ const SLink = styled(Link)`
 `;
 
 export default () => {
-  useCleanNotification();
-
   const email = useInput();
   const name = useInput();
   const password = useInput();
   const dispatch = useDispatch();
   const { process, loading, success } = useApi(authApi.register);
 
-  const disabled = () =>
-    email.value === '' || name.value === '' || password.value === '';
+  const disabled = () => email.value === '' || name.value === '' || password.value === '';
 
   const onRegister = () => {
     process({
       email: email.value,
       name: name.value,
       password: password.value,
-    }).then(({ data }: Message) => {
+    }).then(({ data }: { data: Message }) => {
       dispatch(setMessage({ type: 'success', value: data.message }));
     });
   };
@@ -65,7 +62,7 @@ export default () => {
             {...password}
             onKeyUp={e => (e.keyCode === 13 ? onRegister() : null)}
           />
-          <Button disabled={disabled()} onClick={onRegister} loading={loading}>
+          <Button theme="withBg" disabled={disabled()} onClick={onRegister} loading={loading}>
             회원가입
           </Button>
           <Span>

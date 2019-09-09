@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useInput, useCleanNotification } from 'hooks';
+import { useInput } from 'hooks';
 import { authApi } from 'utils/api';
 import { useDispatch } from 'react-redux';
 import { setMessage } from 'store/notification/actions';
@@ -12,10 +12,7 @@ interface IProps {
 
 interface TextByStep {
   step: 1 | 2 | 3;
-  text:
-    | typeof FIND_PASSWORD.ONE
-    | typeof FIND_PASSWORD.TWO
-    | typeof FIND_PASSWORD.THREE;
+  text: typeof FIND_PASSWORD.ONE | typeof FIND_PASSWORD.TWO | typeof FIND_PASSWORD.THREE;
 }
 
 export default ({ history: { replace } }: IProps) => {
@@ -29,9 +26,6 @@ export default ({ history: { replace } }: IProps) => {
   });
   const [confirmLoading, setCLoading] = useState(false);
   const [sendLoading, setSLoading] = useState(false);
-
-  // component mount되면 cleasn Message
-  useCleanNotification();
 
   const sendSecretKey = (type?: 'resend') => {
     if (type === 'resend') setSLoading(true);
@@ -51,18 +45,13 @@ export default ({ history: { replace } }: IProps) => {
       .catch(
         err =>
           err.response &&
-          dispatch(
-            setMessage({ type: 'danger', value: err.response.data.message }),
-          ),
+          dispatch(setMessage({ type: 'danger', value: err.response.data.message })),
       )
-      .finally(() =>
-        type === 'resend' ? setSLoading(false) : setCLoading(false),
-      );
+      .finally(() => (type === 'resend' ? setSLoading(false) : setCLoading(false)));
   };
 
   const resendSecretKey = () => {
-    if (!window.confirm(`${email.value} 로 보안코드를 다시 전송하시겠습니까?`))
-      return;
+    if (!window.confirm(`${email.value} 로 보안코드를 다시 전송하시겠습니까?`)) return;
     sendSecretKey('resend');
   };
 
@@ -82,9 +71,7 @@ export default ({ history: { replace } }: IProps) => {
       .catch(
         err =>
           err.response &&
-          dispatch(
-            setMessage({ type: 'danger', value: err.response.data.message }),
-          ),
+          dispatch(setMessage({ type: 'danger', value: err.response.data.message })),
       )
       .finally(() => setCLoading(false));
   };
@@ -97,9 +84,7 @@ export default ({ history: { replace } }: IProps) => {
         secret: secret.value,
       })
       .then(() => {
-        dispatch(
-          setMessage({ type: 'success', value: '비밀번호가 변경되었습니다.' }),
-        );
+        dispatch(setMessage({ type: 'success', value: '비밀번호가 변경되었습니다.' }));
         setTimeout(() => replace('/'), 500);
       })
       .finally(() => setCLoading(false));

@@ -20,11 +20,9 @@ const MessageContainer = styled.div<IMesageContainer>`
   position: relative;
   margin: 0 auto;
   padding: ${props => props.theme.gap.medium};
-  border-radius: ${props => props.theme.borderRadius};
+  border-radius: ${props => props.theme.borderRadius.basic};
   background-color: ${props =>
-    props.type === 'danger'
-      ? props.theme.colors.danger
-      : props.theme.colors.success};
+    props.type === 'danger' ? props.theme.colors.danger : props.theme.colors.success};
   margin-bottom: ${props => props.theme.gap.medium};
   ${props =>
     props.home &&

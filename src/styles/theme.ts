@@ -1,7 +1,11 @@
 import { DefaultTheme } from 'styled-components';
 
 const myTheme: DefaultTheme = {
-  borderRadius: '3px',
+  borderRadius: {
+    basic: '3px',
+    avatar: '25%',
+    comment: '15px',
+  },
   breakpoints: {
     sm: '576px',
     md: '768px',
@@ -17,12 +21,8 @@ const myTheme: DefaultTheme = {
     danger: '#E74C3D',
     info: '#f39c12',
     blue: '#3897f0',
-    aside: ({
-      r = '0',
-      g = '0',
-      b = '0',
-    }: { r?: string; g?: string; b?: string } = {}) =>
-      `rgb(${236 + Number(r)}, ${239 + Number(g)}, ${242 + Number(b)})`,
+    aside: ({ r = '0', g = '0', b = '0' }: { r?: string; g?: string; b?: string } = {}) =>
+      `rgb(${242 + Number(r)}, ${245 + Number(g)}, ${248 + Number(b)})`,
   },
   fontSize: {
     tiny: '0.7rem',
@@ -56,10 +56,20 @@ const myTheme: DefaultTheme = {
     min: {
       input: '330px',
     },
-    aside: '12rem',
+    aside: '10rem',
+    article: {
+      container: '602px',
+      image: '600px',
+    },
   },
   height: {
+    articleContent: '60px',
     header: '56px',
+    smallHeader: '42px',
+    nav: '29px',
+  },
+  zIndex: {
+    header: 1,
   },
 };
 

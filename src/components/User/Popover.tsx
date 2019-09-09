@@ -1,22 +1,21 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'store/reducer';
-import { sideLink } from 'styles/mixins/etc';
 import { Link } from 'react-router-dom';
 import { logOut } from 'store/user/actions';
 import { hideUserPopover } from 'store/header/actions';
 
 const Container = styled.div`
   position: absolute;
-  border-radius: ${props => props.theme.borderRadius};
+  border-radius: ${props => props.theme.borderRadius.basic};
   top: 40px;
   right: 0;
   width: 120px;
   background-color: white;
-  box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14),
-    0 6px 30px 5px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.4);
-  z-index: 1;
+  box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12),
+    0 8px 10px -5px rgba(0, 0, 0, 0.4);
+  z-index: ${props => props.theme.zIndex.header};
 `;
 
 const Menu = styled.ul``;
@@ -25,22 +24,34 @@ const Item = styled.li`
   display: block;
 `;
 
+const buttonEffect = css`
+  cursor: pointer;
+  &:hover {
+    color: ${props => props.theme.colors.font};
+    background-color: ${props => props.theme.colors.aside()};
+  }
+  &:active {
+    background-color: ${props => props.theme.colors.aside({ r: '-10', g: '-10', b: '-10' })};
+  }
+  user-select: none;
+`;
+
 const SLink = styled(Link)`
+  text-decoration: none;
+  display: block;
   padding: ${props => props.theme.gap.small} ${props => props.theme.gap.large};
-  ${sideLink}
+  ${buttonEffect}
 `;
 
 const LogOut = styled.div`
   padding: ${props => props.theme.gap.small} ${props => props.theme.gap.large};
-  ${sideLink}
+  ${buttonEffect}
 `;
 
 export default () => {
   const dispatch = useDispatch();
   const { id } = useSelector((state: AppState) => state.user);
-  const userPopover = useSelector(
-    (state: AppState) => state.header.visible.userPopover,
-  );
+  const userPopover = useSelector((state: AppState) => state.header.visible.userPopover);
 
   return userPopover ? (
     <Container>

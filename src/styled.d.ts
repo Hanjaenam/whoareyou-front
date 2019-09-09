@@ -3,7 +3,11 @@ import 'styled-components';
 // and extend them!
 declare module 'styled-components' {
   export interface DefaultTheme {
-    borderRadius: string;
+    borderRadius: {
+      basic: string;
+      avatar: string;
+      comment: string;
+    };
     breakpoints: {
       sm: string;
       md: string;
@@ -54,9 +58,14 @@ declare module 'styled-components' {
         input: string;
       };
       aside: string;
+      article: { container: string; image: string };
     };
     height: {
+      articleContent: string;
       header: string;
+      smallHeader: string;
+      nav: string;
     };
+    zIndex: { header: number };
   }
 }

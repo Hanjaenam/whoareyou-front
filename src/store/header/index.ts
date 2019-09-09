@@ -1,10 +1,10 @@
 import { State, ActionTypes } from './types';
 import {
   TOGGLE_VISIBLE_POPOVER,
-  TOGGLE_CONTRACT_ASIDE,
-  SHOW_ASIDE_MODAL,
-  HIDE_ASIDE_MODAL,
   HIDE_USER_POPOVEER,
+  SET_CONTRACT_HEADER,
+  TOGGLE_CREATE_ARTICLE,
+  HIDE_CREATE_ARTICLE,
 } from './actions';
 
 const initialState: State = {
@@ -12,9 +12,8 @@ const initialState: State = {
     userPopover: false,
     asideModal: false,
   },
-  contract: {
-    aside: false,
-  },
+  contract: false,
+  createArticle: true,
 };
 export default (state = initialState, action: ActionTypes): State => {
   switch (action.type) {
@@ -28,20 +27,20 @@ export default (state = initialState, action: ActionTypes): State => {
         ...state,
         visible: { ...state.visible, userPopover: false },
       };
-    case SHOW_ASIDE_MODAL:
+    case SET_CONTRACT_HEADER:
       return {
         ...state,
-        visible: { ...state.visible, asideModal: true },
+        contract: action.payload,
       };
-    case HIDE_ASIDE_MODAL:
+    case TOGGLE_CREATE_ARTICLE:
       return {
         ...state,
-        visible: { ...state.visible, asideModal: false },
+        createArticle: !state.createArticle,
       };
-    case TOGGLE_CONTRACT_ASIDE:
+    case HIDE_CREATE_ARTICLE:
       return {
         ...state,
-        contract: { aside: !state.contract.aside },
+        createArticle: false,
       };
     default:
       return state;

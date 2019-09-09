@@ -1,9 +1,9 @@
 import {
   TOGGLE_VISIBLE_POPOVER,
-  TOGGLE_CONTRACT_ASIDE,
-  SHOW_ASIDE_MODAL,
-  HIDE_ASIDE_MODAL,
   HIDE_USER_POPOVEER,
+  SET_CONTRACT_HEADER,
+  TOGGLE_CREATE_ARTICLE,
+  HIDE_CREATE_ARTICLE,
 } from './actions';
 
 interface ToggleVisiblePopover {
@@ -12,28 +12,28 @@ interface ToggleVisiblePopover {
 interface HideUserPopover {
   type: typeof HIDE_USER_POPOVEER;
 }
-interface ToggleContractAside {
-  type: typeof TOGGLE_CONTRACT_ASIDE;
+interface SetContractHeader {
+  type: typeof SET_CONTRACT_HEADER;
+  payload: boolean;
 }
-interface ShowAsideModal {
-  type: typeof SHOW_ASIDE_MODAL;
+interface ToggleCreateArticle {
+  type: typeof TOGGLE_CREATE_ARTICLE;
 }
-interface HideAsideModal {
-  type: typeof HIDE_ASIDE_MODAL;
+interface HideCreateArticle {
+  type: typeof HIDE_CREATE_ARTICLE;
 }
 export type ActionTypes =
   | ToggleVisiblePopover
   | HideUserPopover
-  | ToggleContractAside
-  | ShowAsideModal
-  | HideAsideModal;
+  | SetContractHeader
+  | ToggleCreateArticle
+  | HideCreateArticle;
 // state
 export interface State {
   visible: {
     userPopover: boolean;
     asideModal: boolean;
   };
-  contract: {
-    aside: boolean;
-  };
+  contract: boolean;
+  createArticle: boolean;
 }

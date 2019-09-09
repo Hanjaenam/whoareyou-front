@@ -4,6 +4,7 @@ import styled, { keyframes } from 'styled-components';
 interface IProps {
   color?: string;
   size?: number;
+  position?: 'absolute' | 'relative';
 }
 
 const containerSpin = keyframes`
@@ -15,15 +16,14 @@ const containerSpin = keyframes`
 }
 `;
 
-const Container = styled.div<{ size: number }>`
+const Container = styled.div<{ size: number; position: 'absolute' | 'relative' }>`
   height: ${props => `${props.size}rem`};
   width: ${props => `${props.size}rem`};
   -webkit-animation: ${containerSpin} 4.8s linear infinite;
   animation: ${containerSpin} 4.8s linear infinite;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  position: absolute;
-  /* position:relative */
+  position: ${props => props.position};
 `;
 
 const spanSpin = keyframes`
@@ -62,8 +62,7 @@ const Span = styled.span<{ size: number }>`
   /*
   (y출발지점, y출발지점부터 보여질 높이, x출발 지점부터 보여질 너비, x출발지점)
   */
-  clip: ${props =>
-    `rect(0, ${props.size}rem, ${props.size}rem, ${props.size / 2}rem)`};
+  clip: ${props => `rect(0, ${props.size}rem, ${props.size}rem, ${props.size / 2}rem)`};
   -webkit-animation: ${spanSpin} 1.2s linear infinite;
   animation: ${spanSpin} 1.2s linear infinite;
 
@@ -80,18 +79,16 @@ const Span = styled.span<{ size: number }>`
     margin: auto;
     width: ${props => `${props.size}rem`};
     height: ${props => `${props.size}rem`};
-    clip: ${props =>
-      `rect(0, ${props.size}rem, ${props.size}rem, ${props.size / 2}rem)`};
+    clip: ${props => `rect(0, ${props.size}rem, ${props.size}rem, ${props.size / 2}rem)`};
     border-radius: 50%;
     border: 2px solid ${props => props.color};
-    -webkit-animation: ${afterSpin} 1.2s cubic-bezier(0.77, 0, 0.175, 1)
-      infinite;
+    -webkit-animation: ${afterSpin} 1.2s cubic-bezier(0.77, 0, 0.175, 1) infinite;
     animation: ${afterSpin} 1.2s cubic-bezier(0.77, 0, 0.175, 1) infinite;
   }
 `;
 
-export default ({ size = 1, color = '#fff' }: IProps) => (
-  <Container size={size}>
+export default ({ size = 1, color = '#fff', position = 'absolute' }: IProps) => (
+  <Container size={size} position={position}>
     <Span size={size} color={color} />
   </Container>
 );

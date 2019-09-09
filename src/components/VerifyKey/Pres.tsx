@@ -3,10 +3,11 @@ import styled, { css } from 'styled-components';
 import Button from 'components/Common/Button';
 import Input from 'components/Common/Input';
 import Loader from 'components/Common/Loader';
+import { myTheme } from 'styles/theme';
 
 interface IProps {
   disabled: () => boolean;
-  send?: boolean;
+  isSended?: boolean;
   email: string;
   verifyKey: () => void;
   resendLoading: boolean;
@@ -78,7 +79,7 @@ const Span = styled.span`
 
 export default ({
   disabled,
-  send,
+  isSended,
   email,
   verifyKey,
   resendLoading,
@@ -100,7 +101,7 @@ export default ({
         {...secretKey}
         onKeyUp={e => (e.keyCode === 13 ? verifyKey() : null)}
       />
-      {send && (
+      {isSended && (
         <P>
           다음 이메일로 전송됨 : <Span>{email}</Span>
         </P>
@@ -108,18 +109,13 @@ export default ({
     </InputContainer>
     <ModifyButtonStyle>
       <ReceivedEmailContainer>
-        <NotReceivedEmail
-          loading={resendLoading.toString()}
-          onClick={sendSecret}
-        >
-          {type === 'logIn'
-            ? '보안코드를 다시 보내겠습니까?'
-            : '보안코드를 받지 못했나요?'}
+        <NotReceivedEmail loading={resendLoading.toString()} onClick={sendSecret}>
+          {type === 'logIn' ? '보안코드를 다시 보내겠습니까?' : '보안코드를 받지 못했나요?'}
         </NotReceivedEmail>
         &nbsp;
-        {resendLoading && <Loader />}
+        {resendLoading && <Loader color={myTheme.colors.secondary} position="relative" />}
       </ReceivedEmailContainer>
-      <Button disabled={disabled()} onClick={verifyKey} loading={verifyLoading}>
+      <Button theme="withBg" disabled={disabled()} onClick={verifyKey} loading={verifyLoading}>
         확인
       </Button>
     </ModifyButtonStyle>

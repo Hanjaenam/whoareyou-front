@@ -5,26 +5,40 @@ import linkCss from 'styles/mixins/link';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useInput } from 'hooks';
-import { faSearch, faPlus, faBars } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { AppState } from 'store/reducer';
-import {
-  toggleVisiblePopover,
-  toggleContractAside,
-  showAsideModal,
-  hideUserPopover,
-} from 'store/header/actions';
-import { myTheme } from 'styles/theme';
+import { toggleVisiblePopover, hideUserPopover, toggleCreateArticle } from 'store/header/actions';
 import Input from './Input';
-import UserPopover from '../UserPopover';
+import UserPopover from '../User/Popover';
+import HeaderNav from './HeaderNav';
 
-const Container = styled.header`
-  display: flex;
-  align-items: center;
-  height: ${props => props.theme.height.header};
-  padding: 0 ${props => props.theme.gap.medium};
+const Layout = styled.div`
+  @media screen and (max-width: ${props => props.theme.breakpoints.lg}) {
+    background-color: white;
+    z-index: ${props => props.theme.zIndex.header};
+    position: fixed;
+    border-bottom: 1px solid ${props => props.theme.colors.secondary};
+  }
+`;
+
+const Container = styled.header<{ contract: boolean }>`
+  transition: height 0.2s;
+  position: fixed;
+  width: 100vw;
+  z-index: ${props => props.theme.zIndex.header};
   display: grid;
   grid-auto-flow: column;
-  grid-gap: ${props => props.theme.gap.medium};
+  grid-template-columns: auto 1fr auto;
+  grid-gap: ${props => props.theme.gap.small};
+  align-items: center;
+  height: ${props => (props.contract ? props.theme.height.smallHeader : props.theme.height.header)};
+  padding: 0 ${props => props.theme.gap.medium};
+  border-bottom: 1px solid ${props => props.theme.colors.secondary};
+  background-color: white;
+  @media screen and (max-width: ${props => props.theme.breakpoints.lg}) {
+    position: relative;
+    border-bottom: 0;
+  }
   @media screen and (max-width: ${props => props.theme.breakpoints.md}) {
     padding: 0 ${props => props.theme.gap.medium};
   }
@@ -35,30 +49,28 @@ const Container = styled.header`
 
 const Flex = styled.div`
   display: flex;
-  &:first-child {
-    justify-content: flex-start;
-  }
   &:nth-child(2) {
     justify-content: center;
-    > input {
-      width: 100%;
-      max-width: 500px;
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
-      border-right: 0;
-    }
     > div {
-      @media screen and (min-width: ${props => props.theme.breakpoints.md}) {
-        padding-left: ${props => props.theme.gap.large};
-        padding-right: ${props => props.theme.gap.large};
-      }
+      padding: ${props => props.theme.gap.tiny} ${props => props.theme.gap.medium};
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;
     }
   }
-  &:last-child {
-    justify-content: flex-end;
-  }
+`;
+
+const CustomInput = styled(Input)`
+  /**
+  * ToDo : sm 에서 검색 input창 제거
+  */
+  padding-top: ${props => props.theme.gap.tiny};
+  padding-bottom: ${props => props.theme.gap.tiny};
+  width: 100%;
+  max-width: 500px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-right: 0;
+  max-width: ${props => props.theme.width.max.input};
 `;
 
 const UserContainer = styled.div`
@@ -73,18 +85,9 @@ const CustomLink = styled(Link)`
 export default () => {
   const search = useInput('');
   const username = useSelector((state: AppState) => state.user.name);
-  const visible = useSelector(
-    (state: AppState) => state.header.visible.userPopover,
-  );
+  const visible = useSelector((state: AppState) => state.header.visible.userPopover);
   const dispatch = useDispatch();
-  const onAsideControlClick = () => {
-    // breakpoints.lg이하일때만 asideModal이 나타납니다.
-    if (window.innerWidth > parseInt(myTheme.breakpoints.lg, 10)) {
-      dispatch(toggleContractAside());
-    } else {
-      dispatch(showAsideModal());
-    }
-  };
+  const { contract } = useSelector((state: AppState) => state.header);
 
   const hideUserPopoverHandler = () => visible && dispatch(hideUserPopover());
 
@@ -104,36 +107,38 @@ export default () => {
   }, [visible]);
 
   return (
-    <Container>
-      <Flex>
-        <Button
-          theme="noBg"
-          onClick={() => onAsideControlClick()}
-          icon={faBars}
-        />
-        <CustomLink to="/">WhoAreYou</CustomLink>
-      </Flex>
-      <Flex>
-        <Input padding="tiny" placeholder="검색" {...search} />
-        <Button icon={faSearch} />
-      </Flex>
-      <Flex>
-        <Button theme="noBg" icon={faPlus} />
-        {username && (
+    <Layout>
+      <Container contract={contract}>
+        <Flex>
+          <CustomLink to="/latest">WhoAreYou</CustomLink>
+        </Flex>
+        <Flex>
+          <CustomInput padding="tiny" placeholder="검색" {...search} />
+          <Button theme="withBg" icon={faSearch} onClick={() => null} />
+        </Flex>
+        <Flex>
+          {username && (
+            <Button icon={faPlus} theme="noBg" onClick={() => dispatch(toggleCreateArticle())} />
+          )}
           <UserContainer className="username">
-            <Button
-              theme="noBg"
-              onClick={e => {
-                e.stopPropagation();
-                dispatch(toggleVisiblePopover());
-              }}
-            >
-              {username}
-            </Button>
+            {username ? (
+              <Button
+                theme="noBg"
+                onClick={e => {
+                  e.stopPropagation();
+                  dispatch(toggleVisiblePopover());
+                }}
+              >
+                {username}
+              </Button>
+            ) : (
+              <CustomLink to="/">로그인</CustomLink>
+            )}
             <UserPopover />
           </UserContainer>
-        )}
-      </Flex>
-    </Container>
+        </Flex>
+      </Container>
+      <HeaderNav />
+    </Layout>
   );
 };
