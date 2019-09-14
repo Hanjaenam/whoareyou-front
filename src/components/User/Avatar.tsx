@@ -123,7 +123,7 @@ export default ({ id, avatar, page }: IProps) => {
         type="file"
         accept="image/jpeg,image/png"
         name="avatar"
-        id={id}
+        // id={id}
         ref={inputRef as any}
         onChange={onChange}
       />

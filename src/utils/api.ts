@@ -86,10 +86,9 @@ export const userApi = {
     UserAxios({
       url: '/changePassword',
       method: 'PATCH',
+      data: { prePassword, newPassword },
       headers: {
         authorization: `Token ${window.localStorage.getItem('token')}`,
-        'content-type': 'multipart/form-data',
       },
-      data: { prePassword, newPassword },
     }),
 };

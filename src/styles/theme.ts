@@ -48,6 +48,7 @@ const myTheme: DefaultTheme = {
       md: '160px',
     },
   },
+  createArticleImage: '204px',
   width: {
     max: {
       authMain: '550px',
@@ -56,20 +57,28 @@ const myTheme: DefaultTheme = {
     min: {
       input: '330px',
     },
-    aside: '10rem',
+    aside: {
+      xl: '200px',
+      lg: '60px',
+    },
     article: {
       container: '602px',
       image: '600px',
     },
+    createArticle: '950px',
   },
   height: {
-    articleContent: '60px',
-    header: '56px',
-    smallHeader: '42px',
+    header: '48px',
     nav: '29px',
+    createArticle: {
+      xl: '650px',
+      lg: '800px',
+    },
   },
   zIndex: {
     header: 1,
+    black: 2,
+    createArticle: 3,
   },
 };
 

@@ -16,37 +16,26 @@ export const opacityEffect = css`
   }
 `;
 
-export const LinkStyle = (as: 'nav' | 'aside') => css`
+export const LinkStyle = css`
   cursor: pointer;
   text-decoration: none;
   user-select: none;
   display: block;
-  ${as === 'aside'
-    ? css`
-        padding: ${props => props.theme.gap.medium} ${props => props.theme.gap.huge};
-        font-size: ${props => props.theme.fontSize.large};
-        &:hover {
-          background-color: ${props => props.theme.colors.aside({ r: '-10', g: '-10', b: '-10' })};
-        }
-        &:active {
-          color: ${props => props.theme.colors.font};
-          background-color: white;
-          border-right: 3px solid ${props => props.theme.colors.blue};
-        }
-        &.active {
-          background-color: white;
-          border-right: 3px solid ${props => props.theme.colors.blue};
-          opacity: 1;
-        }
-      `
-    : css`
-        font-size: ${props => props.theme.fontSize.medium};
-        padding: ${props => props.theme.gap.tiny} 0;
-        &.active {
-          color: ${props => props.theme.colors.blue};
-          border-bottom: 3px solid ${props => props.theme.colors.blue};
-        }
-      `}
+  padding: ${props => props.theme.gap.medium} ${props => props.theme.gap.large};
+  font-size: ${props => props.theme.fontSize.medium};
+  &:hover {
+    background-color: ${props => props.theme.colors.aside({ r: '-10', g: '-10', b: '-10' })};
+  }
+  &:active {
+    color: ${props => props.theme.colors.font};
+    background-color: white;
+    border-right: 3px solid ${props => props.theme.colors.blue};
+  }
+  &.active {
+    background-color: white;
+    border-right: 3px solid ${props => props.theme.colors.blue};
+    opacity: 1;
+  }
 `;
 
 export const MainHeightAboveLg = `calc(100vh - ${myTheme.height.header})`;
@@ -60,4 +49,14 @@ export const blueColorClick = css`
   &:hover {
     text-decoration: underline;
   }
+`;
+
+export const black = css`
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background-color: #000;
+  opacity: 0.7;
 `;

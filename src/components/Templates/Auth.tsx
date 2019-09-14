@@ -7,6 +7,8 @@ interface IProps {
 }
 
 const Container = styled.div`
+  position: relative;
+  overflow: hidden;
   display: flex;
   height: 100vh;
   min-height: ${props => props.theme.breakpoints.md};
@@ -77,11 +79,11 @@ const Main = styled.main`
 export default ({ children }: IProps) => (
   <Container>
     <Left>
-      <Gretting>Who Are You</Gretting>
+      <Gretting>WhoAreYou</Gretting>
     </Left>
     <Right>
-      <Notification />
       <Main>{children}</Main>
     </Right>
+    <Notification top right />
   </Container>
 );

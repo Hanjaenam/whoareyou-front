@@ -5,12 +5,20 @@ import linkCss from 'styles/mixins/link';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useInput } from 'hooks';
-import { faSearch, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faPlus, faBars } from '@fortawesome/free-solid-svg-icons';
 import { AppState } from 'store/reducer';
-import { toggleVisiblePopover, hideUserPopover, toggleCreateArticle } from 'store/header/actions';
+import {
+  toggleVisiblePopover,
+  hideUserPopover,
+  toggleCreateArticle,
+  toggleContractAside,
+  showAsideModal,
+} from 'store/header/actions';
+import { myTheme } from 'styles/theme';
+import { noBg } from 'styles/mixins/button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Input from './Input';
 import UserPopover from '../User/Popover';
-import HeaderNav from './HeaderNav';
 
 const Layout = styled.div`
   @media screen and (max-width: ${props => props.theme.breakpoints.lg}) {
@@ -21,17 +29,17 @@ const Layout = styled.div`
   }
 `;
 
-const Container = styled.header<{ contract: boolean }>`
+const Container = styled.header`
   transition: height 0.2s;
   position: fixed;
   width: 100vw;
   z-index: ${props => props.theme.zIndex.header};
   display: grid;
   grid-auto-flow: column;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto 1fr;
   grid-gap: ${props => props.theme.gap.small};
   align-items: center;
-  height: ${props => (props.contract ? props.theme.height.smallHeader : props.theme.height.header)};
+  height: ${props => props.theme.height.header};
   padding: 0 ${props => props.theme.gap.medium};
   border-bottom: 1px solid ${props => props.theme.colors.secondary};
   background-color: white;
@@ -47,15 +55,40 @@ const Container = styled.header<{ contract: boolean }>`
   }
 `;
 
-const Flex = styled.div`
-  display: flex;
-  &:nth-child(2) {
+const T = styled.div`
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-gap: ${props => props.theme.gap.small};
+  align-items: center;
+  > div:first-child {
     justify-content: center;
     > div {
       padding: ${props => props.theme.gap.tiny} ${props => props.theme.gap.medium};
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;
     }
+  }
+  @media screen and (max-width: ${props => props.theme.breakpoints.md}) {
+    display: flex;
+    justify-content: flex-end;
+    > div:first-child {
+      > input,
+      > div {
+        display: none;
+      }
+    }
+  }
+`;
+
+const Flex = styled.div`
+  display: flex;
+`;
+
+const Icon = styled.p`
+  ${noBg({ color: 'main', padding: 'small', loading: false, disabled: false })};
+  display: none;
+  @media screen and (max-width: ${props => props.theme.breakpoints.md}) {
+    display: block;
   }
 `;
 
@@ -87,7 +120,6 @@ export default () => {
   const username = useSelector((state: AppState) => state.user.name);
   const visible = useSelector((state: AppState) => state.header.visible.userPopover);
   const dispatch = useDispatch();
-  const { contract } = useSelector((state: AppState) => state.header);
 
   const hideUserPopoverHandler = () => visible && dispatch(hideUserPopover());
 
@@ -106,39 +138,68 @@ export default () => {
     return () => window.removeEventListener('click', hideUserPopoverHandler);
   }, [visible]);
 
+  const onBarsClick = () => {
+    // lg 에서 축소, 확장 불가 ( 확장 시 article 크기 초과 )
+    if (window.innerWidth > parseInt(myTheme.breakpoints.lg, 10)) {
+      dispatch(toggleContractAside());
+    } else {
+      dispatch(showAsideModal());
+    }
+  };
+
   return (
     <Layout>
-      <Container contract={contract}>
+      <Container>
         <Flex>
+          <Button icon={faBars} theme="noBg" onClick={onBarsClick} />
           <CustomLink to="/latest">WhoAreYou</CustomLink>
         </Flex>
-        <Flex>
-          <CustomInput padding="tiny" placeholder="검색" {...search} />
-          <Button theme="withBg" icon={faSearch} onClick={() => null} />
-        </Flex>
-        <Flex>
-          {username && (
-            <Button icon={faPlus} theme="noBg" onClick={() => dispatch(toggleCreateArticle())} />
-          )}
-          <UserContainer className="username">
-            {username ? (
-              <Button
-                theme="noBg"
-                onClick={e => {
-                  e.stopPropagation();
-                  dispatch(toggleVisiblePopover());
-                }}
-              >
-                {username}
-              </Button>
-            ) : (
-              <CustomLink to="/">로그인</CustomLink>
+        <T>
+          <Flex>
+            <CustomInput padding="tiny" placeholder="검색" {...search} />
+            <Button theme="withBg" icon={faSearch} onClick={() => null} />
+            <Icon>
+              <FontAwesomeIcon icon={faSearch} />
+            </Icon>
+          </Flex>
+          <Flex>
+            {username && (
+              <Button icon={faPlus} theme="noBg" onClick={() => dispatch(toggleCreateArticle())} />
             )}
-            <UserPopover />
-          </UserContainer>
-        </Flex>
+            <UserContainer className="username">
+              {username ? (
+                <Button
+                  theme="noBg"
+                  onClick={e => {
+                    e.stopPropagation();
+                    dispatch(toggleVisiblePopover());
+                  }}
+                >
+                  {username}
+                </Button>
+              ) : (
+                <CustomLink to="/">로그인</CustomLink>
+              )}
+              <UserPopover />
+            </UserContainer>
+          </Flex>
+        </T>
       </Container>
-      <HeaderNav />
     </Layout>
   );
 };
+
+// scroll만 된다고 호출되는 게 아닌 듯, 홈페이지 자체가 스크롤이 있고 스크롤이 내려가져야 호출이 된다.
+// const onScroll = (_: Event) => {
+//   if (window.innerWidth > parseInt(myTheme.breakpoints.md, 10)) return;
+//   // console.log(document.body.scrollHeight); // 전체
+//   // console.log(document.body.clientHeight); // 현재 내가 보고 있는 창의 높이
+//   if (window.scrollY > 80) dispatch(setContractHeader(true));
+//   else dispatch(setContractHeader(false));
+// };
+// useEffect(() => {
+//   window.addEventListener('scroll', onScroll);
+//   return () => {
+//     window.removeEventListener('scroll', onScroll);
+//   };
+// }, []);

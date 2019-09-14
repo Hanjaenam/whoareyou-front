@@ -13,9 +13,6 @@ const Container = styled.div`
   position: relative;
   justify-content: center;
   padding: ${props => props.theme.gap.medium};
-  @media screen and (max-width: ${props => props.theme.breakpoints.lg}) {
-    padding: ${props => props.theme.gap.small};
-  }
   @media screen and (max-width: ${props => props.theme.breakpoints.md}) {
     padding: ${props => props.theme.gap.small} 0;
   }
@@ -24,7 +21,7 @@ const Container = styled.div`
 const ArticleContainer = styled.div``;
 
 export default ({ children }: IProps) => {
-  const { createArticle } = useSelector((state: AppState) => state.header);
+  const { createArticle } = useSelector((state: AppState) => state.header.visible);
   return (
     <Container>
       <ArticleContainer>{children}</ArticleContainer>

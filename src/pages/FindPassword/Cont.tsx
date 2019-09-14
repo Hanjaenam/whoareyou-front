@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { useInput } from 'hooks';
 import { authApi } from 'utils/api';
-import { useDispatch } from 'react-redux';
-import { setMessage } from 'store/notification/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { setMessage, cleanMessage } from 'store/notification/actions';
 import { FIND_PASSWORD } from 'constant';
+import { AppState } from 'store/reducer';
 import Presenter from './Pres';
 
 interface IProps {
-  history: { replace: (path: string) => void };
+  history: { replace: (path: string) => void; goBack: () => void };
 }
 
 interface TextByStep {
@@ -15,11 +16,12 @@ interface TextByStep {
   text: typeof FIND_PASSWORD.ONE | typeof FIND_PASSWORD.TWO | typeof FIND_PASSWORD.THREE;
 }
 
-export default ({ history: { replace } }: IProps) => {
+export default ({ history: { replace, goBack } }: IProps) => {
   const email = useInput();
   const secret = useInput();
   const password = useInput();
   const dispatch = useDispatch();
+  const message = useSelector((state: AppState) => state.notification.value);
   const [textByStep, setStep] = useState<TextByStep>({
     step: 1,
     text: FIND_PASSWORD.ONE,
@@ -84,8 +86,8 @@ export default ({ history: { replace } }: IProps) => {
         secret: secret.value,
       })
       .then(() => {
+        replace('/');
         dispatch(setMessage({ type: 'success', value: '비밀번호가 변경되었습니다.' }));
-        setTimeout(() => replace('/'), 500);
       })
       .finally(() => setCLoading(false));
   };
@@ -148,6 +150,12 @@ export default ({ history: { replace } }: IProps) => {
     }
   };
 
+  const onCancel = () => {
+    if (!window.confirm('취소하시겠습니까?')) return;
+    if (message) dispatch(cleanMessage());
+    goBack();
+  };
+
   return (
     <Presenter
       confirmLoading={confirmLoading}
@@ -160,6 +168,7 @@ export default ({ history: { replace } }: IProps) => {
       sendLoading={sendLoading}
       text={textByStep.text}
       email={email.value}
+      onCancel={onCancel}
     />
   );
 };

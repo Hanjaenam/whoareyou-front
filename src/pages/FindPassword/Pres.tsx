@@ -24,6 +24,7 @@ interface IProps {
     PLACEHOLDER: string;
   };
   email: string;
+  onCancel: () => void;
 }
 
 const Title = styled.p`
@@ -37,10 +38,17 @@ const Explain = styled.p`
   font-size: 0.9rem;
 `;
 
-const ModifyButtonStyle = styled.div<{ step: number }>`
+const Bottom = styled.div<{ step: number }>`
   display: flex;
   align-items: center;
   justify-content: ${props => (props.step === 2 ? 'space-between' : 'flex-end')};
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  > div:last-child {
+    margin-left: ${props => props.theme.gap.tiny};
+  }
 `;
 
 const ReceivedEmailContainer = styled.div`
@@ -93,6 +101,7 @@ export default ({
   sendLoading,
   text,
   email,
+  onCancel,
 }: IProps) => {
   return (
     <AuthTemplate>
@@ -112,7 +121,7 @@ export default ({
           </P>
         )}
       </InputContainer>
-      <ModifyButtonStyle step={step}>
+      <Bottom step={step}>
         {step === 2 && (
           <ReceivedEmailContainer>
             <NotReceivedEmail loading={sendLoading} onClick={resendSecretKey}>
@@ -122,15 +131,20 @@ export default ({
             {sendLoading && <Loader color={myTheme.colors.secondary} position="relative" />}
           </ReceivedEmailContainer>
         )}
-        <Button
-          theme="withBg"
-          disabled={disabled() || (step === 2 && sendLoading)}
-          loading={confirmLoading}
-          onClick={onClick}
-        >
-          확인
-        </Button>
-      </ModifyButtonStyle>
+        <ButtonContainer>
+          <Button
+            theme="withBg"
+            disabled={disabled() || (step === 2 && sendLoading)}
+            loading={confirmLoading}
+            onClick={onClick}
+          >
+            확인
+          </Button>
+          <Button theme="border" color="danger" onClick={onCancel}>
+            취소
+          </Button>
+        </ButtonContainer>
+      </Bottom>
     </AuthTemplate>
   );
 };

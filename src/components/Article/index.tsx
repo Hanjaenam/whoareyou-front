@@ -56,18 +56,19 @@ const Image = styled.div<{ url: string }>`
 
 const ContentContainer = styled.div`
   padding: ${props => props.theme.gap.small};
+  padding-bottom: ${props => props.theme.gap.tiny};
+  word-wrap: break-word;
+  line-height: 1.2rem;
 `;
 
 // 최대 200 글자까지
 const Content = styled.p`
-  height: ${props => props.theme.height.articleContent};
   overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 3; /* 라인수 */
-  -webkit-box-orient: vertical;
-  word-wrap: break-word;
-  line-height: 20px;
+`;
+
+const MoreContent = styled.span`
+  margin-left: ${props => props.theme.gap.small};
+  ${blueColorClick}
 `;
 
 const NumberContainer = styled.div`
@@ -78,6 +79,8 @@ const NumberContainer = styled.div`
 
 const number = css`
   padding: 0 ${props => props.theme.gap.tiny};
+  font-size: 0.9rem;
+  font-weight: 500;
   user-select: none;
 `;
 
@@ -87,7 +90,9 @@ const LikeNumber = styled.p`
 
 const CommentNumber = styled.div`
   ${number};
-  ${blueColorClick}
+  span {
+    ${blueColorClick}
+  }
 `;
 
 const CommentContainer = styled.div`
@@ -145,13 +150,18 @@ export default ({
       </ImageContainer>
       {content && (
         <ContentContainer>
-          <Content>{content}</Content>
+          <Content>
+            {content}
+            {content.length >= 200 && <MoreContent>더보기</MoreContent>}
+          </Content>
         </ContentContainer>
       )}
       <NumberContainer>
-        <LikeNumber>좋아요 {likeNumber}</LikeNumber>
+        <LikeNumber>
+          <span>좋아요 {likeNumber}</span>
+        </LikeNumber>
         <CommentNumber onClick={() => setVisComnt(!visibleComnt)}>
-          댓글수 {commentNumber}
+          <span>댓글수 {commentNumber}</span>
         </CommentNumber>
       </NumberContainer>
       {visibleComnt && (

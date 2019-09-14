@@ -7,24 +7,10 @@ import { useDispatch } from 'react-redux';
 import Button from 'components/Common/Button';
 import Input from 'components/Common/Input';
 
-const Container = styled.div`
-  flex: 1;
-  display: grid;
-  padding: ${props => props.theme.gap.huge} 0;
-  grid-gap: ${props => props.theme.gap.medium};
-  justify-content: center;
-`;
-
 const LabelContainer = styled.div`
   display: flex;
   > input {
     width: ${props => props.theme.width.max.input};
-  }
-  @media screen and (max-width: ${props => props.theme.breakpoints.md}) {
-    display: block;
-    > input {
-      width: ${props => props.theme.width.min.input};
-    }
   }
 `;
 
@@ -32,17 +18,11 @@ const MessageContainer = styled.div`
   > input {
     width: ${props => props.theme.width.max.input};
   }
-  @media screen and (max-width: ${props => props.theme.breakpoints.md}) {
-    > input {
-      width: ${props => props.theme.width.min.input};
-    }
-  }
 `;
 
 const Left = styled.label`
   user-select: none;
   display: block;
-  text-align: left;
   margin-right: 0;
   margin-top: 0;
   margin-bottom: ${props => props.theme.gap.small};
@@ -51,6 +31,30 @@ const Left = styled.label`
   flex: 0 0 120px;
   margin-top: ${props => props.theme.gap.tiny};
   margin-right: ${props => props.theme.gap.large};
+`;
+
+const Container = styled.div`
+  flex: 1;
+  display: grid;
+  padding: ${props => props.theme.gap.huge} 0;
+  grid-gap: ${props => props.theme.gap.medium};
+  justify-content: center;
+  @media screen and (max-width: ${props => props.theme.breakpoints.md}) {
+    ${LabelContainer} {
+      display: block;
+      > input {
+        width: ${props => props.theme.width.min.input};
+      }
+    }
+    ${MessageContainer} {
+      > input {
+        width: ${props => props.theme.width.min.input};
+      }
+    }
+    ${Left} {
+      justify-content: flex-start;
+    }
+  }
 `;
 
 const ButtonContainer = styled.div`
@@ -63,6 +67,7 @@ const Message = styled.p<{ color: 'info' | 'success' }>`
   color: ${props => props.theme.colors[props.color]};
   margin-top: ${props => props.theme.gap.tiny};
 `;
+
 export default () => {
   const { setValue: setPrePwd, ...prePassword } = useInputWithSet();
   const { setValue: setNewPwd, ...newPassword } = useInputWithSet();
@@ -71,11 +76,7 @@ export default () => {
   const { process, loading } = useApi(userApi.changePassword);
 
   const disabled = () => {
-    if (
-      prePassword.value === '' ||
-      newPassword.value === '' ||
-      confirmNewPwd.value === ''
-    )
+    if (prePassword.value === '' || newPassword.value === '' || confirmNewPwd.value === '')
       return true;
     if (newPassword.value !== confirmNewPwd.value) return true;
     return false;
@@ -145,12 +146,7 @@ export default () => {
       </LabelContainer>
       <ButtonContainer>
         <Left />
-        <Button
-          theme="withBg"
-          disabled={disabled()}
-          loading={loading}
-          onClick={onClick}
-        >
+        <Button theme="withBg" disabled={disabled()} loading={loading} onClick={onClick}>
           확인
         </Button>
       </ButtonContainer>

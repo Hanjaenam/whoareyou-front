@@ -4,7 +4,7 @@ import AuthTemplate from 'components/Templates/Auth';
 import Button from 'components/Common/Button';
 import Input from 'components/Common/Input';
 import VerifyKey from 'components/VerifyKey';
-import { useInput, useApi } from 'hooks';
+import { useInput, useApi, useCleanNotification } from 'hooks';
 import { Link } from 'react-router-dom';
 import { authApi } from 'utils/api';
 import { useDispatch } from 'react-redux';
@@ -30,6 +30,7 @@ const SLink = styled(Link)`
 `;
 
 export default () => {
+  useCleanNotification();
   const email = useInput();
   const name = useInput();
   const password = useInput();

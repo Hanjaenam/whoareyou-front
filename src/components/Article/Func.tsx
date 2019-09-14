@@ -46,7 +46,7 @@ const Button = styled.div<{ disabled?: boolean; active?: boolean }>`
         `
       : css`
           &:hover {
-            background-color: ${props.theme.colors.secondary};
+            background-color: ${props.theme.colors.aside()};
           }
           &:active {
             transform: scale(0.98);
@@ -61,16 +61,16 @@ const Button = styled.div<{ disabled?: boolean; active?: boolean }>`
 `;
 
 export default ({ isLiked, isBookmarked, toggleWriteComnt }: IProps) => {
-  const disabled = useSelector((state: AppState) => state.user.id === '');
+  const isLogged = useSelector((state: AppState) => state.user.id !== '');
   return (
     <LikeContainer>
-      <Button disabled={disabled} active={isLiked}>
+      <Button disabled={!isLogged} active={isLiked}>
         <FontAwesomeIcon icon={isLiked ? solThumbsUp : reThumbsUp} />
       </Button>
       <Button onClick={toggleWriteComnt}>
         <FontAwesomeIcon icon={faPlus} />
       </Button>
-      <Button disabled={disabled} active={isBookmarked}>
+      <Button disabled={!isLogged} active={isBookmarked}>
         <FontAwesomeIcon icon={isBookmarked ? solBookmark : reBookMark} />
       </Button>
     </LikeContainer>

@@ -5,7 +5,6 @@ import Button from 'components/Common/Button';
 import Input from 'components/Common/Input';
 import VerifyKey from 'components/VerifyKey';
 import { Link } from 'react-router-dom';
-import Axios from 'axios';
 
 interface IProps {
   disabled: () => boolean;
