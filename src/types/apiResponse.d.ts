@@ -1,5 +1,5 @@
 export interface GetMeRes {
-  id: string;
+  id: number;
   email: string;
   name: string;
   valid: boolean;
@@ -14,4 +14,19 @@ export interface Message {
 }
 export interface LogInRes extends GetMeRes {
   token: string;
+}
+export interface ArticleRes {
+  id: number;
+  content: string;
+  createdAt: string;
+  creator: {
+    name: string;
+    avatar: string;
+  };
+  photos: [{ id: number; location: string }];
+  likeNumber: number;
+  commentNumber: number;
+  comments: [{ id: number; creator: string; content: string }];
+  isLiked: boolean;
+  isBookmarked: boolean;
 }

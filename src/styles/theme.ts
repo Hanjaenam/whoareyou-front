@@ -48,7 +48,6 @@ const myTheme: DefaultTheme = {
       md: '160px',
     },
   },
-  createArticleImage: '204px',
   width: {
     max: {
       authMain: '550px',
@@ -65,20 +64,15 @@ const myTheme: DefaultTheme = {
       container: '602px',
       image: '600px',
     },
-    createArticle: '950px',
   },
   height: {
     header: '48px',
     nav: '29px',
-    createArticle: {
-      xl: '650px',
-      lg: '800px',
-    },
   },
   zIndex: {
     header: 1,
     black: 2,
-    createArticle: 3,
+    asideModal: 3,
   },
 };
 

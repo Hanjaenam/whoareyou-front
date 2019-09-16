@@ -33,9 +33,6 @@ const Aside = styled.ul`
 const Item = styled.li`
   cursor: pointer;
   width: 125px;
-  @media screen and (max-width: ${props => props.theme.breakpoints.md}) {
-    font-size: 0.9rem;
-  }
 `;
 
 const Text = styled.p<{ active: boolean }>`
@@ -69,18 +66,12 @@ export default ({ children }: IProps) => {
     <Container>
       <Aside>
         <Item>
-          <Text
-            active={editType === 'profile'}
-            onClick={() => dispatch(setEditType('profile'))}
-          >
+          <Text active={editType === 'profile'} onClick={() => dispatch(setEditType('profile'))}>
             프로필 수정
           </Text>
         </Item>
         <Item>
-          <Text
-            active={editType === 'password'}
-            onClick={() => dispatch(setEditType('password'))}
-          >
+          <Text active={editType === 'password'} onClick={() => dispatch(setEditType('password'))}>
             비밀번호 변경
           </Text>
         </Item>

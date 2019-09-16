@@ -4,12 +4,10 @@ import { Link } from 'react-router-dom';
 import linkCss from 'styles/mixins/link';
 import UserAvatar from 'components/User/Avatar';
 import { MainHeightAboveLg, mainHeightBelowLg } from 'styles/mixins/etc';
+import { useSelector } from 'react-redux';
+import { AppState } from 'store/reducer';
 
 interface IProps {
-  id: string;
-  name: string;
-  introduce: string | null;
-  avatar: string | null;
   children?: ReactNode;
 }
 
@@ -20,6 +18,10 @@ const Container = styled.div`
   @media screen and (max-width: ${props => props.theme.breakpoints.lg}) {
     min-height: ${mainHeightBelowLg};
   }
+`;
+
+const Top = styled.div`
+  background-color: white;
 `;
 
 const InfoContainer = styled.div`
@@ -106,28 +108,30 @@ const Item = styled.div`
 
 const Children = styled.div`
   flex: 1;
-  background-color: white;
 `;
 
-export default ({ id, avatar, name, introduce, children }: IProps) => (
-  <Container>
-    <div>
-      <InfoContainer>
-        <UserAvatar avatar={avatar} page="user" />
-        <TextContainer>
-          <NameContainer>
-            <Name>{name}</Name>
-            <EditProfile to={`/user/${id}/edit`}>프로필 수정</EditProfile>
-          </NameContainer>
-          <Introduce isNull={introduce === null}>{introduce || '소개글이 없습니다...'}</Introduce>
-        </TextContainer>
-      </InfoContainer>
-      <Nav>
-        <Item>
-          <span>내 글</span>
-        </Item>
-      </Nav>
-    </div>
-    <Children>{children}</Children>
-  </Container>
-);
+export default ({ children }: IProps) => {
+  const { id, name, avatar, introduce } = useSelector((state: AppState) => state.user);
+  return (
+    <Container>
+      <Top>
+        <InfoContainer>
+          <UserAvatar avatar={avatar} page="user" />
+          <TextContainer>
+            <NameContainer>
+              <Name>{name}</Name>
+              <EditProfile to={`/user/${id}/edit`}>프로필 수정</EditProfile>
+            </NameContainer>
+            <Introduce isNull={introduce === null}>{introduce || '소개글이 없습니다...'}</Introduce>
+          </TextContainer>
+        </InfoContainer>
+        <Nav>
+          <Item>
+            <span>내 글</span>
+          </Item>
+        </Nav>
+      </Top>
+      <Children>{children}</Children>
+    </Container>
+  );
+};

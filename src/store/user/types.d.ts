@@ -27,7 +27,7 @@ interface LogOut {
 export type ActionTypes = LogIn | Patch | LogOut;
 // state
 export interface State {
-  id: string;
+  id: number;
   email: string;
   name: string;
   valid: boolean;

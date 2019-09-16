@@ -17,6 +17,7 @@ const containerSpin = keyframes`
 `;
 
 const Container = styled.div<{ size: number; position: 'absolute' | 'relative' }>`
+  z-index: 10;
   height: ${props => `${props.size}rem`};
   width: ${props => `${props.size}rem`};
   -webkit-animation: ${containerSpin} 4.8s linear infinite;
@@ -81,14 +82,14 @@ const Span = styled.span<{ size: number }>`
     height: ${props => `${props.size}rem`};
     clip: ${props => `rect(0, ${props.size}rem, ${props.size}rem, ${props.size / 2}rem)`};
     border-radius: 50%;
-    border: 2px solid ${props => props.color};
+    border: 3px solid ${props => props.color};
     -webkit-animation: ${afterSpin} 1.2s cubic-bezier(0.77, 0, 0.175, 1) infinite;
     animation: ${afterSpin} 1.2s cubic-bezier(0.77, 0, 0.175, 1) infinite;
   }
 `;
 
 export default ({ size = 1, color = '#fff', position = 'absolute' }: IProps) => (
-  <Container size={size} position={position}>
+  <Container size={size} position={position} className="loader">
     <Span size={size} color={color} />
   </Container>
 );

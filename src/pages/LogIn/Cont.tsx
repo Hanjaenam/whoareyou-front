@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { logIn } from 'store/user/actions';
-import { useInput, useApi, useCleanNotification } from 'hooks';
+import { useInput, useApi } from 'hooks';
 import { authApi } from 'utils/api';
 import { AxiosError } from 'axios';
 import { LogInRes } from 'types/apiResponse';
@@ -14,7 +14,6 @@ import Presnter from './Pres';
 // }
 
 export default () => {
-  useCleanNotification();
   const email = useInput();
   const password = useInput();
   const dispatch = useDispatch();

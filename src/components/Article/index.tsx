@@ -1,26 +1,27 @@
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { useInputWithSet } from 'hooks';
 import TextArea from 'react-autosize-textarea';
 import Button from 'components/Common/Button';
 import Func from 'components/Article/Func';
 import { blueColorClick } from 'styles/mixins/etc';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Comment from './Comment';
-import Author from './Author';
+import Creator from './Creator';
 
 interface IProps {
-  id: string;
-  author: string;
-  authorAvt: string | null;
+  id: number;
+  creator: string;
+  creatorAvt: string | null;
   content: string;
-  files: string[];
+  photos: [{ id: number; location: string }];
   likeNumber: number;
   commentNumber: number;
   isLiked: boolean;
   isBookmarked: boolean;
   createdAt: string;
-  comments: [{ id: string; author: string; content: string }];
+  comments: [{ id: number; creator: string; content: string }];
 }
 
 const Container = styled.article`
@@ -40,10 +41,51 @@ const Container = styled.article`
   }
 `;
 
-const ImageContainer = styled.div``;
+const ImageContainer = styled.div`
+  position: relative;
+`;
+
+const ImageSlider = styled.div<{ index: number }>`
+  display: flex;
+  transition-duration: 0.5s, 0.3s;
+  transition-timing-function: linear ease;
+  transform: ${props => `translateX(-${100 * props.index}%)`};
+`;
+
+const AngleIcon = styled.div<{ left?: boolean; right?: boolean }>`
+  position: absolute;
+  z-index: ${props => props.theme.zIndex.header};
+  background-color: rgba(255, 255, 255, 0.6);
+  ${props =>
+    props.left &&
+    css`
+      left: 0;
+      border-top-right-radius: ${props.theme.borderRadius};
+      border-bottom-right-radius: ${props.theme.borderRadius};
+    `}
+  ${props =>
+    props.right &&
+    css`
+      right: 0;
+      border-top-left-radius: ${props.theme.borderRadius};
+      border-bottom-left-radius: ${props.theme.borderRadius};
+    `}
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  width: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: ${props => props.theme.gap.huge} 0;
+  > svg {
+    font-size: ${props => props.theme.fontSize.medium};
+  }
+`;
 
 const Image = styled.div<{ url: string }>`
   width: 100%;
+  flex-shrink: 0;
   height: ${props => props.theme.width.article.image};
   background-image: url(${props => props.url});
   background-position: center;
@@ -56,7 +98,6 @@ const Image = styled.div<{ url: string }>`
 
 const ContentContainer = styled.div`
   padding: ${props => props.theme.gap.small};
-  padding-bottom: ${props => props.theme.gap.tiny};
   word-wrap: break-word;
   line-height: 1.2rem;
 `;
@@ -71,32 +112,23 @@ const MoreContent = styled.span`
   ${blueColorClick}
 `;
 
-const NumberContainer = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: ${props => props.theme.gap.tiny};
-`;
-
 const number = css`
-  padding: 0 ${props => props.theme.gap.tiny};
-  font-size: 0.9rem;
+  font-size: 14px;
   font-weight: 500;
   user-select: none;
 `;
 
-const LikeNumber = styled.p`
-  ${number};
-`;
-
 const CommentNumber = styled.div`
   ${number};
+  margin-top: ${props => props.theme.gap.tiny};
   span {
     ${blueColorClick}
   }
 `;
 
 const CommentContainer = styled.div`
-  margin-bottom: ${props => props.theme.gap.tiny};
+  margin: ${props => props.theme.gap.small};
+  margin-top: ${props => props.theme.gap.tiny};
 `;
 
 const TextAreaContainer = styled.div`
@@ -126,9 +158,9 @@ const CustomTextArea = styled(TextArea)`
 
 export default ({
   id,
-  author,
-  authorAvt,
-  files,
+  creator,
+  creatorAvt,
+  photos,
   content,
   likeNumber,
   commentNumber,
@@ -137,16 +169,41 @@ export default ({
   createdAt,
   comments,
 }: IProps) => {
+  const [photoIndex, setIndex] = useState(0);
   const { value: myComment, setValue: setMyComment } = useInputWithSet();
   const [wrtieComnt, setWriteComnt] = useState(false);
   const [visibleComnt, setVisComnt] = useState(false);
   return (
     <Container>
-      <Author avatar={authorAvt} author={author} createdAt={createdAt} />
+      <Creator avatar={creatorAvt} creator={creator} createdAt={createdAt} />
       <ImageContainer>
-        {files.map(file => (
-          <Image key={file} url={file} />
-        ))}
+        {photoIndex !== 0 && (
+          <AngleIcon
+            left
+            onClick={() => {
+              if (photoIndex - 1 < 0) return;
+              setIndex(photoIndex - 1);
+            }}
+          >
+            <FontAwesomeIcon icon={faChevronLeft} />
+          </AngleIcon>
+        )}
+        <ImageSlider index={photoIndex}>
+          {photos.map(photo => (
+            <Image key={photo.id} url={photo.location} />
+          ))}
+        </ImageSlider>
+        {photoIndex !== photos.length - 1 && (
+          <AngleIcon
+            right
+            onClick={() => {
+              if (photoIndex + 1 >= photos.length) return;
+              setIndex(photoIndex + 1);
+            }}
+          >
+            <FontAwesomeIcon icon={faChevronRight} />
+          </AngleIcon>
+        )}
       </ImageContainer>
       {content && (
         <ContentContainer>
@@ -156,22 +213,16 @@ export default ({
           </Content>
         </ContentContainer>
       )}
-      <NumberContainer>
-        <LikeNumber>
-          <span>좋아요 {likeNumber}</span>
-        </LikeNumber>
+      <CommentContainer>
+        {comments.map(comment => (
+          <Comment key={comment.id} creator={comment.creator} content={comment.content} />
+        ))}
         <CommentNumber onClick={() => setVisComnt(!visibleComnt)}>
-          <span>댓글수 {commentNumber}</span>
+          <span>댓글 {commentNumber}개 모두 보기</span>
         </CommentNumber>
-      </NumberContainer>
-      {visibleComnt && (
-        <CommentContainer>
-          {comments.map(comment => (
-            <Comment key={comment.id} author={comment.author} content={comment.content} />
-          ))}
-        </CommentContainer>
-      )}
+      </CommentContainer>
       <Func
+        likeNumber={likeNumber}
         isLiked={isLiked}
         isBookmarked={isBookmarked}
         toggleWriteComnt={() => setWriteComnt(!wrtieComnt)}

@@ -23,6 +23,7 @@ interface IMesageContainer {
 }
 
 const MessageContainer = styled.div<IMesageContainer>`
+  z-index: ${props => props.theme.zIndex.black};
   position: relative;
   margin: 0 auto;
   padding: ${props => props.theme.gap.medium};

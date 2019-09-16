@@ -2,7 +2,7 @@ import { ActionTypes, State } from './types';
 import { LOG_IN, PATCH, LOG_OUT } from './actions';
 
 const initialState: State = {
-  id: '',
+  id: -1,
   email: '',
   name: '',
   avatar: null,

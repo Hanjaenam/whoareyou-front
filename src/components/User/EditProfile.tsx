@@ -75,9 +75,10 @@ export default () => {
     return false;
   };
 
+  // UserAvatar id="avatar" 삭제 추후 문제되면 다시 넣을 것
   return (
     <Container>
-      <UserAvatar id="avatar" avatar={user.avatar} page="userEdit" />
+      <UserAvatar avatar={user.avatar} page="userEdit" />
       <InputContainer>
         <LabelContainer>
           <Label htmlFor="username">이름</Label>

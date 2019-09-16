@@ -1,8 +1,5 @@
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
-import { AppState } from 'store/reducer';
-import CreateArticle from 'components/Article/Create';
 
 interface IProps {
   children: ReactNode;
@@ -20,12 +17,8 @@ const Container = styled.div`
 
 const ArticleContainer = styled.div``;
 
-export default ({ children }: IProps) => {
-  const { createArticle } = useSelector((state: AppState) => state.header.visible);
-  return (
-    <Container>
-      <ArticleContainer>{children}</ArticleContainer>
-      {createArticle && <CreateArticle />}
-    </Container>
-  );
-};
+export default ({ children }: IProps) => (
+  <Container>
+    <ArticleContainer>{children}</ArticleContainer>
+  </Container>
+);

@@ -1,7 +1,6 @@
 import React, { ReactNode } from 'react';
 import styled, { css } from 'styled-components';
 import Aside from 'components/Aside';
-import Notification from 'components/Common/Notification';
 import { useSelector } from 'react-redux';
 import { AppState } from 'store/reducer';
 import AsideModal from 'components/AsideModal';
@@ -17,6 +16,8 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;
+  max-width: 2000px;
+  margin: 0 auto;
 `;
 
 const Layout = styled.div`
@@ -55,7 +56,6 @@ export default ({ children }: IProps) => {
         <Main contractAside={contractAside}>{children}</Main>
       </Layout>
       <AsideModal />
-      <Notification bottom right />
     </Container>
   );
 };

@@ -5,3 +5,4 @@ export { default as LatestArticle } from './LatestArticle';
 export { default as User } from './User';
 export { default as UserEdit } from './UserEdit';
 export { default as OAuthCallBack } from './OAuthCallBack';
+export { default as CreateArticle } from './CreateArticle';

@@ -49,7 +49,6 @@ declare module 'styled-components' {
         md: string;
       };
     };
-    createArticleImage: string;
     width: {
       max: {
         authMain: string;
@@ -63,16 +62,11 @@ declare module 'styled-components' {
         lg: string;
       };
       article: { container: string; image: string };
-      createArticle: string;
     };
     height: {
       header: string;
       nav: string;
-      createArticle: {
-        xl: string;
-        lg: string;
-      };
     };
-    zIndex: { header: number; black: number; createArticle: number };
+    zIndex: { header: number; black: number; asideModal: number };
   }
 }

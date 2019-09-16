@@ -2,8 +2,6 @@ import { State, ActionTypes } from './types';
 import {
   TOGGLE_VISIBLE_POPOVER,
   HIDE_USER_POPOVEER,
-  TOGGLE_CREATE_ARTICLE,
-  HIDE_CREATE_ARTICLE,
   TOGGLE_CONTRACT_ASIDE,
   HIDE_ASIDE_MODAL,
   SHOW_ASIDE_MODAL,
@@ -14,7 +12,6 @@ const initialState: State = {
     userPopover: false,
     asideModal: false,
     header: false,
-    createArticle: false,
   },
   contract: {
     aside: false,
@@ -31,22 +28,6 @@ export default (state = initialState, action: ActionTypes): State => {
       return {
         ...state,
         visible: { ...state.visible, userPopover: false },
-      };
-    case TOGGLE_CREATE_ARTICLE:
-      return {
-        ...state,
-        visible: {
-          ...state.visible,
-          createArticle: !state.visible.createArticle,
-        },
-      };
-    case HIDE_CREATE_ARTICLE:
-      return {
-        ...state,
-        visible: {
-          ...state.visible,
-          createArticle: false,
-        },
       };
     case TOGGLE_CONTRACT_ASIDE:
       return {

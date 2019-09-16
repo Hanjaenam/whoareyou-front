@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { AxiosPromise, AxiosError } from 'axios';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setMessage, cleanMessage } from 'store/notification/actions';
 import { Status, useInputParams } from 'types/hooks';
+import { AppState } from 'store/reducer';
 
 const isDev = process.env.NODE_ENV;
 
@@ -99,10 +100,8 @@ export const useApi2 = (api: () => AxiosPromise<any>) => {
 
 export const useCleanNotification = () => {
   const dispatch = useDispatch();
-  useEffect(
-    () => () => {
-      dispatch(cleanMessage());
-    },
-    [],
-  );
+  const { value } = useSelector((state: AppState) => state.notification);
+  useEffect(() => {
+    if (value !== '') dispatch(cleanMessage());
+  }, []);
 };

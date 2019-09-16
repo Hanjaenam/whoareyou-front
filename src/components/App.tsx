@@ -5,6 +5,7 @@ import { userApi } from 'utils/api';
 import { logIn } from 'store/user/actions';
 import { AxiosError } from 'axios';
 import { GetMeRes } from 'types/apiResponse';
+import Notification from 'components/Common/Notification';
 import Routes from './Routes';
 
 export default () => {
@@ -34,5 +35,12 @@ export default () => {
     }
   }, []);
 
-  return <Router>{!loading && <Routes />}</Router>;
+  return (
+    <Router>
+      <>
+        {!loading && <Routes />}
+        <Notification bottom right />
+      </>
+    </Router>
+  );
 };

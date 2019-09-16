@@ -30,7 +30,7 @@ const Container = styled.div<{ visible: boolean }>`
     position: fixed;
     transform: translateX(-100%);
     height: 100vh;
-    z-index: 2;
+    z-index: ${props => props.theme.zIndex.asideModal};
     ${props =>
       props.visible &&
       css`

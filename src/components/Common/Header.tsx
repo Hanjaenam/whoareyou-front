@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import Button from 'components/Common/Button';
 import linkCss from 'styles/mixins/link';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useInput } from 'hooks';
 import { faSearch, faPlus, faBars } from '@fortawesome/free-solid-svg-icons';
@@ -10,7 +10,6 @@ import { AppState } from 'store/reducer';
 import {
   toggleVisiblePopover,
   hideUserPopover,
-  toggleCreateArticle,
   toggleContractAside,
   showAsideModal,
 } from 'store/header/actions';
@@ -20,18 +19,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Input from './Input';
 import UserPopover from '../User/Popover';
 
-const Layout = styled.div`
-  @media screen and (max-width: ${props => props.theme.breakpoints.lg}) {
-    background-color: white;
-    z-index: ${props => props.theme.zIndex.header};
-    position: fixed;
-    border-bottom: 1px solid ${props => props.theme.colors.secondary};
-  }
-`;
-
 const Container = styled.header`
   transition: height 0.2s;
   position: fixed;
+  max-width: 2000px;
   width: 100vw;
   z-index: ${props => props.theme.zIndex.header};
   display: grid;
@@ -43,10 +34,7 @@ const Container = styled.header`
   padding: 0 ${props => props.theme.gap.medium};
   border-bottom: 1px solid ${props => props.theme.colors.secondary};
   background-color: white;
-  @media screen and (max-width: ${props => props.theme.breakpoints.lg}) {
-    position: relative;
-    border-bottom: 0;
-  }
+
   @media screen and (max-width: ${props => props.theme.breakpoints.md}) {
     padding: 0 ${props => props.theme.gap.medium};
   }
@@ -55,7 +43,7 @@ const Container = styled.header`
   }
 `;
 
-const T = styled.div`
+const Right = styled.div`
   display: grid;
   grid-template-columns: 1fr auto;
   grid-gap: ${props => props.theme.gap.small};
@@ -115,6 +103,17 @@ const CustomLink = styled(Link)`
   ${linkCss.noBg}
 `;
 
+const CustomNavLink = styled(NavLink)`
+  ${linkCss.basic}
+  ${linkCss.noBg}
+  &.active {
+    background-color: ${props => props.theme.colors.main};
+    > svg {
+      color: white;
+    }
+  }
+`;
+
 export default () => {
   const search = useInput('');
   const username = useSelector((state: AppState) => state.user.name);
@@ -148,44 +147,44 @@ export default () => {
   };
 
   return (
-    <Layout>
-      <Container>
+    <Container>
+      <Flex>
+        <Button icon={faBars} theme="noBg" onClick={onBarsClick} />
+        <CustomLink to={username ? '/' : '/latest'}>WhoAreYou</CustomLink>
+      </Flex>
+      <Right>
         <Flex>
-          <Button icon={faBars} theme="noBg" onClick={onBarsClick} />
-          <CustomLink to="/latest">WhoAreYou</CustomLink>
+          <CustomInput padding="tiny" placeholder="검색" {...search} />
+          <Button theme="withBg" icon={faSearch} onClick={() => null} />
+          <Icon>
+            <FontAwesomeIcon icon={faSearch} />
+          </Icon>
         </Flex>
-        <T>
-          <Flex>
-            <CustomInput padding="tiny" placeholder="검색" {...search} />
-            <Button theme="withBg" icon={faSearch} onClick={() => null} />
-            <Icon>
-              <FontAwesomeIcon icon={faSearch} />
-            </Icon>
-          </Flex>
-          <Flex>
-            {username && (
-              <Button icon={faPlus} theme="noBg" onClick={() => dispatch(toggleCreateArticle())} />
+        <Flex>
+          {username && (
+            <CustomNavLink to="/create">
+              <FontAwesomeIcon icon={faPlus} />
+            </CustomNavLink>
+          )}
+          <UserContainer className="username">
+            {username ? (
+              <Button
+                theme="noBg"
+                onClick={e => {
+                  e.stopPropagation();
+                  dispatch(toggleVisiblePopover());
+                }}
+              >
+                {username}
+              </Button>
+            ) : (
+              <CustomLink to="/">로그인</CustomLink>
             )}
-            <UserContainer className="username">
-              {username ? (
-                <Button
-                  theme="noBg"
-                  onClick={e => {
-                    e.stopPropagation();
-                    dispatch(toggleVisiblePopover());
-                  }}
-                >
-                  {username}
-                </Button>
-              ) : (
-                <CustomLink to="/">로그인</CustomLink>
-              )}
-              <UserPopover />
-            </UserContainer>
-          </Flex>
-        </T>
-      </Container>
-    </Layout>
+            <UserPopover />
+          </UserContainer>
+        </Flex>
+      </Right>
+    </Container>
   );
 };
 

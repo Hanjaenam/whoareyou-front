@@ -8,6 +8,7 @@ import {
   UserPatch,
   PatchAvatar,
   ChangePassword,
+  PostArticle,
 } from 'types/api';
 
 const AuthAxios = axios.create({ baseURL: '/api/auth' });
@@ -46,6 +47,7 @@ const UserAxios = axios.create({
 });
 
 export const userApi = {
+  // headers 를 create에 정의하면 OAuth2 login 이 되지 않는다.
   getMe: () =>
     UserAxios({
       url: '/me',
@@ -90,5 +92,26 @@ export const userApi = {
       headers: {
         authorization: `Token ${window.localStorage.getItem('token')}`,
       },
+    }),
+};
+
+const ArticleAxios = axios.create({
+  baseURL: '/api/article',
+  headers: {
+    authorization: `Token ${window.localStorage.getItem('token')}`,
+  },
+});
+
+export const articleApi = {
+  getAll: () => ArticleAxios({ url: '/', method: 'GET' }),
+  create: ({ formData }: PostArticle) =>
+    ArticleAxios({
+      url: '/',
+      method: 'POST',
+      headers: {
+        authorization: `Token ${window.localStorage.getItem('token')}`,
+        'content-type': 'multipart/form-data',
+      },
+      data: formData,
     }),
 };

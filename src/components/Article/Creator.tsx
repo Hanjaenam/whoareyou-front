@@ -3,10 +3,11 @@ import styled from 'styled-components';
 import Button from 'components/Common/Button';
 import tempAvatar from 'assets/avatar.png';
 import { faExpand } from '@fortawesome/free-solid-svg-icons';
+import moment from 'moment';
 
 interface IProps {
   avatar: string | null;
-  author: string;
+  creator: string;
   createdAt: string;
 }
 
@@ -46,13 +47,13 @@ const CreatedAt = styled.p`
   margin-top: ${props => props.theme.gap.tiny};
 `;
 
-export default ({ avatar, author, createdAt }: IProps) => (
+export default ({ avatar, creator, createdAt }: IProps) => (
   <Top>
     <Avatar url={avatar} />
     <AuthorContainer>
       <div>
-        <Author>{author}</Author>
-        <CreatedAt>{createdAt}</CreatedAt>
+        <Author>{creator}</Author>
+        <CreatedAt>{moment(createdAt).fromNow()}</CreatedAt>
       </div>
       <Button icon={faExpand} theme="noBg" onClick={() => null} />
     </AuthorContainer>

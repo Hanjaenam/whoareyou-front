@@ -1,6 +1,5 @@
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
-import Notification from '../Common/Notification';
 
 interface IProps {
   children: ReactNode;
@@ -84,6 +83,5 @@ export default ({ children }: IProps) => (
     <Right>
       <Main>{children}</Main>
     </Right>
-    <Notification top right />
   </Container>
 );

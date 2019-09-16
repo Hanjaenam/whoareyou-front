@@ -3,16 +3,15 @@ import styled from 'styled-components';
 import { blueColorClick } from 'styles/mixins/etc';
 
 interface IProps {
-  author: string;
+  creator: string;
   content: string;
 }
 
 const Container = styled.div`
   display: flex;
-  padding: ${props => props.theme.gap.small};
-  background-color: ${props => props.theme.colors.aside()};
-  border-radius: ${props => props.theme.borderRadius.comment};
-  border: 1px solid white;
+  & + & {
+    margin-top: ${props => props.theme.gap.tiny};
+  }
 `;
 
 const Author = styled.p`
@@ -23,9 +22,9 @@ const Author = styled.p`
 
 const Comment = styled.p``;
 
-export default ({ author, content }: IProps) => (
+export default ({ creator, content }: IProps) => (
   <Container>
-    <Author>{author}</Author>
+    <Author>{creator}</Author>
     <Comment>{content}</Comment>
   </Container>
 );

@@ -30,7 +30,7 @@ const SLink = styled(NavLink)`
   font-size: ${props => props.theme.fontSize.medium};
   border-right: 3px solid transparent;
   &:hover {
-    background-color: ${props => props.theme.colors.aside({ r: '-10', g: '-10', b: '-10' })};
+    background-color: ${props => props.theme.colors.aside({ r: '-20', g: '-20', b: '-20' })};
   }
   &:active {
     color: ${props => props.theme.colors.font};
@@ -101,12 +101,12 @@ const Container = styled.aside<{ contract: boolean; modal?: boolean }>`
 
 const Aside = ({ modal }: IProps) => {
   const contract = useSelector((state: AppState) => state.header.contract.aside);
-  const isLogged = useSelector((state: AppState) => state.user.id !== '');
+  const isLogged = useSelector((state: AppState) => state.user.id !== -1);
   return (
     <Container contract={contract} modal={modal}>
       <Menu>
         <Item>
-          <SLink to="/">
+          <SLink exact to="/">
             <Icon icon={faClock} />
             <span>최신</span>
           </SLink>

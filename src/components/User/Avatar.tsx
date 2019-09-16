@@ -2,19 +2,24 @@ import React, { useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 import tempAvatar from 'assets/avatar.png';
 import { userApi } from 'utils/api';
-import { useSelector, useDispatch } from 'react-redux';
-import { AppState } from 'store/reducer';
+import { useDispatch } from 'react-redux';
 import { useApi } from 'hooks';
 import { setMessage } from 'store/notification/actions';
 import { patchUser } from 'store/user/actions';
+import Loader from 'components/Common/Loader';
 
 interface IProps {
-  id?: string;
   avatar: string | null;
   page: 'user' | 'userEdit';
 }
 
-const Avatar = styled.div<{ url: string | null; page: 'user' | 'userEdit' }>`
+interface IAvatar {
+  url: string | null;
+  page: 'user' | 'userEdit';
+  status: { loading: boolean };
+}
+
+const Avatar = styled.div<IAvatar>`
   position: relative;
   border-radius: ${props => props.theme.borderRadius.avatar};
   border: 1px solid ${props => props.theme.colors.secondary};
@@ -23,6 +28,9 @@ const Avatar = styled.div<{ url: string | null; page: 'user' | 'userEdit' }>`
   background-repeat: no-repeat;
   background-size: cover;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   ${props =>
     props.page === 'user'
       ? css`
@@ -57,6 +65,18 @@ const Avatar = styled.div<{ url: string | null; page: 'user' | 'userEdit' }>`
             }
           }
         `}
+  ${props =>
+    props.status.loading &&
+    css`
+      &::after {
+        content: '';
+        display: block;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+      }
+    `}
 `;
 
 const AddAvatar = styled.button`
@@ -87,20 +107,17 @@ const Input = styled.input<{ ref: React.MutableRefObject<undefined> }>`
   display: none;
 `;
 
-export default ({ id, avatar, page }: IProps) => {
+export default ({ avatar, page }: IProps) => {
   const inputRef = useRef<HTMLInputElement>();
   const dispatch = useDispatch();
   const [visibleAddAvatar, setVisible] = useState(page === 'userEdit');
   const { process, loading } = useApi(userApi.patchAvatar);
-  const { id: userId, name } = useSelector((state: AppState) => state.user);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const image = e.target.files ? e.target.files[0] : null;
     if (image === null) return;
     const formData = new FormData();
     formData.append('avatar', image);
-    formData.append('id', userId);
-    formData.append('name', name);
     process({ formData }).then(({ data }: { data: string }) => {
       dispatch(patchUser({ avatar: data }));
       dispatch(setMessage({ type: 'success', value: '수정되었습니다.' }));
@@ -113,6 +130,7 @@ export default ({ id, avatar, page }: IProps) => {
       page={page}
       onMouseEnter={page === 'user' ? () => setVisible(true) : undefined}
       onMouseLeave={page === 'user' ? () => setVisible(false) : undefined}
+      status={{ loading }}
     >
       {visibleAddAvatar ? (
         <AddAvatar onClick={() => inputRef.current && inputRef.current.click()}>
@@ -123,10 +141,10 @@ export default ({ id, avatar, page }: IProps) => {
         type="file"
         accept="image/jpeg,image/png"
         name="avatar"
-        // id={id}
         ref={inputRef as any}
         onChange={onChange}
       />
+      {loading && <Loader size={1.5} />}
     </Avatar>
   );
 };

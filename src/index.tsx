@@ -4,8 +4,12 @@ import GlobalStyles from 'styles/GlobalStyles';
 import { ThemeProvider } from 'styled-components';
 import { Provider } from 'react-redux';
 import { myTheme } from 'styles/theme';
+import moment from 'moment';
+import 'moment/locale/ko';
 import store from 'store';
 import App from './components/App';
+
+moment.locale('ko');
 
 ReactDOM.render(
   <>

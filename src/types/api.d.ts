@@ -34,3 +34,7 @@ export interface ChangePassword {
   prePassword: string;
   newPassword: string;
 }
+
+export interface PostArticle {
+  formData: FormData;
+}

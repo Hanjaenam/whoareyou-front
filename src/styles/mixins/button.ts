@@ -49,6 +49,9 @@ export const basic = (
   display: flex;
   align-items: center;
   justify-content: center;
+  @media screen and (max-width: ${props => props.theme.breakpoints.md}) {
+    padding: ${props => props.theme.gap.tiny};
+  }
 `;
 
 export const withBg = (
@@ -123,9 +126,9 @@ export const border = (
     padding: 'small',
   },
 ) => css`
+${basic({ padding })}
 ${disabled && _disabled('border')}
 ${loading && _loading}
-${basic({ padding })}
   border: 1px solid ${props => props.theme.colors[color]};
   ${
     disabled || loading

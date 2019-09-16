@@ -3,11 +3,11 @@ import styled, { css } from 'styled-components';
 import {
   faBookmark as solBookmark,
   faThumbsUp as solThumbsUp,
-  faPlus,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faBookmark as reBookMark,
   faThumbsUp as reThumbsUp,
+  faCommentDots,
 } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { basic } from 'styles/mixins/button';
@@ -18,6 +18,7 @@ interface IProps {
   isLiked: boolean;
   isBookmarked: boolean;
   toggleWriteComnt: () => void;
+  likeNumber: number;
 }
 
 const LikeContainer = styled.div`
@@ -33,6 +34,10 @@ const LikeContainer = styled.div`
       font-size: ${props => props.theme.fontSize.large};
     }
   }
+`;
+
+const LikeNumber = styled.span`
+  margin-left: ${props => props.theme.gap.tiny};
 `;
 
 const Button = styled.div<{ disabled?: boolean; active?: boolean }>`
@@ -56,19 +61,24 @@ const Button = styled.div<{ disabled?: boolean; active?: boolean }>`
   ${props =>
     props.active &&
     css`
-      color: ${props.theme.colors.blue};
+      background-color: ${props.theme.colors.blue};
+      > svg,
+      > span {
+        color: white;
+      }
     `}
 `;
 
-export default ({ isLiked, isBookmarked, toggleWriteComnt }: IProps) => {
-  const isLogged = useSelector((state: AppState) => state.user.id !== '');
+export default ({ isLiked, isBookmarked, toggleWriteComnt, likeNumber }: IProps) => {
+  const isLogged = useSelector((state: AppState) => state.user.id !== -1);
   return (
     <LikeContainer>
       <Button disabled={!isLogged} active={isLiked}>
         <FontAwesomeIcon icon={isLiked ? solThumbsUp : reThumbsUp} />
+        <LikeNumber>{likeNumber}</LikeNumber>
       </Button>
       <Button onClick={toggleWriteComnt}>
-        <FontAwesomeIcon icon={faPlus} />
+        <FontAwesomeIcon icon={faCommentDots} />
       </Button>
       <Button disabled={!isLogged} active={isBookmarked}>
         <FontAwesomeIcon icon={isBookmarked ? solBookmark : reBookMark} />
