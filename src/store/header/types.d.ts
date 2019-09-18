@@ -21,6 +21,7 @@ interface ShowAsideModal {
 interface HideAsideModal {
   type: typeof HIDE_ASIDE_MODAL;
 }
+
 export type ActionTypes =
   | ToggleVisiblePopover
   | HideUserPopover
@@ -33,6 +34,7 @@ export interface State {
     userPopover: boolean;
     asideModal: boolean;
     header: boolean;
+    createArticle: boolean;
   };
   contract: {
     aside: boolean;

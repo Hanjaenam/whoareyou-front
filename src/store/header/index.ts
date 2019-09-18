@@ -12,6 +12,7 @@ const initialState: State = {
     userPopover: false,
     asideModal: false,
     header: false,
+    createArticle: false,
   },
   contract: {
     aside: false,

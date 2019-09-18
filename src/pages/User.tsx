@@ -1,14 +1,15 @@
 import React, { useEffect, useState, createContext } from 'react';
 import HomeTemplate from 'components/Templates/Common/Home';
-import UserTemplate from 'components/Templates/User';
-import Article from 'components/Article';
+import UserTemplate from 'components/Templates/UserTemp';
 import { ArticleRes } from 'types/apiRes/article';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'store/reducer';
-import { GetOne } from 'types/apiRes/user';
+import { Basic } from 'types/apiRes/user';
 import userApi from 'api/user';
 import { useApi } from 'hooks';
 import ArticleProvider from 'context/article';
+import Article from 'components/Article';
+import { setArticleArr } from 'store/articleArr/actions';
 
 interface IProps {
   match: { params: { id: string } };
@@ -16,12 +17,12 @@ interface IProps {
 
 interface IUserContext {
   isMe: boolean;
-  user: GetOne;
+  otherUser: Basic | undefined;
 }
 
 export const UserContext = createContext<IUserContext>({
   isMe: false,
-  user: { id: -1, name: '', avatar: null, introduce: null },
+  otherUser: undefined,
 });
 
 export default ({
@@ -29,32 +30,29 @@ export default ({
     params: { id },
   },
 }: IProps) => {
-  const [articles, setArticles] = useState([]);
-  const [user, setUser] = useState<GetOne | null>(null);
-
   const { process, loading, success } = useApi(userApi.getArticleOnCreator, 'home');
-  const me = useSelector((state: AppState) => state.user);
+  const { articleArr } = useSelector((state: AppState) => state);
+  const dispatch = useDispatch();
+
+  const [otherUser, setUser] = useState<Basic>();
+  const isMe = useSelector((state: AppState) => state.user.id === Number(id));
 
   useEffect(() => {
-    // get user info
-    if (me.id === Number(id)) {
-      setUser({ id: me.id, name: me.name, avatar: me.avatar, introduce: me.introduce });
-    } else {
-      userApi.getOne({ id });
-    }
-    // get article
-    process({ id }).then(res => setArticles(res.data));
+    // 내가 아닐 경우에만 정보 가져오기
+    if (!isMe)
+      userApi.getOne({ id: Number(id) }).then(({ data }: { data: Basic }) => setUser(data));
+    process({ id: Number(id) }).then(res => dispatch(setArticleArr(res.data)));
   }, []);
 
   return (
     <HomeTemplate>
-      {user && (
-        <UserContext.Provider value={{ isMe: me.id === Number(id), user }}>
+      {(isMe || otherUser) && (
+        <UserContext.Provider value={{ isMe, otherUser }}>
           <UserTemplate>
             {!loading &&
               success &&
-              articles.map((article: ArticleRes, index: number) => (
-                <ArticleProvider key={article.id} article={article} idx={index}>
+              articleArr.map((article: ArticleRes, index: number) => (
+                <ArticleProvider key={article.id} idx={index}>
                   <Article />
                 </ArticleProvider>
               ))}

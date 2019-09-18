@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import styled, { css } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
-import { useData } from 'context/article';
+import { ArticleContext } from 'context/article';
+import { useSelector } from 'react-redux';
+import { AppState } from 'store/reducer';
 
 const ImageContainer = styled.div`
   position: relative;
@@ -23,15 +25,15 @@ const AngleIcon = styled.div<{ left?: boolean; right?: boolean }>`
     props.left &&
     css`
       left: 0;
-      border-top-right-radius: ${props.theme.borderRadius};
-      border-bottom-right-radius: ${props.theme.borderRadius};
+      border-top-right-radius: 15px;
+      border-bottom-right-radius: 15px;
     `}
   ${props =>
     props.right &&
     css`
       right: 0;
-      border-top-left-radius: ${props.theme.borderRadius};
-      border-bottom-left-radius: ${props.theme.borderRadius};
+      border-top-left-radius: 15px;
+      border-bottom-left-radius: 15px;
     `}
   top: 50%;
   transform: translateY(-50%);
@@ -43,6 +45,9 @@ const AngleIcon = styled.div<{ left?: boolean; right?: boolean }>`
   padding: ${props => props.theme.gap.huge} 0;
   > svg {
     font-size: ${props => props.theme.fontSize.medium};
+  }
+  @media screen and (max-width: ${props => props.theme.breakpoints.sm}) {
+    width: 20px;
   }
 `;
 
@@ -60,10 +65,12 @@ const Photo = styled.div<{ url: string }>`
 `;
 
 export default () => {
-  const data = useData();
+  const data = useContext(ArticleContext);
   if (data === null) return null;
+
   const [photoIndex, setIndex] = useState(0);
-  const { photos } = data;
+  const { photos } = useSelector((state: AppState) => state.articleArr[data.index]);
+
   return (
     <ImageContainer>
       {photoIndex !== 0 && (

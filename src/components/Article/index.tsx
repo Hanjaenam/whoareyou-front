@@ -1,15 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import Bottom from 'components/Article/Bottom';
-import { blueColorClick } from 'styles/mixins/etc';
 import PhotoSlider from 'components/Article/PhotoSlider';
-import { useSelector } from 'react-redux';
-import { AppState } from 'store/reducer';
-import { useData } from 'context/article';
-import Comments from './Comments';
-import Creator from './Creator';
+import Comments from 'components/Article/Comments';
+import Top from 'components/Article/Top';
+import Content from 'components/Article/Content';
 
 const Container = styled.article`
+  position: relative;
   border: 1px solid ${props => props.theme.colors.secondary};
   border-radius: ${props => props.theme.borderRadius.basic};
   overflow: hidden;
@@ -27,40 +25,12 @@ const Container = styled.article`
   }
 `;
 
-const ContentContainer = styled.div`
-  padding: ${props => props.theme.gap.small};
-  word-wrap: break-word;
-  line-height: 1.2rem;
-`;
-
-// 최대 200 글자까지
-const Content = styled.p`
-  overflow: hidden;
-`;
-
-const MoreContent = styled.span`
-  margin-left: ${props => props.theme.gap.small};
-  ${blueColorClick}
-`;
-
-export default () => {
-  const data = useData();
-  if (data === null) return null;
-  const { content } = data;
-  return (
-    <Container>
-      <Creator />
-      <PhotoSlider />
-      {content && (
-        <ContentContainer>
-          <Content>
-            {content}
-            {content.length >= 200 && <MoreContent>더보기</MoreContent>}
-          </Content>
-        </ContentContainer>
-      )}
-      <Comments />
-      <Bottom />
-    </Container>
-  );
-};
+export default () => (
+  <Container>
+    <Top />
+    <PhotoSlider />
+    <Content />
+    <Comments />
+    <Bottom />
+  </Container>
+);

@@ -10,7 +10,7 @@ const ArticleAxios = axios.create({
 export default {
   getAll: () => ArticleAxios({ url: '/', method: 'GET' }),
 
-  getCreator: ({ id }: { id: string }) => ArticleAxios({ url: `${id}/creator`, method: 'GET' }),
+  getCreator: ({ id }: { id: number }) => ArticleAxios({ url: `${id}/creator`, method: 'GET' }),
 
   create: ({ formData }: { formData: FormData }) =>
     ArticleAxios({
@@ -23,5 +23,5 @@ export default {
       data: formData,
     }),
 
-  remove: ({ id }: { id: string }) => ArticleAxios({ url: `/${id}`, method: 'DELETE' }),
+  remove: ({ id }: { id: number }) => ArticleAxios({ url: `/${id}`, method: 'DELETE' }),
 };

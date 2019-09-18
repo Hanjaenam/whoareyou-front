@@ -5,7 +5,7 @@ const myTheme: DefaultTheme = {
     basic: '3px',
     avatar: '25%',
     comment: '15px',
-    auth: '25px',
+    authMain: '25px',
   },
   breakpoints: {
     sm: '576px',
@@ -40,12 +40,12 @@ const myTheme: DefaultTheme = {
     large: '25px',
     huge: '35px',
   },
-  userAvatarSize: {
-    userPage: {
+  avatarSize: {
+    user: {
       xl: '160px',
       md: '120px',
     },
-    userEditPage: {
+    userEdit: {
       xl: '200px',
       md: '160px',
     },

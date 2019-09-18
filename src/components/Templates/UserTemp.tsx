@@ -1,10 +1,13 @@
-import React, { ReactNode, useContext } from 'react';
-import styled, { css } from 'styled-components';
+import React, { ReactNode, useContext, useMemo } from 'react';
+import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import linkCss from 'styles/mixins/link';
-import UserAvatar from 'components/User/Avatar';
+import MyAvatar from 'components/User/Avatar';
 import { MainHeightAboveLg, mainHeightBelowLg, articleContainer } from 'styles/mixins/etc';
 import { UserContext } from 'pages/User';
+import tempAvatar from 'assets/avatar.png';
+import { useSelector } from 'react-redux';
+import { AppState } from 'store/reducer';
 
 const Container = styled.div`
   display: flex;
@@ -17,6 +20,7 @@ const Container = styled.div`
 
 const Top = styled.div`
   background-color: white;
+  border-bottom: 1px solid ${props => props.theme.colors.secondary};
 `;
 
 const InfoContainer = styled.div`
@@ -34,6 +38,12 @@ const InfoContainer = styled.div`
     width: 100%;
     padding: ${props => props.theme.gap.tiny};
   }
+`;
+
+const OtherAvatar = styled.img`
+  width: ${props => props.theme.avatarSize.user};
+  height: ${props => props.theme.avatarSize.user};
+  border-radius: ${props => props.theme.borderRadius.avatar};
 `;
 
 const TextContainer = styled.div`
@@ -73,14 +83,10 @@ const EditProfile = styled(Link)`
   ${linkCss.border}
 `;
 
-const Introduce = styled.p<{ isNull: boolean }>`
+const Introduce = styled.p`
   text-indent: ${props => props.theme.gap.medium};
-  ${props =>
-    props.isNull &&
-    css`
-      color: ${props.theme.colors.secondary};
-    `}
-    @media screen and (max-width: ${props => props.theme.breakpoints.md}) {
+
+  @media screen and (max-width: ${props => props.theme.breakpoints.md}) {
     text-indent: ${props => props.theme.gap.small};
   }
 `;
@@ -110,20 +116,31 @@ interface IProps {
 }
 
 export default ({ children }: IProps) => {
-  const { isMe, user } = useContext(UserContext);
+  const { isMe, otherUser } = useContext(UserContext);
+  const { name, introduce } = useSelector((state: AppState) => state.user);
+
+  const getIntroduce = useMemo(() => {
+    const placeholder = '소개글이 없습니다...';
+    if (isMe) return introduce || placeholder;
+    if (otherUser) return otherUser.introduce || placeholder;
+    return placeholder;
+  }, [isMe ? introduce : otherUser && otherUser.introduce]);
+
   return (
     <Container>
       <Top>
         <InfoContainer>
-          <UserAvatar avatar={user.avatar} page="user" />
+          {isMe ? (
+            <MyAvatar page="user" />
+          ) : (
+            <OtherAvatar src={(otherUser && otherUser.avatar) || tempAvatar} />
+          )}
           <TextContainer>
             <NameContainer>
-              <Name>{user.name}</Name>
-              {isMe && <EditProfile to={`/user/${user.id}/edit`}>프로필 수정</EditProfile>}
+              <Name>{isMe ? name : otherUser && otherUser.name}</Name>
+              {isMe && <EditProfile to="/user/edit">프로필 수정</EditProfile>}
             </NameContainer>
-            <Introduce isNull={user.introduce === null}>
-              {user.introduce || '소개글이 없습니다...'}
-            </Introduce>
+            <Introduce>{getIntroduce}</Introduce>
           </TextContainer>
         </InfoContainer>
         <Nav>

@@ -34,7 +34,7 @@ const Main = styled.main`
   width: ${props => props.theme.breakpoints.sm};
   margin: 0 auto;
   background-color: white;
-  border-radius: ${props => props.theme.borderRadius.auth};
+  border-radius: ${props => props.theme.borderRadius.authMain};
   @media screen and (max-width: ${props => props.theme.breakpoints.sm}) {
     width: 100%;
     border-radius: 0;

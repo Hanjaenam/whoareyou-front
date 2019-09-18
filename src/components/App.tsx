@@ -4,7 +4,7 @@ import { HashRouter as Router } from 'react-router-dom';
 import userApi from 'api/user';
 import { logIn } from 'store/user/actions';
 import { AxiosError } from 'axios';
-import { GetMeRes } from 'types/apiRes/user';
+import { Basic } from 'types/apiRes/user';
 import Notification from 'components/Common/Notification';
 import Routes from './Routes';
 
@@ -20,7 +20,7 @@ export default () => {
     if (token) {
       userApi
         .getMe()
-        .then(({ data }: { data: GetMeRes }) => {
+        .then(({ data }: { data: Basic }) => {
           dispatch(logIn(data));
           setLoading(false);
         })

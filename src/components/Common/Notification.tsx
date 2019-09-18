@@ -12,7 +12,7 @@ interface IMesageContainer {
 }
 
 const MessageContainer = styled.div<IMesageContainer>`
-  position: absolute;
+  position: fixed;
   bottom: ${props => props.theme.gap.small};
   right: ${props => props.theme.gap.small};
   margin: 0 auto;

@@ -16,7 +16,7 @@ export default {
       },
     }),
 
-  getOne: ({ id }: { id: string }) =>
+  getOne: ({ id }: { id: number }) =>
     UserAxios({
       url: `/${id}`,
       method: 'GET',
@@ -25,7 +25,7 @@ export default {
       },
     }),
 
-  getArticleOnCreator: ({ id }: { id: string }) =>
+  getArticleOnCreator: ({ id }: { id: number }) =>
     UserAxios({
       url: `/${id}/article`,
       method: 'GET',

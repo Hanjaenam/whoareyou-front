@@ -1,16 +1,15 @@
-import React, { useRef, useState, useContext } from 'react';
+import React, { useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 import tempAvatar from 'assets/avatar.png';
 import userApi from 'api/user';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useApi } from 'hooks';
 import { setMessage } from 'store/notification/actions';
 import { patchUser } from 'store/user/actions';
 import Loader from 'components/Common/Loader';
-import { UserContext } from 'pages/User';
+import { AppState } from 'store/reducer';
 
 interface IProps {
-  avatar: string | null;
   page: 'user' | 'userEdit';
 }
 
@@ -32,40 +31,20 @@ const Avatar = styled.div<IAvatar>`
   display: flex;
   justify-content: center;
   align-items: center;
-  ${props =>
-    props.page === 'user'
-      ? css`
-          width: ${props.theme.userAvatarSize.userPage.xl};
-          height: ${props.theme.userAvatarSize.userPage.xl};
-          > button {
-            border-bottom-right-radius: 35px;
-            border-bottom-left-radius: 35px;
-          }
-          @media screen and (max-width: ${props.theme.breakpoints.md}) {
-            width: ${props.theme.userAvatarSize.userPage.md};
-            height: ${props.theme.userAvatarSize.userPage.md};
-            > button {
-              border-bottom-right-radius: 25px;
-              border-bottom-left-radius: 25px;
-            }
-          }
-        `
-      : css`
-          width: ${props.theme.userAvatarSize.userEditPage.xl};
-          height: ${props.theme.userAvatarSize.userEditPage.xl};
-          > button {
-            border-bottom-right-radius: 45px;
-            border-bottom-left-radius: 45px;
-          }
-          @media screen and (max-width: ${props.theme.breakpoints.md}) {
-            width: ${props.theme.userAvatarSize.userEditPage.md};
-            height: ${props.theme.userAvatarSize.userEditPage.md};
-            > button {
-              border-bottom-right-radius: 35px;
-              border-bottom-left-radius: 35px;
-            }
-          }
-        `}
+  width: ${props => props.theme.avatarSize[props.page].xl};
+  height: ${props => props.theme.avatarSize[props.page].xl};
+  > button {
+    border-bottom-right-radius: ${props => (props.page === 'user' ? '35px' : '45p')};
+    border-bottom-left-radius: ${props => (props.page === 'user' ? '35px' : '45p')};
+  }
+  @media screen and (max-width: ${props => props.theme.breakpoints.md}) {
+    width: ${props => props.theme.avatarSize[props.page].md};
+    height: ${props => props.theme.avatarSize[props.page].md};
+    > button {
+      border-bottom-right-radius: ${props => (props.page === 'user' ? '25px' : '35px')};
+      border-bottom-left-radius: ${props => (props.page === 'user' ? '25px' : '35px')};
+    }
+  }
   ${props =>
     props.status.loading &&
     css`
@@ -77,7 +56,7 @@ const Avatar = styled.div<IAvatar>`
         height: 100%;
         background-color: rgba(0, 0, 0, 0.7);
       }
-    `}
+    `};
 `;
 
 const AddAvatar = styled.button`
@@ -108,12 +87,12 @@ const Input = styled.input<{ ref: React.MutableRefObject<undefined> }>`
   display: none;
 `;
 
-export default ({ avatar, page }: IProps) => {
+export default ({ page }: IProps) => {
   const inputRef = useRef<HTMLInputElement>();
   const dispatch = useDispatch();
   const [visibleAddAvatar, setVisible] = useState(page === 'userEdit');
   const { process, loading } = useApi(userApi.patchAvatar, 'home');
-  const { isMe } = useContext(UserContext);
+  const { avatar } = useSelector((state: AppState) => state.user);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const image = e.target.files ? e.target.files[0] : null;
@@ -125,12 +104,7 @@ export default ({ avatar, page }: IProps) => {
       dispatch(setMessage({ type: 'success', value: '수정되었습니다.' }));
     });
   };
-  // page 가 user 이고 내 정보가 아니면 아바타만
-  if (page === 'user' && !isMe)
-    return <Avatar url={avatar} page={page} status={{ loading: false }} />;
-  // 그 이외
-  // 1. page === user 이고 내 정보
-  // 2. page === userEdit일 때 (isMe 상관 없음)
+
   return (
     <Avatar
       url={avatar}

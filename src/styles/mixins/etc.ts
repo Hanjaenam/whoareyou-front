@@ -52,13 +52,13 @@ export const blueColorClick = css`
 `;
 
 export const black = css`
-  position: fixed;
   top: 0;
   right: 0;
   left: 0;
   bottom: 0;
   background-color: #000;
   opacity: 0.7;
+  z-index: ${props => props.theme.zIndex.black};
 `;
 
 export const authContainer = css`
@@ -71,7 +71,7 @@ export const authContainer = css`
 `;
 
 export const articleContainer = css`
-  margin: ${props => props.theme.gap.medium};
+  margin: ${props => props.theme.gap.medium} 0;
   @media screen and (max-width: ${props => props.theme.breakpoints.md}) {
     margin: ${props => props.theme.gap.small} 0;
   }

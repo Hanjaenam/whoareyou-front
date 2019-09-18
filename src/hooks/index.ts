@@ -72,8 +72,10 @@ export const useApi = <T, K extends keyof T>(
   api: (__0: { [keys in K]: T[keys] }) => AxiosPromise<any>,
   template: 'auth' | 'home',
 ) => {
-  // 404 error 바꿀 것 !! server route없는 곳으로 api요청 시 404 돌아온다.
-  const controlError = [400, 401, 403, 404, 409, 422];
+  // 204 : 리소스 요청했지만 응답 데이터가 없음 ( 이메일 없음 등등... )
+  // 401 : 보안코드가 필요한데, 입력하지 않음 ( 허가하기 위해 데이터 필요 - 안보냄 )
+  // 403 : 보안코드가 틀림 ( 허가 실패 ? )
+  const controlError = [204, 400, 401, 403, 409, 422];
   const [status, setStatus] = useState<Status>({
     loading: false,
     success: false,

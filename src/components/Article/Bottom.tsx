@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import styled, { css } from 'styled-components';
 import {
   faBookmark as solBookmark,
@@ -17,6 +17,7 @@ import { AppState } from 'store/reducer';
 import { useInputWithSet } from 'hooks';
 import TextArea from 'react-autosize-textarea';
 import Button from 'components/Common/Button';
+import { ArticleContext } from 'context/article';
 
 const Container = styled.div`
   display: flex;
@@ -87,22 +88,27 @@ const CustomTextArea = styled(TextArea)`
 `;
 
 export default () => {
+  const data = useContext(ArticleContext);
+  if (data === null) return null;
+
   const isLogged = useSelector((state: AppState) => state.user.id !== -1);
   const { value: myComment, setValue: setMyComment } = useInputWithSet();
-  const [data, setData] = useState();
   const [wrtieComnt, setWriteComnt] = useState(false);
+  const { isLiked, likeNumber, isBookmarked } = useSelector(
+    (state: AppState) => state.articleArr[data.index],
+  );
   return (
     <>
       <Container>
-        <Function disabled={!isLogged} active={data.isLiked}>
-          <FontAwesomeIcon icon={data.isLiked ? solThumbsUp : reThumbsUp} />
-          <LikeNumber>{data.likeNumber}</LikeNumber>
+        <Function disabled={!isLogged} active={isLiked}>
+          <FontAwesomeIcon icon={isLiked ? solThumbsUp : reThumbsUp} />
+          <LikeNumber>{likeNumber}</LikeNumber>
         </Function>
         <Function onClick={() => setWriteComnt(!wrtieComnt)}>
           <FontAwesomeIcon icon={faCommentDots} />
         </Function>
-        <Function disabled={!isLogged} active={data.isBookmarked}>
-          <FontAwesomeIcon icon={data.isBookmarked ? solBookmark : reBookMark} />
+        <Function disabled={!isLogged} active={isBookmarked}>
+          <FontAwesomeIcon icon={isBookmarked ? solBookmark : reBookMark} />
         </Function>
       </Container>
       {wrtieComnt && (

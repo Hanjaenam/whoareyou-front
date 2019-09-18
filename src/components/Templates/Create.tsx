@@ -12,34 +12,22 @@ import { useDispatch } from 'react-redux';
 import { setMessage } from 'store/notification/actions';
 import Loader from 'components/Common/Loader';
 import { myTheme } from 'styles/theme';
+import { black } from 'styles/mixins/etc';
 
-interface IProps {
-  goBack: () => void;
-}
+const Black = styled.div`
+  ${black};
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 
-const Container = styled.div<{ status: { loading: boolean } }>`
+const Container = styled.div`
   position: relative;
   background-color: white;
   display: flex;
   flex-direction: column;
   width: ${props => `calc(100vw - ${props.theme.width.aside.xl})`};
-  ${props =>
-    props.status.loading &&
-    css`
-      &::after {
-        content: '';
-        display: block;
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.2);
-      }
-    `}
-  .loader {
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
   @media screen and (max-width: ${props => props.theme.breakpoints.lg}) {
     width: ${props => `calc(100vw - ${props.theme.width.aside.lg})`};
   }
@@ -47,7 +35,6 @@ const Container = styled.div<{ status: { loading: boolean } }>`
     width: 100vw;
   }
 `;
-
 const Top = styled.div<{ hidePadBot: boolean }>`
   display: flex;
   padding: ${props => props.theme.gap.medium};
@@ -107,6 +94,10 @@ const CustomTextArea = styled(TextArea)`
   box-sizing: border-box;
   min-height: 200px;
   font-size: ${props => props.theme.fontSize.large};
+  &::placeholder {
+    color: ${props => props.theme.colors.secondary};
+    -webkit-text-fill-color: ${props => props.theme.colors.secondary};
+  }
 `;
 
 const ButtonContainer = styled.div`
@@ -128,6 +119,9 @@ const reorder = (list: File[], startIndex: number, endIndex: number) => {
   result.splice(endIndex, 0, removed);
   return result;
 };
+interface IProps {
+  goBack: () => void;
+}
 
 const CreateArticle = ({ goBack }: IProps) => {
   const [images, setImage] = useState<File[]>([]);
@@ -175,8 +169,12 @@ const CreateArticle = ({ goBack }: IProps) => {
   };
 
   return (
-    <Container status={{ loading }}>
-      {loading && <Loader size={3} color={myTheme.colors.secondary} />}
+    <Container>
+      {loading && (
+        <Black>
+          <Loader size={2} color={myTheme.colors.secondary} />
+        </Black>
+      )}
       <Top hidePadBot={images.length !== 0}>
         <AddImage htmlFor="images[]">
           <Icon icon={faPlus} />

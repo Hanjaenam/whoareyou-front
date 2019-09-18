@@ -18,7 +18,7 @@ const Routes = () => {
   return isLogged ? (
     <Switch>
       <Route exact path="/" component={LatestArticle} />
-      <Route path="/user/:id/edit" component={UserEdit} />
+      <Route path="/user/edit" component={UserEdit} />
       <Route path="/user/:id" component={User} />
       <Route path="/create" component={CreateArticle} />
       <Redirect from="*" to="/" />

@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import styled, { css } from 'styled-components';
 import { blueColorClick } from 'styles/mixins/etc';
-import { useData } from 'context/article';
+import { ArticleContext } from 'context/article';
+import { useSelector } from 'react-redux';
+import { AppState } from 'store/reducer';
 
 const CommentContainer = styled.div`
   margin: ${props => props.theme.gap.small};
@@ -38,10 +40,14 @@ const CommentNumber = styled.div`
 `;
 
 export default () => {
-  const [visibleComnt, setVisComnt] = useState(false);
-  const data = useData();
+  const data = useContext(ArticleContext);
   if (data === null) return null;
-  const { comments, commentNumber } = data;
+
+  const { comments, commentNumber } = useSelector(
+    (state: AppState) => state.articleArr[data.index],
+  );
+  const [visibleComnt, setVisComnt] = useState(false);
+
   return (
     <CommentContainer>
       {comments.map(comment => (

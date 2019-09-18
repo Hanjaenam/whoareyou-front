@@ -1,13 +1,20 @@
-import { SET_ARTICLES } from './actions';
+import { Record } from 'immutable';
+import { SET_ARTICLE_ARR, REMOVE_ARTICLE } from './actions';
 
 export type SetArticleArrPayl = State[];
+export type RemoveArticlePayl = number;
 
 interface SetArticleArr {
-  type: typeof SET_ARTICLES;
+  type: typeof SET_ARTICLE_ARR;
   payload: SetArticleArrPayl;
 }
 
-export type ActionTypes = SetArticleArr;
+interface RemoveArticle {
+  type: typeof REMOVE_ARTICLE;
+  payload: RemoveArticlePayl;
+}
+
+export type ActionTypes = SetArticleArr | RemoveArticle;
 
 export interface State {
   id: number;

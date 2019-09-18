@@ -7,7 +7,7 @@ declare module 'styled-components' {
       basic: string;
       avatar: string;
       comment: string;
-      auth: string;
+      authMain: string;
     };
     breakpoints: {
       sm: string;
@@ -40,12 +40,12 @@ declare module 'styled-components' {
       large: string;
       huge: string;
     };
-    userAvatarSize: {
-      userPage: {
+    avatarSize: {
+      user: {
         xl: string;
         md: string;
       };
-      userEditPage: {
+      userEdit: {
         xl: string;
         md: string;
       };

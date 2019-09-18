@@ -12,8 +12,8 @@ import { AppState } from 'store/reducer';
 import { myTheme } from 'styles/theme';
 
 const Black = styled.div<{ visible: boolean }>`
-  ${black}
-  z-index: ${props => props.theme.zIndex.header};
+  position: fixed;
+  ${black};
   ${props =>
     !props.visible &&
     css`

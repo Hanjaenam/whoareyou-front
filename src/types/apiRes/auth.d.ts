@@ -1,5 +1,5 @@
-import { GetMeRes } from './user';
+import { Basic } from './user';
 
-export interface LogInRes extends GetMeRes {
+export interface LogInRes extends Basic {
   token: string;
 }
