@@ -1,12 +1,13 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useContext } from 'react';
 import styled, { css } from 'styled-components';
 import tempAvatar from 'assets/avatar.png';
-import { userApi } from 'utils/api';
+import userApi from 'api/user';
 import { useDispatch } from 'react-redux';
 import { useApi } from 'hooks';
 import { setMessage } from 'store/notification/actions';
 import { patchUser } from 'store/user/actions';
 import Loader from 'components/Common/Loader';
+import { UserContext } from 'pages/User';
 
 interface IProps {
   avatar: string | null;
@@ -111,7 +112,8 @@ export default ({ avatar, page }: IProps) => {
   const inputRef = useRef<HTMLInputElement>();
   const dispatch = useDispatch();
   const [visibleAddAvatar, setVisible] = useState(page === 'userEdit');
-  const { process, loading } = useApi(userApi.patchAvatar);
+  const { process, loading } = useApi(userApi.patchAvatar, 'home');
+  const { isMe } = useContext(UserContext);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const image = e.target.files ? e.target.files[0] : null;
@@ -123,7 +125,12 @@ export default ({ avatar, page }: IProps) => {
       dispatch(setMessage({ type: 'success', value: '수정되었습니다.' }));
     });
   };
-
+  // page 가 user 이고 내 정보가 아니면 아바타만
+  if (page === 'user' && !isMe)
+    return <Avatar url={avatar} page={page} status={{ loading: false }} />;
+  // 그 이외
+  // 1. page === user 이고 내 정보
+  // 2. page === userEdit일 때 (isMe 상관 없음)
   return (
     <Avatar
       url={avatar}

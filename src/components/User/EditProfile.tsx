@@ -6,7 +6,7 @@ import { AppState } from 'store/reducer';
 import Input from 'components/Common/Input';
 import UserAvatar from 'components/User/Avatar';
 import Button from 'components/Common/Button';
-import { userApi } from 'utils/api';
+import userApi from 'api/user';
 import { patchUser } from 'store/user/actions';
 import { setMessage } from 'store/notification/actions';
 
@@ -60,7 +60,7 @@ export default () => {
   const username = useInput(user.name);
   const introduce = useInput(user.introduce === null ? '' : user.introduce);
   const dispatch = useDispatch();
-  const { loading, process } = useApi(userApi.patch);
+  const { loading, process } = useApi(userApi.patch, 'home');
 
   const onClick = () =>
     process({ name: username.value, introduce: introduce.value }).then(() => {

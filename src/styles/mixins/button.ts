@@ -49,7 +49,7 @@ export const basic = (
   display: flex;
   align-items: center;
   justify-content: center;
-  @media screen and (max-width: ${props => props.theme.breakpoints.md}) {
+  @media screen and (max-width: ${props => props.theme.breakpoints.sm}) {
     padding: ${props => props.theme.gap.tiny};
   }
 `;

@@ -16,8 +16,8 @@ import {
 import { myTheme } from 'styles/theme';
 import { noBg } from 'styles/mixins/button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import UserPopover from 'components/User/Popover';
 import Input from './Input';
-import UserPopover from '../User/Popover';
 
 const Container = styled.header`
   transition: height 0.2s;

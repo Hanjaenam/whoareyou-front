@@ -4,21 +4,11 @@ import Button from 'components/Common/Button';
 import Input from 'components/Common/Input';
 import Loader from 'components/Common/Loader';
 import { myTheme } from 'styles/theme';
+import { authContainer } from 'styles/mixins/etc';
 
-interface IProps {
-  disabled: () => boolean;
-  isSended?: boolean;
-  email: string;
-  verifyKey: () => void;
-  resendLoading: boolean;
-  sendSecret: () => void;
-  secretKey: {
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    value: string;
-  };
-  type?: 'logIn';
-  verifyLoading: boolean;
-}
+const Container = styled.div`
+  ${authContainer};
+`;
 
 const Title = styled.p`
   text-indent: 1rem;
@@ -77,8 +67,21 @@ const Span = styled.span`
   font-weight: bold;
 `;
 
+interface IProps {
+  isSended?: boolean;
+  email: string;
+  verifyKey: () => void;
+  resendLoading: boolean;
+  sendSecret: () => void;
+  secretKey: {
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    value: string;
+  };
+  type: 'logIn' | 'register';
+  verifyLoading: boolean;
+}
+
 export default ({
-  disabled,
   isSended,
   email,
   verifyKey,
@@ -89,35 +92,42 @@ export default ({
   verifyLoading,
 }: IProps) => (
   <>
-    <Title>보안코드 확인</Title>
-    <Explain>
-      {type === 'logIn'
-        ? '이메일로 전송되었던 보안코드를 입력해주세요.'
-        : '이메일로 전송된 보안코드를 입력해주세요.'}
-    </Explain>
-    <InputContainer>
-      <Input
-        placeholder="보안코드 입력"
-        {...secretKey}
-        onKeyUp={e => (e.keyCode === 13 ? verifyKey() : null)}
-      />
-      {isSended && (
-        <P>
-          다음 이메일로 전송됨 : <Span>{email}</Span>
-        </P>
-      )}
-    </InputContainer>
-    <ModifyButtonStyle>
-      <ReceivedEmailContainer>
-        <NotReceivedEmail loading={resendLoading.toString()} onClick={sendSecret}>
-          {type === 'logIn' ? '보안코드를 다시 보내겠습니까?' : '보안코드를 받지 못했나요?'}
-        </NotReceivedEmail>
-        &nbsp;
-        {resendLoading && <Loader color={myTheme.colors.secondary} position="relative" />}
-      </ReceivedEmailContainer>
-      <Button theme="withBg" disabled={disabled()} onClick={verifyKey} loading={verifyLoading}>
-        확인
-      </Button>
-    </ModifyButtonStyle>
+    <Container>
+      <Title>보안코드 확인</Title>
+      <Explain>
+        {type === 'logIn'
+          ? '이메일로 전송되었던 보안코드를 입력해주세요.'
+          : '이메일로 전송된 보안코드를 입력해주세요.'}
+      </Explain>
+      <InputContainer>
+        <Input
+          placeholder="보안코드 입력"
+          {...secretKey}
+          onKeyUp={e => (e.keyCode === 13 ? verifyKey() : null)}
+        />
+        {isSended && (
+          <P>
+            다음 이메일로 전송됨 : <Span>{email}</Span>
+          </P>
+        )}
+      </InputContainer>
+      <ModifyButtonStyle>
+        <ReceivedEmailContainer>
+          <NotReceivedEmail loading={resendLoading.toString()} onClick={sendSecret}>
+            보안코드를 다시 보내겠습니까?
+          </NotReceivedEmail>
+          &nbsp;
+          {resendLoading && <Loader color={myTheme.colors.secondary} position="relative" />}
+        </ReceivedEmailContainer>
+        <Button
+          theme="withBg"
+          disabled={secretKey.value === '' || resendLoading}
+          onClick={verifyKey}
+          loading={verifyLoading}
+        >
+          확인
+        </Button>
+      </ModifyButtonStyle>
+    </Container>
   </>
 );

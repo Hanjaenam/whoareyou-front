@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useInput } from 'hooks';
-import { authApi } from 'utils/api';
-import { useDispatch, useSelector } from 'react-redux';
-import { setMessage, cleanMessage } from 'store/notification/actions';
+import authApi from 'api/auth';
+import { useDispatch } from 'react-redux';
+import { setMessage } from 'store/notification/actions';
 import { FIND_PASSWORD } from 'constant';
-import { AppState } from 'store/reducer';
-import Presenter from './Pres';
+import Presenter from './Presenter';
+import { AuthContext } from '../Common/Auth';
 
 interface IProps {
-  history: { replace: (path: string) => void; goBack: () => void };
+  replace: (path: string) => void;
+  goBack: () => void;
 }
 
 interface TextByStep {
@@ -16,18 +17,18 @@ interface TextByStep {
   text: typeof FIND_PASSWORD.ONE | typeof FIND_PASSWORD.TWO | typeof FIND_PASSWORD.THREE;
 }
 
-export default ({ history: { replace, goBack } }: IProps) => {
+export default ({ replace, goBack }: IProps) => {
   const email = useInput();
   const secret = useInput();
   const password = useInput();
   const dispatch = useDispatch();
-  const message = useSelector((state: AppState) => state.notification.value);
   const [textByStep, setStep] = useState<TextByStep>({
     step: 1,
     text: FIND_PASSWORD.ONE,
   });
   const [confirmLoading, setCLoading] = useState(false);
   const [sendLoading, setSLoading] = useState(false);
+  const authContext = useContext(AuthContext);
 
   const sendSecretKey = (type?: 'resend') => {
     if (type === 'resend') setSLoading(true);
@@ -36,18 +37,19 @@ export default ({ history: { replace, goBack } }: IProps) => {
     authApi
       .sendSecretKey({ email: email.value, type: 'newPassword' })
       .then(() => {
-        dispatch(
-          setMessage({
+        if (authContext) {
+          authContext.setMessage({
             type: 'success',
             value: `${email.value} 로 보안코드가 전송되었습니다.`,
-          }),
-        );
+          });
+        }
         setStep({ step: 2, text: FIND_PASSWORD.TWO });
       })
       .catch(
         err =>
           err.response &&
-          dispatch(setMessage({ type: 'danger', value: err.response.data.message })),
+          authContext &&
+          authContext.setMessage({ type: 'danger', value: err.response.data.message }),
       )
       .finally(() => (type === 'resend' ? setSLoading(false) : setCLoading(false)));
   };
@@ -62,18 +64,19 @@ export default ({ history: { replace, goBack } }: IProps) => {
     authApi
       .verifySecretKey({ email: email.value, secret: secret.value })
       .then(() => {
-        dispatch(
-          setMessage({
+        if (authContext) {
+          authContext.setMessage({
             type: 'success',
             value: `보안코드 ${secret.value}, 확인되었습니다.`,
-          }),
-        );
+          });
+        }
         setStep({ step: 3, text: FIND_PASSWORD.THREE });
       })
       .catch(
         err =>
           err.response &&
-          dispatch(setMessage({ type: 'danger', value: err.response.data.message })),
+          authContext &&
+          authContext.setMessage({ type: 'danger', value: err.response.data.message }),
       )
       .finally(() => setCLoading(false));
   };
@@ -91,7 +94,6 @@ export default ({ history: { replace, goBack } }: IProps) => {
       })
       .finally(() => setCLoading(false));
   };
-
   const onClick = () => {
     switch (textByStep.step) {
       case 1:
@@ -151,8 +153,7 @@ export default ({ history: { replace, goBack } }: IProps) => {
   };
 
   const onCancel = () => {
-    if (!window.confirm('취소하시겠습니까?')) return;
-    if (message) dispatch(cleanMessage());
+    if (textByStep.step !== 1 && !window.confirm('취소하시겠습니까?')) return;
     goBack();
   };
 

@@ -7,6 +7,7 @@ declare module 'styled-components' {
       basic: string;
       avatar: string;
       comment: string;
+      auth: string;
     };
     breakpoints: {
       sm: string;

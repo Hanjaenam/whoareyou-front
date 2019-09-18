@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
-import { userApi } from 'utils/api';
 import { useDispatch } from 'react-redux';
 import { logIn } from 'store/user/actions';
-import { useApi2 } from 'hooks';
-import { GetMeRes } from 'types/apiResponse';
+import { useApiNoParms } from 'hooks';
+import { GetMeRes } from 'types/apiRes/user';
+import userApi from 'api/user';
 
 interface IProps {
   location: { search: string };
@@ -11,7 +11,7 @@ interface IProps {
 
 export default ({ location: { search } }: IProps) => {
   const dispatch = useDispatch();
-  const { process, loading, success } = useApi2(userApi.getMe);
+  const { process, loading, success } = useApiNoParms(userApi.getMe);
   useEffect(() => {
     const token = search.split('=')[1];
     window.localStorage.setItem('token', token);

@@ -4,7 +4,7 @@ import Aside from 'components/Aside';
 import { useSelector } from 'react-redux';
 import { AppState } from 'store/reducer';
 import AsideModal from 'components/AsideModal';
-import Header from '../Common/Header';
+import Header from '../../Common/Header';
 
 interface IProps {
   children: ReactNode;

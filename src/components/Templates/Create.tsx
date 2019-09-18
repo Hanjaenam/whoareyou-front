@@ -7,7 +7,7 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { DragDropContext, Droppable, DropResult, DroppableProvided } from 'react-beautiful-dnd';
 import PreviewImage from 'components/Article/PreviewImage';
 import { useApi } from 'hooks';
-import { articleApi } from 'utils/api';
+import articleApi from 'api/article';
 import { useDispatch } from 'react-redux';
 import { setMessage } from 'store/notification/actions';
 import Loader from 'components/Common/Loader';
@@ -131,7 +131,7 @@ const reorder = (list: File[], startIndex: number, endIndex: number) => {
 
 const CreateArticle = ({ goBack }: IProps) => {
   const [images, setImage] = useState<File[]>([]);
-  const { process, loading } = useApi(articleApi.create);
+  const { process, loading } = useApi(articleApi.create, 'home');
   const [content, setContent] = useState();
   const dispatch = useDispatch();
 
@@ -153,7 +153,7 @@ const CreateArticle = ({ goBack }: IProps) => {
     setContent(value);
   }, []);
 
-  const onDelete = (imageName: string) =>
+  const onRemove = (imageName: string) =>
     setImage(images.filter(image => image.name !== imageName));
 
   const onDragEnd = (result: DropResult) => {
@@ -186,7 +186,7 @@ const CreateArticle = ({ goBack }: IProps) => {
             {(provided: DroppableProvided, _) => (
               <DropZone ref={provided.innerRef} {...provided.droppableProps}>
                 {images.map((image, index) => (
-                  <PreviewImage key={image.name} image={image} onDelete={onDelete} index={index} />
+                  <PreviewImage key={image.name} image={image} onRemove={onRemove} index={index} />
                 ))}
                 {provided.placeholder}
               </DropZone>

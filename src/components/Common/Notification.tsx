@@ -6,67 +6,35 @@ import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'store/reducer';
 import { cleanMessage } from 'store/notification/actions';
 
-interface IProps {
-  top?: boolean;
-  bottom?: boolean;
-  left?: boolean;
-  right?: boolean;
-}
-
 interface IMesageContainer {
   type: 'danger' | 'success' | null;
   showUp: boolean;
-  top?: boolean;
-  bottom?: boolean;
-  right?: boolean;
-  left?: boolean;
 }
 
 const MessageContainer = styled.div<IMesageContainer>`
-  z-index: ${props => props.theme.zIndex.black};
-  position: relative;
+  position: absolute;
+  bottom: ${props => props.theme.gap.small};
+  right: ${props => props.theme.gap.small};
   margin: 0 auto;
   padding: ${props => props.theme.gap.medium};
   border-radius: ${props => props.theme.borderRadius.basic};
   background-color: ${props =>
     props.type === 'danger' ? props.theme.colors.danger : props.theme.colors.success};
-  margin-bottom: ${props => props.theme.gap.medium};
-  position: absolute;
-  margin-bottom: 0;
-  transition: 1s;
-  ${props =>
-    props.top &&
-    css`
-      top: ${props.theme.gap.small};
-    `};
-  ${props =>
-    props.bottom &&
-    css`
-      bottom: ${props.theme.gap.small};
-    `};
-  ${props =>
-    props.right &&
-    css`
-      right: ${props.theme.gap.small};
-    `};
-  ${props =>
-    props.left &&
-    css`
-      left: ${props.theme.gap.small};
-    `};
+  z-index: ${props => props.theme.zIndex.black};
+  transition: 0.25s;
   ${props =>
     props.showUp
       ? css`
           transform: translateY(0);
         `
       : css`
-          transform: ${props.bottom
-            ? `translateY(calc(100% + ${props.theme.gap.small}))`
-            : `translateY(calc(-100% - ${props.theme.gap.small}))`};
+          transform: ${`translateY(calc(100% + ${props.theme.gap.small}))`};
         `};
   @media screen and (max-width: ${props => props.theme.breakpoints.sm}) {
     width: 100%;
-    margin: ${props => props.theme.gap.small} 0;
+    bottom: 0;
+    right: 0;
+    border-radius: 0;
   }
 `;
 
@@ -91,26 +59,25 @@ const RemoveMsgButton = styled.button`
   }
 `;
 
-export default ({ top, bottom, left, right }: IProps) => {
+export default () => {
   const { value, type } = useSelector((state: AppState) => state.notification);
   const [up, setUp] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (value !== null) {
+      setUp(true);
       setTimeout(() => {
-        setUp(true);
+        setUp(false);
         setTimeout(() => {
-          setUp(false);
-          setTimeout(() => {
-            dispatch(cleanMessage());
-          }, 1000); // cleanMessage
-        }, 3000); // setUp(false)
-      }, 100); // setUp(true)
+          dispatch(cleanMessage());
+        }, 250); // cleanMessage
+      }, 2500); // setUp(false)
     }
   }, [value]);
+
   return value !== null ? (
-    <MessageContainer type={type} showUp={up} top={top} bottom={bottom} left={left} right={right}>
+    <MessageContainer type={type} showUp={up}>
       <Message>{value}</Message>
       <RemoveMsgButton onClick={() => dispatch(cleanMessage())}>
         <FontAwesomeIcon icon={faTimes} />

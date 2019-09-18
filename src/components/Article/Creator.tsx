@@ -1,17 +1,13 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import Button from 'components/Common/Button';
 import tempAvatar from 'assets/avatar.png';
-import { faExpand } from '@fortawesome/free-solid-svg-icons';
+import { faExpand, faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment';
+import { useData } from 'context/article';
+import { UserContext } from 'pages/User';
 
-interface IProps {
-  avatar: string | null;
-  creator: string;
-  createdAt: string;
-}
-
-const Top = styled.div`
+const Container = styled.div`
   display: flex;
   align-items: center;
   padding: ${props => props.theme.gap.small};
@@ -39,7 +35,7 @@ const AuthorContainer = styled.div`
   margin-left: ${props => props.theme.gap.small};
 `;
 
-const Author = styled.p``;
+const Creator = styled.p``;
 
 const CreatedAt = styled.p`
   opacity: 0.5;
@@ -47,15 +43,33 @@ const CreatedAt = styled.p`
   margin-top: ${props => props.theme.gap.tiny};
 `;
 
-export default ({ avatar, creator, createdAt }: IProps) => (
-  <Top>
-    <Avatar url={avatar} />
-    <AuthorContainer>
-      <div>
-        <Author>{creator}</Author>
-        <CreatedAt>{moment(createdAt).fromNow()}</CreatedAt>
-      </div>
-      <Button icon={faExpand} theme="noBg" onClick={() => null} />
-    </AuthorContainer>
-  </Top>
-);
+const Func = styled.div`
+  display: flex;
+`;
+
+export default () => {
+  const data = useData();
+  if (data === null) return null;
+  const { creator, createdAt } = data;
+  const { isMe } = useContext(UserContext);
+  return (
+    <Container>
+      <Avatar url={creator.avatar} />
+      <AuthorContainer>
+        <div>
+          <Creator>{creator.name}</Creator>
+          <CreatedAt>{moment(createdAt).fromNow()}</CreatedAt>
+        </div>
+        <Func>
+          <Button icon={faExpand} theme="noBg" onClick={() => null} />
+          {isMe && (
+            <>
+              <Button icon={faEdit} theme="noBg" onClick={() => null} />
+              <Button icon={faTrash} color="danger" theme="noBg" onClick={() => null} />
+            </>
+          )}
+        </Func>
+      </AuthorContainer>
+    </Container>
+  );
+};

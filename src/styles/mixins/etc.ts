@@ -60,3 +60,19 @@ export const black = css`
   background-color: #000;
   opacity: 0.7;
 `;
+
+export const authContainer = css`
+  padding: ${props => props.theme.gap.huge};
+  display: grid;
+  grid-gap: ${props => props.theme.gap.large};
+  @media screen and (max-width: ${props => props.theme.breakpoints.lg}) {
+    padding: ${props => props.theme.gap.large};
+  }
+`;
+
+export const articleContainer = css`
+  margin: ${props => props.theme.gap.medium};
+  @media screen and (max-width: ${props => props.theme.breakpoints.md}) {
+    margin: ${props => props.theme.gap.small} 0;
+  }
+`;

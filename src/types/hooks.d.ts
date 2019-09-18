@@ -3,5 +3,3 @@ export interface Status {
   success: boolean;
   failure: boolean;
 }
-
-export type useInputParams = string | undefined;

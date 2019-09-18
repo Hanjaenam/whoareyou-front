@@ -1,15 +1,10 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useContext } from 'react';
 import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
 import linkCss from 'styles/mixins/link';
 import UserAvatar from 'components/User/Avatar';
-import { MainHeightAboveLg, mainHeightBelowLg } from 'styles/mixins/etc';
-import { useSelector } from 'react-redux';
-import { AppState } from 'store/reducer';
-
-interface IProps {
-  children?: ReactNode;
-}
+import { MainHeightAboveLg, mainHeightBelowLg, articleContainer } from 'styles/mixins/etc';
+import { UserContext } from 'pages/User';
 
 const Container = styled.div`
   display: flex;
@@ -106,23 +101,29 @@ const Item = styled.div`
   }
 `;
 
-const Children = styled.div`
-  flex: 1;
+const ArticleContainer = styled.div`
+  ${articleContainer};
 `;
 
+interface IProps {
+  children: ReactNode;
+}
+
 export default ({ children }: IProps) => {
-  const { id, name, avatar, introduce } = useSelector((state: AppState) => state.user);
+  const { isMe, user } = useContext(UserContext);
   return (
     <Container>
       <Top>
         <InfoContainer>
-          <UserAvatar avatar={avatar} page="user" />
+          <UserAvatar avatar={user.avatar} page="user" />
           <TextContainer>
             <NameContainer>
-              <Name>{name}</Name>
-              <EditProfile to={`/user/${id}/edit`}>프로필 수정</EditProfile>
+              <Name>{user.name}</Name>
+              {isMe && <EditProfile to={`/user/${user.id}/edit`}>프로필 수정</EditProfile>}
             </NameContainer>
-            <Introduce isNull={introduce === null}>{introduce || '소개글이 없습니다...'}</Introduce>
+            <Introduce isNull={user.introduce === null}>
+              {user.introduce || '소개글이 없습니다...'}
+            </Introduce>
           </TextContainer>
         </InfoContainer>
         <Nav>
@@ -131,7 +132,7 @@ export default ({ children }: IProps) => {
           </Item>
         </Nav>
       </Top>
-      <Children>{children}</Children>
+      <ArticleContainer>{children}</ArticleContainer>
     </Container>
   );
 };

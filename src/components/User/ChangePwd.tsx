@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
-import { useApi, useInputWithSet } from 'hooks';
-import { userApi } from 'utils/api';
+import { useInputWithSet, useApi } from 'hooks';
+import userApi from 'api/user';
 import { setMessage } from 'store/notification/actions';
 import { useDispatch } from 'react-redux';
 import Button from 'components/Common/Button';
@@ -73,7 +73,7 @@ export default () => {
   const { setValue: setNewPwd, ...newPassword } = useInputWithSet();
   const { setValue: setCNewPwd, ...confirmNewPwd } = useInputWithSet();
   const dispatch = useDispatch();
-  const { process, loading } = useApi(userApi.changePassword);
+  const { process, loading } = useApi(userApi.changePassword, 'home');
 
   const disabled = () => {
     if (prePassword.value === '' || newPassword.value === '' || confirmNewPwd.value === '')

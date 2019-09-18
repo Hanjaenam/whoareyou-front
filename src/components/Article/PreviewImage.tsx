@@ -8,7 +8,7 @@ import { Draggable, DraggableProvided, DraggableStateSnapshot } from 'react-beau
 interface IProps {
   image: File;
   index: number;
-  onDelete: (delteName: string) => void;
+  onRemove: (removeName: string) => void;
 }
 
 const Preview = styled.div`
@@ -58,7 +58,7 @@ const PreviewFunc = styled.div`
   opacity: 0;
 `;
 
-const DeleteIconCont = styled.div`
+const RemoveIconCont = styled.div`
   opacity: 0;
   position: absolute;
   top: 0;
@@ -71,7 +71,7 @@ const DeleteIconCont = styled.div`
   }
 `;
 
-const DeleteIcon = styled(FontAwesomeIcon)`
+const RemoveIcon = styled(FontAwesomeIcon)`
   font-size: ${props => props.theme.fontSize.huge};
   color: ${props => props.theme.colors.secondary};
 `;
@@ -113,7 +113,7 @@ const TitleExplain = styled.div`
   }
 `;
 
-export default ({ image, index, onDelete }: IProps) => {
+export default ({ image, index, onRemove }: IProps) => {
   const imgRef = useRef<HTMLImageElement>();
   useEffect(() => {
     const reader = new FileReader();
@@ -135,14 +135,14 @@ export default ({ image, index, onDelete }: IProps) => {
         >
           <img alt={image.name} ref={imgRef as any} />
           <PreviewFunc>
-            <DeleteIconCont
+            <RemoveIconCont
               onClick={(e: React.MouseEvent<HTMLDivElement>) => {
                 e.stopPropagation();
-                onDelete(image.name);
+                onRemove(image.name);
               }}
             >
-              <DeleteIcon icon={faTrashAlt} />
-            </DeleteIconCont>
+              <RemoveIcon icon={faTrashAlt} />
+            </RemoveIconCont>
             <DragIconCont>
               <DragIcon icon={faHandRock} />
             </DragIconCont>

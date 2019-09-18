@@ -1,40 +1,32 @@
 import React, { useEffect, useState } from 'react';
-import HomeTemplate from 'components/Templates/Home';
-import ArticleTemplate from 'components/Templates/Article';
+import HomeTemplate from 'components/Templates/Common/Home';
+import LatestArticleTemp from 'components/Templates/LatestArticle';
 import Article from 'components/Article';
-import { useApi2 } from 'hooks';
-import { articleApi } from 'utils/api';
-import { ArticleRes } from 'types/apiResponse';
+import { useApiNoParms } from 'hooks';
+import articleApi from 'api/article';
+import { ArticleRes } from 'types/apiRes/article';
+import ArticleProvider from 'context/article';
 
 // content length = 200
 export default () => {
-  const { process, loading, success } = useApi2(articleApi.getAll);
-  const [articles, setArticles] = useState<ArticleRes[]>([]);
+  const [articles, setArticles] = useState([]);
+  const { process, loading, success } = useApiNoParms(articleApi.getAll);
+
   useEffect(() => {
     process().then(res => setArticles(res.data));
   }, []);
+
   return (
     <HomeTemplate>
-      <ArticleTemplate>
+      <LatestArticleTemp>
         {!loading &&
           success &&
-          articles.map(article => (
-            <Article
-              key={article.id}
-              id={article.id}
-              creatorAvt={article.creator.avatar}
-              creator={article.creator.name}
-              photos={article.photos}
-              content={article.content}
-              createdAt={article.createdAt}
-              likeNumber={article.likeNumber}
-              commentNumber={article.commentNumber}
-              comments={article.comments}
-              isLiked={article.isLiked}
-              isBookmarked={article.isBookmarked}
-            />
+          articles.map((article: ArticleRes, index: number) => (
+            <ArticleProvider key={article.id} article={article} idx={index}>
+              <Article />
+            </ArticleProvider>
           ))}
-      </ArticleTemplate>
+      </LatestArticleTemp>
     </HomeTemplate>
   );
 };

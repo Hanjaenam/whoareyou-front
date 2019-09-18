@@ -8,7 +8,6 @@ export interface PatchPayl {
   name?: string;
   introduce?: string;
   avatar?: string;
-  valid?: boolean;
   googleId?: string;
   naverId?: string;
 }
@@ -30,10 +29,7 @@ export interface State {
   id: number;
   email: string;
   name: string;
-  valid: boolean;
-  introduce: string | null;
   avatar: string | null;
-  googleId: string | null;
-  naverId: string | null;
+  introduce: string | null;
   createdAt: string;
 }

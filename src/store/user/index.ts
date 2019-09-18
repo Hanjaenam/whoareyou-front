@@ -8,9 +8,6 @@ const initialState: State = {
   avatar: null,
   introduce: null,
   createdAt: '',
-  valid: false,
-  naverId: null,
-  googleId: null,
 };
 
 export default (state = initialState, action: ActionTypes): State => {
@@ -22,15 +19,12 @@ export default (state = initialState, action: ActionTypes): State => {
     }
     case PATCH: {
       const {
-        payload: { name, avatar, googleId, naverId, valid },
+        payload: { name, avatar },
       } = action;
       return {
         ...state,
         name: name === undefined ? state.name : name,
         avatar: avatar === undefined ? state.avatar : avatar,
-        googleId: googleId === undefined ? state.googleId : googleId,
-        naverId: naverId === undefined ? state.name : naverId,
-        valid: valid === undefined ? state.valid : valid,
       };
     }
     case LOG_OUT: {

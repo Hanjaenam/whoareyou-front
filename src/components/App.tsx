@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { HashRouter as Router } from 'react-router-dom';
-import { userApi } from 'utils/api';
+import userApi from 'api/user';
 import { logIn } from 'store/user/actions';
 import { AxiosError } from 'axios';
-import { GetMeRes } from 'types/apiResponse';
+import { GetMeRes } from 'types/apiRes/user';
 import Notification from 'components/Common/Notification';
 import Routes from './Routes';
 
@@ -39,7 +39,7 @@ export default () => {
     <Router>
       <>
         {!loading && <Routes />}
-        <Notification bottom right />
+        <Notification />
       </>
     </Router>
   );
