@@ -150,7 +150,7 @@ export default () => {
     <Container>
       <Flex>
         <Button icon={faBars} theme="noBg" onClick={onBarsClick} />
-        <CustomLink to={username ? '/' : '/latest'}>WhoAreYou</CustomLink>
+        <CustomLink to={username ? '/' : '/latest'}>WhoRU</CustomLink>
       </Flex>
       <Right>
         <Flex>
@@ -162,7 +162,7 @@ export default () => {
         </Flex>
         <Flex>
           {username && (
-            <CustomNavLink to="/create">
+            <CustomNavLink to="/new">
               <FontAwesomeIcon icon={faPlus} />
             </CustomNavLink>
           )}

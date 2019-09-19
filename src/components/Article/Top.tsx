@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from 'components/Common/Button';
 import tempAvatar from 'assets/avatar.png';
@@ -12,6 +13,7 @@ import { ArticleContext } from 'context/article';
 import { AppState } from 'store/reducer';
 import { removeArticle } from 'store/articleArr/actions';
 import { setMessage } from 'store/notification/actions';
+import { setEditArticle } from 'store/editArticle/actions';
 import Loader from 'components/Common/Loader';
 import { black } from 'styles/mixins/etc';
 
@@ -65,15 +67,21 @@ const Black = styled.div`
   height: 100%;
 `;
 
-export default () => {
+interface IProps {
+  history: {
+    push: (path: string) => void;
+  };
+}
+
+const Top = ({ history: { push } }: IProps) => {
   const data = useContext(ArticleContext);
   const { isMe } = useContext(UserContext);
   const { process, loading } = useApi(articleApi.remove, 'home');
   const { avatar } = useSelector((state: AppState) => state.user);
   const dispatch = useDispatch();
-
-  if (!data) return null;
-  const { creator, createdAt, id } = useSelector((state: AppState) => state.articleArr[data.index]);
+  const { creator, createdAt, id, photos, content } = useSelector(
+    (state: AppState) => state.articleArr[data.index],
+  );
 
   const onRemove = () => {
     if (!isMe) return;
@@ -102,7 +110,14 @@ export default () => {
             {isMe && (
               <>
                 <Button icon={faTrash} color="danger" theme="noBg" onClick={onRemove} />
-                <Button icon={faEdit} theme="noBg" onClick={() => null} />
+                <Button
+                  icon={faEdit}
+                  theme="noBg"
+                  onClick={() => {
+                    dispatch(setEditArticle({ id, content, photos }));
+                    push('/edit');
+                  }}
+                />
               </>
             )}
             <Button icon={faExpand} theme="noBg" onClick={() => null} />
@@ -112,3 +127,5 @@ export default () => {
     </>
   );
 };
+
+export default withRouter(Top);

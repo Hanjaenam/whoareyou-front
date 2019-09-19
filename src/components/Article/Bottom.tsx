@@ -12,12 +12,15 @@ import {
 } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { basic } from 'styles/mixins/button';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'store/reducer';
-import { useInputWithSet } from 'hooks';
+import { useInputWithSet, useApi } from 'hooks';
 import TextArea from 'react-autosize-textarea';
 import Button from 'components/Common/Button';
 import { ArticleContext } from 'context/article';
+import commentApi from 'api/comment';
+import { Create } from 'types/apiRes/comment';
+import { createComment } from 'store/articleArr/actions';
 
 const Container = styled.div`
   display: flex;
@@ -89,14 +92,20 @@ const CustomTextArea = styled(TextArea)`
 
 export default () => {
   const data = useContext(ArticleContext);
-  if (data === null) return null;
-
   const isLogged = useSelector((state: AppState) => state.user.id !== -1);
-  const { value: myComment, setValue: setMyComment } = useInputWithSet();
+  const { value: comment, setValue: setComment } = useInputWithSet();
   const [wrtieComnt, setWriteComnt] = useState(false);
-  const { isLiked, likeNumber, isBookmarked } = useSelector(
+  const { process, loading } = useApi(commentApi.create, 'home');
+  const { isLiked, likeNumber, isBookmarked, id } = useSelector(
     (state: AppState) => state.articleArr[data.index],
   );
+  const dispatch = useDispatch();
+
+  const onCreate = () =>
+    process({ articleId: id, content: comment }).then((res: { data: Create }) =>
+      dispatch(createComment({ index: data.index, ...res.data })),
+    );
+
   return (
     <>
       <Container>
@@ -115,10 +124,10 @@ export default () => {
         <TextAreaContainer>
           <CustomTextArea
             placeholder="댓글 달기"
-            value={myComment}
-            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setMyComment(e.target.value)}
+            value={comment}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setComment(e.target.value)}
           />
-          <Button icon={faPlus} theme="noBg" onClick={() => null} />
+          <Button icon={faPlus} theme="noBg" onClick={onCreate} />
         </TextAreaContainer>
       )}
     </>

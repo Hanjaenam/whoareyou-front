@@ -13,7 +13,6 @@ const myTheme: DefaultTheme = {
     lg: '1024px',
     xl: '1440px',
   },
-
   colors: {
     font: '#262626',
     main: '#2c3e50',

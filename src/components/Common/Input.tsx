@@ -7,7 +7,7 @@ interface IProps {
   disabled?: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onKeyUp?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
-  placeholder: string | undefined;
+  placeholder?: string;
   padding?: 'tiny' | 'small' | 'medium';
   type?: string;
   value: string;

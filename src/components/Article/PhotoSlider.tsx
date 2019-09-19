@@ -66,8 +66,6 @@ const Photo = styled.div<{ url: string }>`
 
 export default () => {
   const data = useContext(ArticleContext);
-  if (data === null) return null;
-
   const [photoIndex, setIndex] = useState(0);
   const { photos } = useSelector((state: AppState) => state.articleArr[data.index]);
 

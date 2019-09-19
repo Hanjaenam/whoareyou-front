@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const ArticleAxios = axios.create({
+const articleAxios = axios.create({
   baseURL: '/api/article',
   headers: {
     authorization: `Token ${window.localStorage.getItem('token')}`,
@@ -8,12 +8,12 @@ const ArticleAxios = axios.create({
 });
 
 export default {
-  getAll: () => ArticleAxios({ url: '/', method: 'GET' }),
+  getAll: () => articleAxios({ url: '/', method: 'GET' }),
 
-  getCreator: ({ id }: { id: number }) => ArticleAxios({ url: `${id}/creator`, method: 'GET' }),
+  getCreator: ({ id }: { id: number }) => articleAxios({ url: `${id}/creator`, method: 'GET' }),
 
   create: ({ formData }: { formData: FormData }) =>
-    ArticleAxios({
+    articleAxios({
       url: '/',
       method: 'POST',
       headers: {
@@ -23,5 +23,5 @@ export default {
       data: formData,
     }),
 
-  remove: ({ id }: { id: number }) => ArticleAxios({ url: `/${id}`, method: 'DELETE' }),
+  remove: ({ id }: { id: number }) => articleAxios({ url: `/${id}`, method: 'DELETE' }),
 };

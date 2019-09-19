@@ -41,7 +41,9 @@ export default ({
     // 내가 아닐 경우에만 정보 가져오기
     if (!isMe)
       userApi.getOne({ id: Number(id) }).then(({ data }: { data: Basic }) => setUser(data));
-    process({ id: Number(id) }).then(res => dispatch(setArticleArr(res.data)));
+    process({ id: Number(id) }).then((res: { data: ArticleRes[] }) =>
+      dispatch(setArticleArr(res.data)),
+    );
   }, []);
 
   return (

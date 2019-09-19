@@ -17,7 +17,7 @@ export default () => {
   const { articleArr } = useSelector((state: AppState) => state);
 
   useEffect(() => {
-    process().then(res => dispatch(setArticleArr(res.data)));
+    process().then((res: { data: ArticleRes[] }) => dispatch(setArticleArr(res.data)));
   }, []);
 
   return (

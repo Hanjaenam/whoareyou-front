@@ -10,6 +10,6 @@ interface IProps {
 
 export default ({ history: { goBack } }: IProps) => (
   <HomeTemplate>
-    <UpdateArticle goBack={goBack} />
+    <UpdateArticle goBack={goBack} edit />
   </HomeTemplate>
 );

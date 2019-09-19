@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Bottom from 'components/Article/Bottom';
 import PhotoSlider from 'components/Article/PhotoSlider';
-import Comments from 'components/Article/Comments';
+import CommentList from 'components/Article/CommentList';
 import Top from 'components/Article/Top';
 import Content from 'components/Article/Content';
 
@@ -30,7 +30,7 @@ export default () => (
     <Top />
     <PhotoSlider />
     <Content />
-    <Comments />
+    <CommentList />
     <Bottom />
   </Container>
 );

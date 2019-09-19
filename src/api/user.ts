@@ -1,14 +1,14 @@
 import axios from 'axios';
 import { Patch, ChangePassword } from 'types/api/user';
 
-const UserAxios = axios.create({
+const userAxios = axios.create({
   baseURL: '/api/user',
 });
 
 export default {
   // headers 를 create에 정의하면 OAuth2 login 이 되지 않는다.
   getMe: () =>
-    UserAxios({
+    userAxios({
       url: '/me',
       method: 'GET',
       headers: {
@@ -17,7 +17,7 @@ export default {
     }),
 
   getOne: ({ id }: { id: number }) =>
-    UserAxios({
+    userAxios({
       url: `/${id}`,
       method: 'GET',
       headers: {
@@ -26,7 +26,7 @@ export default {
     }),
 
   getArticleOnCreator: ({ id }: { id: number }) =>
-    UserAxios({
+    userAxios({
       url: `/${id}/article`,
       method: 'GET',
       headers: {
@@ -35,7 +35,7 @@ export default {
     }),
 
   remove: () =>
-    UserAxios({
+    userAxios({
       url: '/',
       method: 'DELETE',
       headers: {
@@ -43,7 +43,7 @@ export default {
       },
     }),
   patch: ({ name, introduce }: Patch) =>
-    UserAxios({
+    userAxios({
       url: '/',
       method: 'PATCH',
       data: { name, introduce },
@@ -52,7 +52,7 @@ export default {
       },
     }),
   patchAvatar: ({ formData }: { formData: FormData }) =>
-    UserAxios({
+    userAxios({
       url: '/avatar',
       method: 'PATCH',
       headers: {
@@ -63,7 +63,7 @@ export default {
     }),
   changePassword: ({ prePassword, newPassword }: ChangePassword) =>
     // data:'123' -> server: req.body = '123
-    UserAxios({
+    userAxios({
       url: '/changePassword',
       method: 'PATCH',
       data: { prePassword, newPassword },

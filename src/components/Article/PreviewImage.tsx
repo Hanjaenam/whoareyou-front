@@ -3,7 +3,8 @@ import styled, { keyframes } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { faHandRock } from '@fortawesome/free-regular-svg-icons';
-import { Draggable, DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd';
+import { Draggable, DraggableStateSnapshot, DraggableProvided } from 'react-beautiful-dnd';
+import articleApi from 'api/article';
 
 interface IProps {
   image: File;
@@ -115,14 +116,17 @@ const TitleExplain = styled.div`
 
 export default ({ image, index, onRemove }: IProps) => {
   const imgRef = useRef<HTMLImageElement>();
+
   useEffect(() => {
     const reader = new FileReader();
     reader.readAsDataURL(image);
     reader.addEventListener('load', () => {
       if (!imgRef.current) return;
       imgRef.current.setAttribute('src', reader.result as string);
+      console.log(reader.result);
     });
   }, []);
+
   return (
     <Draggable draggableId={image.name} index={index}>
       {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (

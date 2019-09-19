@@ -23,7 +23,6 @@ const MoreContent = styled.span`
 
 export default () => {
   const data = useContext(ArticleContext);
-  if (data === null) return null;
   const { content } = useSelector((state: AppState) => state.articleArr[data.index]);
 
   return content !== 'undefined' ? (
