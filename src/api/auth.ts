@@ -1,7 +1,9 @@
 import { LogIn, Register, VerifySecretKey, SendSecretKey, ChangePwd } from 'types/api/auth';
 import getAxios from 'api';
 
-const AuthAxios = getAxios({ baseURL: '/auth', withToken: false });
+const AuthAxios = getAxios({
+  baseURL: '/auth',
+});
 
 export default {
   logIn: ({ email, password }: LogIn) =>

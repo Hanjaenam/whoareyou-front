@@ -3,16 +3,41 @@ import getAxios from 'api';
 
 const commentAxios = getAxios({
   baseURL: '/article',
-  withToken: true,
 });
 
 export default {
   getAll: ({ articleId }: { articleId: number }) =>
-    commentAxios({ url: `/${articleId}/comment`, method: 'GET' }),
+    commentAxios({
+      url: `/${articleId}/comment`,
+      method: 'GET',
+      headers: {
+        authorization: `Token ${window.localStorage.getItem('token')}`,
+      },
+    }),
   create: ({ articleId, content }: Create) =>
-    commentAxios({ url: `/${articleId}/comment`, method: 'POST', data: { content } }),
+    commentAxios({
+      url: `/${articleId}/comment`,
+      method: 'POST',
+      data: { content },
+      headers: {
+        authorization: `Token ${window.localStorage.getItem('token')}`,
+      },
+    }),
   remove: ({ articleId, id }: Remove) =>
-    commentAxios({ url: `/${articleId}/comment/${id}`, method: 'DELETE' }),
+    commentAxios({
+      url: `/${articleId}/comment/${id}`,
+      method: 'DELETE',
+      headers: {
+        authorization: `Token ${window.localStorage.getItem('token')}`,
+      },
+    }),
   patch: ({ articleId, id, content }: Patch) =>
-    commentAxios({ url: `/${articleId}/comment/${id}`, method: 'PATCH', data: { content } }),
+    commentAxios({
+      url: `/${articleId}/comment/${id}`,
+      method: 'PATCH',
+      data: { content },
+      headers: {
+        authorization: `Token ${window.localStorage.getItem('token')}`,
+      },
+    }),
 };

@@ -3,7 +3,6 @@ import getAxios from 'api';
 
 const userAxios = getAxios({
   baseURL: '/user',
-  withToken: false,
 });
 
 export default {
