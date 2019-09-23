@@ -1,10 +1,8 @@
-import axios from 'axios';
+import getAxios from 'api';
 
-const likeAxios = axios.create({
-  baseURL: '/api/article',
-  headers: {
-    authorization: `Token ${window.localStorage.getItem('token')}`,
-  },
+const likeAxios = getAxios({
+  baseURL: '/article',
+  withToken: true,
 });
 
 export default {

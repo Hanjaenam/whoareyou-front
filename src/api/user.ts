@@ -1,8 +1,9 @@
-import axios from 'axios';
 import { Patch, ChangePassword } from 'types/api/user';
+import getAxios from 'api';
 
-const userAxios = axios.create({
-  baseURL: '/api/user',
+const userAxios = getAxios({
+  baseURL: '/user',
+  withToken: false,
 });
 
 export default {

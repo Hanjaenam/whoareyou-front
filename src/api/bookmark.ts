@@ -1,11 +1,6 @@
-import axios from 'axios';
+import getAxios from 'api';
 
-const bookmarkAxios = axios.create({
-  baseURL: '/api/article',
-  headers: {
-    authorization: `Token ${window.localStorage.getItem('token')}`,
-  },
-});
+const bookmarkAxios = getAxios({ baseURL: '/article', withToken: true });
 
 export default {
   create: ({ articleId }: { articleId: number }) =>

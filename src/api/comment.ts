@@ -1,11 +1,9 @@
-import axios from 'axios';
 import { Create, Remove, Patch } from 'types/api/comment';
+import getAxios from 'api';
 
-const commentAxios = axios.create({
-  baseURL: '/api/article',
-  headers: {
-    authorization: `Token ${window.localStorage.getItem('token')}`,
-  },
+const commentAxios = getAxios({
+  baseURL: '/article',
+  withToken: true,
 });
 
 export default {

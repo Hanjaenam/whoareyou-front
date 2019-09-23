@@ -1,11 +1,6 @@
-import axios from 'axios';
+import getAxios from 'api';
 
-const articleAxios = axios.create({
-  baseURL: '/api/article',
-  headers: {
-    authorization: `Token ${window.localStorage.getItem('token')}`,
-  },
-});
+const articleAxios = getAxios({ baseURL: '/article', withToken: true });
 
 export default {
   getAll: ({ category }: { category: 'latest' | 'favorite' | 'bookmark' }) =>
