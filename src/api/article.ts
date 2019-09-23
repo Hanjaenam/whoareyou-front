@@ -8,7 +8,8 @@ const articleAxios = axios.create({
 });
 
 export default {
-  getAll: () => articleAxios({ url: '/', method: 'GET' }),
+  getAll: ({ category }: { category: 'latest' | 'favorite' | 'bookmark' }) =>
+    articleAxios({ url: `/${category}`, method: 'GET' }),
 
   getCreator: ({ id }: { id: number }) => articleAxios({ url: `${id}/creator`, method: 'GET' }),
 

@@ -7,3 +7,9 @@ export interface Remove {
   articleId: number;
   id: number;
 }
+
+export interface Patch {
+  articleId: number;
+  id: number;
+  content: string;
+}

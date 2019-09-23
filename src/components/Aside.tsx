@@ -120,13 +120,13 @@ const Aside = ({ modal }: IProps) => {
         {isLogged && (
           <>
             <Item>
-              <SLink to="/tag">
+              <SLink to="/bookmark">
                 <Icon icon={faBookmark} />
                 <span>북마크</span>
               </SLink>
             </Item>
             <Item>
-              <SLink to="/tag">
+              <SLink to="/like">
                 <Icon icon={faThumbsUp} />
                 <span>좋아요 표시한 글</span>
               </SLink>

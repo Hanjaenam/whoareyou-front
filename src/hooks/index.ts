@@ -91,16 +91,16 @@ export const useApi = <T, K extends keyof T>(
    * 4. 로직이 각각 다른 promise함수들 finally     : 맨 마지막으로 호출된다.
    */
   const process = (__0: T): Promise<any> => {
-    setStatus(s => ({ ...s, loading: true }));
+    setStatus(s => ({ failure: false, success: false, loading: true }));
     return new Promise<any>((res, rej) =>
       api(__0)
         .then(value => {
-          setStatus(s => ({ ...s, loading: false, success: true }));
+          setStatus({ failure: false, loading: false, success: true });
           return res(value);
         })
         .catch((err: AxiosError) => {
           if (err.response && controlError.includes(err.response.status)) {
-            setStatus(s => ({ ...s, loading: false, failure: true }));
+            setStatus({ success: false, loading: false, failure: true });
             if (template === 'home') {
               dispatch(setMessage({ type: 'danger', value: err.response.data.message }));
             } else if (context) {

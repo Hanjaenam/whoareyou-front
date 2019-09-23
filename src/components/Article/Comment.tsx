@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 import { blueColorClick } from 'styles/mixins/etc';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPen, faTimes, faCheck } from '@fortawesome/free-solid-svg-icons';
-import { removeComment } from 'store/articleArr/actions';
+import { removeComment, setComment } from 'store/articleArr/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { useApi, useInput } from 'hooks';
 import commentApi from 'api/comment';
@@ -11,7 +11,7 @@ import { ArticleContext } from 'context/article';
 import { AppState } from 'store/reducer';
 import moment from 'moment';
 
-const CommentContainer = styled.div``;
+const Container = styled.div``;
 
 const DataContainer = styled.div`
   display: flex;
@@ -19,7 +19,7 @@ const DataContainer = styled.div`
   align-items: center;
   background-color: #f2f3f5;
   border-radius: 10px;
-  padding: 2.5px ${props => props.theme.gap.small};
+  padding: 2px ${props => props.theme.gap.small};
   padding-right: 0;
 `;
 
@@ -38,7 +38,8 @@ const CreatedAt = styled.span`
   font-size: ${props => props.theme.fontSize.small};
   color: rgba(0, 0, 0, 0.3);
   font-style: italic;
-  margin-left: ${props => props.theme.gap.tiny};
+  position: relative;
+  top: -3px;
 `;
 
 const ButtonContainer = styled.div`
@@ -102,37 +103,51 @@ const Input = styled.input`
 
 interface IProps {
   id: number;
+  index: number;
   creator: string;
   content: string;
   createdAt: string;
 }
 
-export default ({ id, creator, content, createdAt }: IProps) => {
+export default ({ id, index, creator, content, createdAt }: IProps) => {
   const data = useContext(ArticleContext);
   const dispatch = useDispatch();
   const comment = useInput(content);
   const [isEdit, setEdit] = useState(false);
   const { process, loading } = useApi(commentApi.remove, 'home');
+  const { process: processPatch, loading: patchLoading } = useApi(commentApi.patch, 'home');
   const { id: articleId } = useSelector((state: AppState) => state.articleArr[data.index]);
 
   const onRemove = () => {
     if (!window.confirm('삭제하시겠습니까?')) return;
-    process({ id, articleId }).then(() => dispatch(removeComment({ index: data.index, id })));
+    process({ id, articleId }).then(() =>
+      dispatch(removeComment({ articleIndex: data.index, index })),
+    );
   };
 
-  const onEdit = () => {
-    setEdit(!isEdit);
+  const onEdit = () => setEdit(!isEdit);
+
+  const onEditConfirm = () =>
+    processPatch({ articleId, id, content: comment.value }).then(() => {
+      setEdit(false);
+      dispatch(setComment({ index: data.index, comment: { index, content: comment.value } }));
+    });
+
+  const onKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.keyCode === 13) {
+      onEditConfirm();
+    }
   };
 
   return (
-    <CommentContainer key={id}>
+    <Container key={id}>
       <DataContainer>
         <ContentContainer>
           <Author>{creator}</Author>
           {isEdit ? (
             <InputContainer>
-              <Input {...comment} />
-              <EditConfirmButton>
+              <Input autoFocus {...comment} onKeyUp={onKeyUp} />
+              <EditConfirmButton onClick={onEditConfirm}>
                 <FontAwesomeIcon icon={faCheck} />
               </EditConfirmButton>
             </InputContainer>
@@ -153,6 +168,6 @@ export default ({ id, creator, content, createdAt }: IProps) => {
         </ButtonContainer>
       </DataContainer>
       <CreatedAt>{moment(createdAt).fromNow()}</CreatedAt>
-    </CommentContainer>
+    </Container>
   );
 };

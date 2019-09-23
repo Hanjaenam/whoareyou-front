@@ -54,7 +54,7 @@ export default ({
             {!loading &&
               success &&
               articleArr.map((article: ArticleRes, index: number) => (
-                <ArticleProvider key={article.id} idx={index}>
+                <ArticleProvider key={article.id} index={index}>
                   <Article />
                 </ArticleProvider>
               ))}

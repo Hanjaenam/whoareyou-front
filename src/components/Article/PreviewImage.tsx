@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { faHandRock } from '@fortawesome/free-regular-svg-icons';
 import { Draggable, DraggableStateSnapshot, DraggableProvided } from 'react-beautiful-dnd';
-import articleApi from 'api/article';
 
 interface IProps {
   image: File;
@@ -123,7 +122,6 @@ export default ({ image, index, onRemove }: IProps) => {
     reader.addEventListener('load', () => {
       if (!imgRef.current) return;
       imgRef.current.setAttribute('src', reader.result as string);
-      console.log(reader.result);
     });
   }, []);
 

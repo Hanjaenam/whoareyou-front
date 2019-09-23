@@ -20,7 +20,15 @@ import Button from 'components/Common/Button';
 import { ArticleContext } from 'context/article';
 import commentApi from 'api/comment';
 import { Create } from 'types/apiRes/comment';
-import { createComment } from 'store/articleArr/actions';
+import {
+  createComment,
+  createLike,
+  removeLike,
+  createBookmark,
+  removeBookmark,
+} from 'store/articleArr/actions';
+import likeApi from 'api/like';
+import bookmarkApi from 'api/bookmark';
 
 const Container = styled.div`
   display: flex;
@@ -37,11 +45,11 @@ const Container = styled.div`
   }
 `;
 
-const LikeNumber = styled.span`
+const Number = styled.span`
   margin-left: ${props => props.theme.gap.tiny};
 `;
 
-const Function = styled.div<{ disabled?: boolean; active?: boolean }>`
+const FunButton = styled.div<{ disabled?: boolean; active?: boolean }>`
   ${basic({ padding: 'small' })}
   ${props =>
     props.disabled
@@ -96,29 +104,52 @@ export default () => {
   const { value: comment, setValue: setComment } = useInputWithSet();
   const [wrtieComnt, setWriteComnt] = useState(false);
   const { process, loading } = useApi(commentApi.create, 'home');
-  const { isLiked, likeNumber, isBookmarked, id } = useSelector(
+  const { isLiked, likeNumber, isBookmarked, id, commentNumber } = useSelector(
     (state: AppState) => state.articleArr[data.index],
   );
   const dispatch = useDispatch();
 
   const onCreate = () =>
-    process({ articleId: id, content: comment }).then((res: { data: Create }) =>
-      dispatch(createComment({ index: data.index, ...res.data })),
-    );
+    process({ articleId: id, content: comment }).then((res: { data: Create }) => {
+      setComment('');
+      setWriteComnt(false);
+      dispatch(createComment({ index: data.index, ...res.data }));
+    });
+
+  const onLikeClick = () => {
+    if (isLiked) {
+      dispatch(removeLike(data.index));
+      likeApi.remove({ articleId: id });
+    } else {
+      dispatch(createLike(data.index));
+      likeApi.create({ articleId: id });
+    }
+  };
+
+  const onBookmarkClick = () => {
+    if (isBookmarked) {
+      dispatch(removeBookmark(data.index));
+      bookmarkApi.remove({ articleId: id });
+    } else {
+      dispatch(createBookmark(data.index));
+      bookmarkApi.create({ articleId: id });
+    }
+  };
 
   return (
     <>
       <Container>
-        <Function disabled={!isLogged} active={isLiked}>
+        <FunButton disabled={!isLogged} active={isLiked} onClick={onLikeClick}>
           <FontAwesomeIcon icon={isLiked ? solThumbsUp : reThumbsUp} />
-          <LikeNumber>{likeNumber}</LikeNumber>
-        </Function>
-        <Function onClick={() => setWriteComnt(!wrtieComnt)}>
+          <Number>{likeNumber}</Number>
+        </FunButton>
+        <FunButton onClick={() => setWriteComnt(!wrtieComnt)}>
           <FontAwesomeIcon icon={faCommentDots} />
-        </Function>
-        <Function disabled={!isLogged} active={isBookmarked}>
+          <Number>{commentNumber}</Number>
+        </FunButton>
+        <FunButton disabled={!isLogged} active={isBookmarked} onClick={onBookmarkClick}>
           <FontAwesomeIcon icon={isBookmarked ? solBookmark : reBookMark} />
-        </Function>
+        </FunButton>
       </Container>
       {wrtieComnt && (
         <TextAreaContainer>

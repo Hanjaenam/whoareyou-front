@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'store/reducer';
 import { useApi } from 'hooks';
 import commentApi from 'api/comment';
-import { setComment } from 'store/articleArr/actions';
+import { expandComments } from 'store/articleArr/actions';
 import { GetAll } from 'types/apiRes/comment';
 import Comment from './Comment';
 
@@ -37,41 +37,45 @@ export default () => {
   );
   const { process, loading } = useApi(commentApi.getAll, 'home');
   const [expand, setExpand] = useState(false);
+  const [processed, setProcessed] = useState(false);
   const dispatch = useDispatch();
 
-  const getAllComment = () => {
-    process({ articleId }).then((res: { data: GetAll }) => {
-      setExpand(true);
-      dispatch(setComment({ index: data.index, comments: res.data }));
-    });
-  };
+  const getAllComment = () =>
+    processed
+      ? setExpand(true)
+      : process({ articleId }).then((res: { data: GetAll }) => {
+          dispatch(expandComments({ index: data.index, comments: res.data }));
+          setExpand(true);
+          setProcessed(true);
+        });
 
   const renderCommentNumber = useMemo(() => {
     if (commentNumber <= 3) return null;
-    if (!expand)
-      return (
-        <CommentNumber onClick={getAllComment}>
-          <span>남은 댓글 {commentNumber - 3}개 모두 보기</span>
-        </CommentNumber>
-      );
     return (
-      <CommentNumber onClick={getAllComment}>
-        <span>댓글 접기</span>
+      <CommentNumber onClick={expand ? () => setExpand(false) : getAllComment}>
+        <span>{expand ? '댓글 접기' : '댓글 더 보기'}</span>
       </CommentNumber>
     );
   }, [expand]);
 
   return (
     <Container>
-      {comments.map(comment => (
-        <Comment
-          key={comment.id}
-          id={comment.id}
-          creator={comment.creator}
-          content={comment.content}
-          createdAt={comment.createdAt}
-        />
-      ))}
+      {comments.map(
+        (
+          comment: { id: number; creator: string; content: string; createdAt: string },
+          index: number,
+        ) =>
+          !expand && index >= 3 ? null : (
+            <Comment
+              key={comment.id}
+              id={comment.id}
+              index={index}
+              creator={comment.creator}
+              content={comment.content}
+              createdAt={comment.createdAt}
+            />
+          ),
+      )}
       {renderCommentNumber}
     </Container>
   );

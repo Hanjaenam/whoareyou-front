@@ -83,7 +83,7 @@ export default () => {
         </AngleIcon>
       )}
       <ImageSlider index={photoIndex}>
-        {photos.map(photo => (
+        {photos.map((photo: { id: number; location: string }) => (
           <Photo key={photo.id} url={photo.location} />
         ))}
       </ImageSlider>

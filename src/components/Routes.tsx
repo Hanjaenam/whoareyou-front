@@ -4,7 +4,7 @@ import {
   LogIn,
   Register,
   FindPassword,
-  LatestArticle,
+  ArticleList,
   User,
   UserEdit,
   OAuthCallBack,
@@ -18,11 +18,12 @@ const Routes = () => {
   const isLogged = useSelector((state: AppState) => state.user.id !== -1);
   return isLogged ? (
     <Switch>
-      <Route exact path="/" component={LatestArticle} />
+      <Route exact path="/" component={ArticleList} />
       <Route path="/user/edit" component={UserEdit} />
       <Route path="/user/:id" component={User} />
       <Route path="/new" component={CreateArticle} />
       <Route path="/edit" component={EditArticle} />
+      <Route path="/:category" component={ArticleList} />
       <Redirect from="*" to="/" />
     </Switch>
   ) : (
@@ -30,7 +31,7 @@ const Routes = () => {
       <Route exact path="/" component={LogIn} />
       <Route path="/register" component={Register} />
       <Route path="/findPassword" component={FindPassword} />
-      <Route path="/latest" component={LatestArticle} />
+      <Route path="/latest" component={ArticleList} />
       <Route path="/callback" component={OAuthCallBack} />
       <Redirect from="*" to="/" />
     </Switch>
