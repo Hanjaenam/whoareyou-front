@@ -20,15 +20,12 @@ export default () => {
     if (token) {
       userApi
         .getMe()
-        .then(({ data }: { data: Basic }) => {
-          dispatch(logIn(data));
-          setLoading(false);
-        })
+        .then(({ data }: { data: Basic }) => dispatch(logIn(data)))
         .catch((err: AxiosError) => {
-          if (err.response && err.response.status === 401) {
-            window.localStorage.removeItem('token');
-            setLoading(false);
-          }
+          if (err.response && err.response.status === 401) window.localStorage.removeItem('token');
+        })
+        .finally(() => {
+          setLoading(false);
         });
     } else {
       setLoading(false);
