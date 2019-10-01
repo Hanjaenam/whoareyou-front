@@ -21,10 +21,9 @@ const Black = styled.div`
 const Container = styled.div`
   position: relative;
   background-color: white;
-  display: flex;
-  flex-direction: column;
-  width:100%;
-  /* width: ${props => `calc(100vw - ${props.theme.width.aside.xl})`}; */
+  /* display: flex; */
+  /* flex-direction: column; */
+  width: ${props => `calc(100vw - ${props.theme.width.aside.xl})`};
   @media screen and (max-width: ${props => props.theme.breakpoints.lg}) {
     width: ${props => `calc(100vw - ${props.theme.width.aside.lg})`};
   }

@@ -9,7 +9,7 @@ import {
   UserEdit,
   OAuthCallBack,
   CreateArticle,
-  EditArticle,
+  ArticleEdit,
 } from 'pages';
 import { useSelector } from 'react-redux';
 import { AppState } from 'store/reducer';
@@ -22,7 +22,7 @@ const Routes = () => {
       <Route path="/user/edit" component={UserEdit} />
       <Route path="/user/:id" component={User} />
       <Route path="/new" component={CreateArticle} />
-      <Route path="/edit" component={EditArticle} />
+      <Route path="/edit" component={ArticleEdit} />
       <Route path="/:category" component={ArticleList} />
       <Redirect from="*" to="/" />
     </Switch>

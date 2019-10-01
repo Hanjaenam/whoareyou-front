@@ -1,6 +1,6 @@
 import React from 'react';
 import HomeTemplate from 'components/Templates/Common/Home';
-import UpdateArticle from 'components/Templates/UpdateArticle';
+import CreateArticle from 'components/Templates/CreateArticle';
 
 interface IProps {
   history: {
@@ -10,6 +10,6 @@ interface IProps {
 
 export default ({ history: { goBack } }: IProps) => (
   <HomeTemplate>
-    <UpdateArticle goBack={goBack} edit />
+    <CreateArticle goBack={goBack} edit />
   </HomeTemplate>
 );

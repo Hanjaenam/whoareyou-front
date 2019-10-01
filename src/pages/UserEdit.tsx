@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'store/reducer';
 import ChangePwd from 'components/User/ChangePwd';
 import { setEditType } from 'store/userEdit/actions';
+import { Helmet } from 'react-helmet';
 
 export default () => {
   const { editType } = useSelector((state: AppState) => state.userEdit);
@@ -19,6 +20,9 @@ export default () => {
   );
   return (
     <HomeTemplate>
+      <Helmet>
+        <title>회원정보 수정</title>
+      </Helmet>
       <UserEditTemp>{editType === 'profile' ? <EditProfile /> : <ChangePwd />}</UserEditTemp>
     </HomeTemplate>
   );

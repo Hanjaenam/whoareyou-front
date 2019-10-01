@@ -1,9 +1,11 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
+
 import { useDispatch } from 'react-redux';
 import { logIn } from 'store/user/actions';
 import { useApiNoParms } from 'hooks';
 import { Basic } from 'types/apiRes/user';
 import userApi from 'api/user';
+import { Helmet } from 'react-helmet';
 
 interface IProps {
   location: { search: string };
@@ -20,5 +22,9 @@ export default ({ location: { search }, history: { push, replace } }: IProps) =>
       dispatch(logIn(data));
     });
   }, []);
-  return null;
+  return (
+    <Helmet>
+      <title>whoareyou</title>
+    </Helmet>
+  );
 };

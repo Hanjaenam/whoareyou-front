@@ -108,12 +108,12 @@ const Aside = ({ modal }: IProps) => {
             <span>최신</span>
           </SLink>
         </Item>
-        <Item>
+        {/* <Item>
           <SLink to="/tag">
             <Icon icon={faFireAlt} />
             <span>인기</span>
           </SLink>
-        </Item>
+        </Item> */}
         {isLogged && (
           <>
             <Item>

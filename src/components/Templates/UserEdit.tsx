@@ -23,11 +23,17 @@ const Container = styled.div`
     border-left: 0;
     border-right: 0;
     border-radius: 0;
+    display: block;
   }
 `;
 
 const Aside = styled.ul`
   border-right: 1px solid ${props => props.theme.colors.secondary};
+  @media screen and (max-width: ${props => props.theme.breakpoints.sm}) {
+    display: flex;
+    border-bottom: 1px solid ${props => props.theme.colors.secondary};
+    border-right: 0;
+  }
 `;
 
 const Item = styled.li`
@@ -47,15 +53,24 @@ const Text = styled.p<{ active: boolean }>`
           opacity: 1;
           color: ${props.theme.colors.font};
           border-right: 3px solid ${props.theme.colors.main};
+          @media screen and (max-width: ${props.theme.breakpoints.sm}) {
+            border-right: 0;
+            border-bottom: 3px solid ${props.theme.colors.main};
+          }
         `
       : css`
           &:hover {
             background-color: ${props.theme.colors.secondary};
             border-right: 3px solid ${props.theme.colors.main};
+            @media screen and (max-width: ${props.theme.breakpoints.sm}) {
+              border-right: 0;
+              border-bottom: 3px solid ${props.theme.colors.main};
+            }
           }
         `};
   @media screen and (max-width: ${props => props.theme.breakpoints.md}) {
     padding: ${props => props.theme.gap.small};
+    text-align: center;
   }
 `;
 

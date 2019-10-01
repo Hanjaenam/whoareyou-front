@@ -10,6 +10,7 @@ import { useApi } from 'hooks';
 import ArticleProvider from 'context/article';
 import Article from 'components/Article';
 import { setArticleArr } from 'store/articleArr/actions';
+import { Helmet } from 'react-helmet';
 
 interface IProps {
   match: { params: { id: string } };
@@ -36,6 +37,7 @@ export default ({
 
   const [otherUser, setUser] = useState<Basic>();
   const isMe = useSelector((state: AppState) => state.user.id === Number(id));
+  const myName = useSelector((state: AppState) => state.user.name);
 
   useEffect(() => {
     // 내가 아닐 경우에만 정보 가져오기
@@ -49,17 +51,22 @@ export default ({
   return (
     <HomeTemplate>
       {(isMe || otherUser) && (
-        <UserContext.Provider value={{ isMe, otherUser }}>
-          <UserTemplate>
-            {!loading &&
-              success &&
-              articleArr.map((article: ArticleRes, index: number) => (
-                <ArticleProvider key={article.id} index={index}>
-                  <Article />
-                </ArticleProvider>
-              ))}
-          </UserTemplate>
-        </UserContext.Provider>
+        <>
+          <Helmet>
+            <title>{isMe ? myName : otherUser && otherUser.name}</title>
+          </Helmet>
+          <UserContext.Provider value={{ isMe, otherUser }}>
+            <UserTemplate>
+              {!loading &&
+                success &&
+                articleArr.map((article: ArticleRes, index: number) => (
+                  <ArticleProvider key={article.id} index={index}>
+                    <Article />
+                  </ArticleProvider>
+                ))}
+            </UserTemplate>
+          </UserContext.Provider>
+        </>
       )}
     </HomeTemplate>
   );

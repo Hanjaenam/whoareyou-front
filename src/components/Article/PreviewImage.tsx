@@ -11,8 +11,9 @@ interface IProps {
   onRemove: (removeName: string) => void;
 }
 
-const Preview = styled.div`
+const Container = styled.div`
   flex-shrink: 0;
+  flex-grow: 0;
   cursor: pointer;
   position: relative;
   width: 200px;
@@ -72,6 +73,7 @@ const RemoveIconCont = styled.div`
 `;
 
 const RemoveIcon = styled(FontAwesomeIcon)`
+  cursor: pointer;
   font-size: ${props => props.theme.fontSize.huge};
   color: ${props => props.theme.colors.secondary};
 `;
@@ -128,7 +130,7 @@ export default ({ image, index, onRemove }: IProps) => {
   return (
     <Draggable draggableId={image.name} index={index}>
       {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
-        <Preview
+        <Container
           className="preview-image"
           id={image.name}
           ref={provided.innerRef}
@@ -154,7 +156,7 @@ export default ({ image, index, onRemove }: IProps) => {
               <p>타이틀로 보여질 사진입니다.</p>
             </TitleExplain>
           )}
-        </Preview>
+        </Container>
       )}
     </Draggable>
   );

@@ -1,6 +1,7 @@
 import React from 'react';
 import HomeTemplate from 'components/Templates/Common/Home';
-import UpdateArticle from 'components/Templates/UpdateArticle';
+import CreateArticle from 'components/Templates/CreateArticle';
+import { Helmet } from 'react-helmet';
 
 interface IProps {
   history: {
@@ -10,6 +11,9 @@ interface IProps {
 
 export default ({ history: { goBack } }: IProps) => (
   <HomeTemplate>
-    <UpdateArticle goBack={goBack} />
+    <Helmet>
+      <title>새 글</title>
+    </Helmet>
+    <CreateArticle goBack={goBack} />
   </HomeTemplate>
 );

@@ -9,6 +9,7 @@ import Article from 'components/Article';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from 'store/reducer';
 import { setArticleArr } from 'store/articleArr/actions';
+import { Helmet } from 'react-helmet';
 
 interface IProps {
   match: {
@@ -43,6 +44,9 @@ export default ({
 
   return category === 'callback' ? null : (
     <HomeTemplate>
+      <Helmet>
+        <title>whoareyou</title>
+      </Helmet>
       <LatestArticleTemp>
         {!loading && success
           ? articleArr.map((article: ArticleRes, index: number) => (
