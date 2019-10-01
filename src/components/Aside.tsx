@@ -61,17 +61,14 @@ const contractCss = css`
     font-size: ${props => props.theme.fontSize.large};
     margin-right: 0;
   }
-  ${Item} {
-    &:nth-child(4) {
-      display: none;
-    }
-  }
+
   ${SLink} {
     flex-direction: column;
     font-size: ${props => props.theme.fontSize.small};
     padding: ${props => props.theme.gap.small} 0;
     span {
       margin-top: ${props => props.theme.gap.tiny};
+      text-align: center;
     }
   }
   ${Text}, ${Line} {

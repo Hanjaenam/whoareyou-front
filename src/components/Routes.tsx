@@ -31,8 +31,8 @@ const Routes = () => {
       <Route exact path="/" component={LogIn} />
       <Route path="/register" component={Register} />
       <Route path="/findPassword" component={FindPassword} />
-      <Route path="/latest" component={ArticleList} />
       <Route path="/callback" component={OAuthCallBack} />
+      <Route path="/:category" component={ArticleList} />
       <Redirect from="*" to="/" />
     </Switch>
   );

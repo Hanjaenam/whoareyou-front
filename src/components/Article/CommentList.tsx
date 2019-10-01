@@ -40,10 +40,12 @@ export default () => {
   const [processed, setProcessed] = useState(false);
   const dispatch = useDispatch();
 
+  // 2번째 펼치기 이후부턴 api 사용하지 않도록
   const getAllComment = () =>
     processed
       ? setExpand(true)
       : process({ articleId }).then((res: { data: GetAll }) => {
+          console.log(res.data);
           dispatch(expandComments({ index: data.index, comments: res.data }));
           setExpand(true);
           setProcessed(true);

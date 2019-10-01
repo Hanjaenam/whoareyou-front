@@ -25,9 +25,10 @@ export default ({ email, type }: IProps) => {
   const authContext = useContext(AuthContext);
 
   const verifyKey = () =>
-    processVerify({ email, secret: secretKey.value })
-      .then(({ data }: { data: LogInRes }) => dispatch(logIn(data)))
-      .then(() => dispatch(setMessage({ type: 'success', value: '환영합니다!' })));
+    processVerify({ email, secret: secretKey.value }).then(({ data }: { data: LogInRes }) => {
+      dispatch(logIn(data));
+      dispatch(setMessage({ type: 'success', value: '환영합니다!' }));
+    });
 
   const sendSecret = () => {
     if (!window.confirm(`${email} 로 보안코드를 다시 전송하시겠습니까?`)) return;

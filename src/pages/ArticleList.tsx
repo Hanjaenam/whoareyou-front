@@ -13,8 +13,11 @@ import { setArticleArr } from 'store/articleArr/actions';
 interface IProps {
   match: {
     params: {
-      category: 'latest' | 'favorite' | 'bookmark';
+      category: 'latest' | 'favorite' | 'bookmark' | 'callback' | 'register';
     };
+  };
+  history: {
+    replace: any;
   };
 }
 // content length = 200
@@ -22,16 +25,23 @@ export default ({
   match: {
     params: { category = 'latest' },
   },
+  history: { replace },
 }: IProps) => {
   const { process, loading, success } = useApi(articleApi.getAll, 'home');
   const dispatch = useDispatch();
   const { articleArr } = useSelector((state: AppState) => state);
 
   useEffect(() => {
-    process({ category }).then((res: { data: ArticleRes[] }) => dispatch(setArticleArr(res.data)));
+    if (category === 'callback' || category === 'register') {
+      replace('/latest');
+    } else {
+      process({ category }).then((res: { data: ArticleRes[] }) => {
+        dispatch(setArticleArr(res.data));
+      });
+    }
   }, [category]);
 
-  return (
+  return category === 'callback' ? null : (
     <HomeTemplate>
       <LatestArticleTemp>
         {!loading && success
