@@ -104,6 +104,8 @@ const ButtonContainer = styled.div`
   grid-gap: ${props => props.theme.gap.medium};
 `;
 
+const isDev = process.env.NODE_ENV === 'development';
+
 export default () => {
   const email = useInput();
   const password = useInput();
@@ -153,10 +155,21 @@ export default () => {
         <Or>OR</Or>
       </Separator>
       <ButtonContainer>
-        <GoogleButton onClick={() => window.open('http://localhost:4000/api/auth/google', '_self')}>
+        <GoogleButton
+          onClick={() =>
+            window.open(
+              isDev ? 'http://localhost:4000/api/auth/google' : '/api/auth/google',
+              '_self',
+            )
+          }
+        >
           <span>Google</span>
         </GoogleButton>
-        <NaverButton onClick={() => window.open('http://localhost:4000/api/auth/naver', '_self')}>
+        <NaverButton
+          onClick={() =>
+            window.open(isDev ? 'http://localhost:4000/api/auth/naver' : '/api/auth/naver', '_self')
+          }
+        >
           <span>Naver</span>
         </NaverButton>
       </ButtonContainer>
