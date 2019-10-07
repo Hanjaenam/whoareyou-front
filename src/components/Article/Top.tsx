@@ -20,6 +20,7 @@ import { black } from 'styles/mixins/etc';
 const Container = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: ${props => props.theme.gap.small};
 `;
 
@@ -35,17 +36,21 @@ const Avatar = styled.div<IAvatar>`
   height: 50px;
   border-radius: ${props => props.theme.borderRadius.avatar};
   display: inline-block;
+  margin-right: ${props => props.theme.gap.small};
+  cursor: pointer;
 `;
 
-const AuthorContainer = styled.div`
-  flex: 1;
+const CreatorContainer = styled.div`
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-left: ${props => props.theme.gap.small};
 `;
 
-const Creator = styled.p``;
+const CreatorName = styled.p`
+  cursor: pointer;
+  &:active {
+    color: ${props => props.theme.colors.secondary};
+  }
+`;
 
 const CreatedAt = styled.p`
   opacity: 0.5;
@@ -92,6 +97,10 @@ const Top = ({ history: { push } }: IProps) => {
     });
   };
 
+  const onClickCreator = () => {
+    push(`/user/${creator.id}`);
+  };
+
   return (
     <>
       {loading && (
@@ -100,29 +109,29 @@ const Top = ({ history: { push } }: IProps) => {
         </Black>
       )}
       <Container>
-        <Avatar url={isMe ? avatar : creator.avatar} />
-        <AuthorContainer>
+        <CreatorContainer>
+          <Avatar url={isMe ? avatar : creator.avatar} onClick={onClickCreator} />
           <div>
-            <Creator>{creator.name}</Creator>
+            <CreatorName onClick={onClickCreator}>{creator.name}</CreatorName>
             <CreatedAt>{moment(createdAt).fromNow()}</CreatedAt>
           </div>
-          <Func>
-            {isMe && (
-              <>
-                <Button icon={faTrash} color="danger" theme="noBg" onClick={onRemove} />
-                <Button
-                  icon={faEdit}
-                  theme="noBg"
-                  onClick={() => {
-                    dispatch(setEditArticle({ id, content, photos }));
-                    push('/edit');
-                  }}
-                />
-              </>
-            )}
-            <Button icon={faExpand} theme="noBg" onClick={() => null} />
-          </Func>
-        </AuthorContainer>
+        </CreatorContainer>
+        <Func>
+          {isMe && (
+            <>
+              <Button icon={faTrash} color="danger" theme="noBg" onClick={onRemove} />
+              <Button
+                icon={faEdit}
+                theme="noBg"
+                onClick={() => {
+                  dispatch(setEditArticle({ id, content, photos }));
+                  push('/edit');
+                }}
+              />
+            </>
+          )}
+          <Button icon={faExpand} theme="noBg" onClick={() => null} />
+        </Func>
       </Container>
     </>
   );

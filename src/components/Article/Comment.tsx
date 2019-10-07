@@ -15,6 +15,7 @@ const Container = styled.div``;
 
 const DataContainer = styled.div`
   display: flex;
+  height: 30px;
   justify-content: space-between;
   align-items: center;
   background-color: #f2f3f5;
@@ -117,6 +118,7 @@ export default ({ id, index, creator, content, createdAt }: IProps) => {
   const { process, loading } = useApi(commentApi.remove, 'home');
   const { process: processPatch, loading: patchLoading } = useApi(commentApi.patch, 'home');
   const { id: articleId } = useSelector((state: AppState) => state.articleArr[data.index]);
+  const { name } = useSelector((state: AppState) => state.user);
 
   const onRemove = () => {
     if (!window.confirm('삭제하시겠습니까?')) return;
@@ -155,17 +157,19 @@ export default ({ id, index, creator, content, createdAt }: IProps) => {
             <Content>{content}</Content>
           )}
         </ContentContainer>
-        <ButtonContainer>
-          <EditButton onClick={onEdit}>
-            <FontAwesomeIcon
-              icon={isEdit ? faTimes : faPen}
-              style={{ fontSize: isEdit ? '1.2rem' : '1rem' }}
-            />
-          </EditButton>
-          <RemoveButton onClick={onRemove}>
-            <FontAwesomeIcon icon={faTrash} />
-          </RemoveButton>
-        </ButtonContainer>
+        {creator === name ? (
+          <ButtonContainer>
+            <EditButton onClick={onEdit}>
+              <FontAwesomeIcon
+                icon={isEdit ? faTimes : faPen}
+                style={{ fontSize: isEdit ? '1.2rem' : '1rem' }}
+              />
+            </EditButton>
+            <RemoveButton onClick={onRemove}>
+              <FontAwesomeIcon icon={faTrash} />
+            </RemoveButton>
+          </ButtonContainer>
+        ) : null}
       </DataContainer>
       <CreatedAt>{moment(createdAt).fromNow()}</CreatedAt>
     </Container>

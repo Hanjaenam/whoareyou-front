@@ -3,7 +3,7 @@ import HomeTemplate from 'components/Templates/Common/Home';
 import LatestArticleTemp from 'components/Templates/LatestArticle';
 import { useApi } from 'hooks';
 import articleApi from 'api/article';
-import { ArticleRes } from 'types/apiRes/article';
+import { State as ArticleRes } from 'store/articleArr/types';
 import ArticleProvider from 'context/article';
 import Article from 'components/Article';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,7 +14,7 @@ import { Helmet } from 'react-helmet';
 interface IProps {
   match: {
     params: {
-      category: 'latest' | 'favorite' | 'bookmark' | 'callback' | 'register';
+      category: 'latest' | 'favorite' | 'bookmark';
     };
   };
   history: {
@@ -29,20 +29,21 @@ export default ({
   history: { replace },
 }: IProps) => {
   const { process, loading, success } = useApi(articleApi.getAll, 'home');
-  const dispatch = useDispatch();
   const { articleArr } = useSelector((state: AppState) => state);
+  const isLogged = useSelector((state: AppState) => state.user.id !== -1);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (category === 'callback' || category === 'register') {
-      replace('/latest');
-    } else {
-      process({ category }).then((res: { data: ArticleRes[] }) => {
+    if (category === 'latest' || category === 'favorite' || category === 'bookmark') {
+      process({ isLogged, category }).then((res: { data: ArticleRes[] }) => {
         dispatch(setArticleArr(res.data));
       });
+    } else {
+      replace('/latest');
     }
   }, [category]);
 
-  return category === 'callback' ? null : (
+  return category === 'latest' || category === 'favorite' || category === 'bookmark' ? (
     <HomeTemplate>
       <Helmet>
         <title>whoareyou</title>
@@ -57,5 +58,5 @@ export default ({
           : null}
       </LatestArticleTemp>
     </HomeTemplate>
-  );
+  ) : null;
 };

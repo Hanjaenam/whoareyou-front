@@ -145,7 +145,7 @@ export default ({ children }: IProps) => {
         </InfoContainer>
         <Nav>
           <Item>
-            <span>내 글</span>
+            <span>게시물</span>
           </Item>
         </Nav>
       </Top>

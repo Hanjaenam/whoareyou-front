@@ -32,7 +32,7 @@ const Routes = () => {
       <Route path="/register" component={Register} />
       <Route path="/findPassword" component={FindPassword} />
       <Route path="/callback" component={OAuthCallBack} />
-      <Route path="/:category" component={ArticleList} />
+      <Route path="/latest" component={ArticleList} />
       <Redirect from="*" to="/" />
     </Switch>
   );

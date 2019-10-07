@@ -34,6 +34,7 @@ export default (state = initialState, action: ActionTypes): State[] => {
       const { articleIndex, index } = action.payload;
       return fromJS(state)
         .removeIn([articleIndex, 'comments', index])
+        .setIn([articleIndex, 'commentNumber'], state[articleIndex].commentNumber - 1)
         .toJS();
     }
     case EXPAND_COMMENTS: {

@@ -139,7 +139,7 @@ export default () => {
   return (
     <>
       <Container>
-        <FunButton disabled={!isLogged} active={isLiked} onClick={onLikeClick}>
+        <FunButton active={isLiked} onClick={onLikeClick}>
           <FontAwesomeIcon icon={isLiked ? solThumbsUp : reThumbsUp} />
           <Number>{likeNumber}</Number>
         </FunButton>
@@ -147,7 +147,7 @@ export default () => {
           <FontAwesomeIcon icon={faCommentDots} />
           <Number>{commentNumber}</Number>
         </FunButton>
-        <FunButton disabled={!isLogged} active={isBookmarked} onClick={onBookmarkClick}>
+        <FunButton active={isBookmarked} onClick={onBookmarkClick}>
           <FontAwesomeIcon icon={isBookmarked ? solBookmark : reBookMark} />
         </FunButton>
       </Container>

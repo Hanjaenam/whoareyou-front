@@ -5,14 +5,22 @@ const articleAxios = getAxios({
 });
 
 export default {
-  getAll: ({ category }: { category: 'latest' | 'favorite' | 'bookmark' }) =>
-    articleAxios({
+  getAll: ({
+    isLogged,
+    category,
+  }: {
+    isLogged: boolean;
+    category: 'latest' | 'favorite' | 'bookmark';
+  }) => {
+    const headers = isLogged
+      ? { authorization: `Token ${window.localStorage.getItem('token')}` }
+      : undefined;
+    return articleAxios({
       url: `/${category}`,
       method: 'GET',
-      headers: {
-        authorization: `Token ${window.localStorage.getItem('token')}`,
-      },
-    }),
+      headers,
+    });
+  },
 
   getCreator: ({ id }: { id: number }) =>
     articleAxios({

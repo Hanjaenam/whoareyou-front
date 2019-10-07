@@ -25,7 +25,7 @@ export default () => {
   const data = useContext(ArticleContext);
   const { content } = useSelector((state: AppState) => state.articleArr[data.index]);
 
-  return content !== 'undefined' ? (
+  return content !== '' ? (
     <Container>
       <Content>
         {content}

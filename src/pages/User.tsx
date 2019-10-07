@@ -1,7 +1,7 @@
 import React, { useEffect, useState, createContext } from 'react';
 import HomeTemplate from 'components/Templates/Common/Home';
 import UserTemplate from 'components/Templates/UserTemp';
-import { ArticleRes } from 'types/apiRes/article';
+import { State as ArticleRes } from 'store/articleArr/types';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'store/reducer';
 import { Basic } from 'types/apiRes/user';
@@ -41,8 +41,9 @@ export default ({
 
   useEffect(() => {
     // 내가 아닐 경우에만 정보 가져오기
-    if (!isMe)
+    if (!isMe) {
       userApi.getOne({ id: Number(id) }).then(({ data }: { data: Basic }) => setUser(data));
+    }
     process({ id: Number(id) }).then((res: { data: ArticleRes[] }) =>
       dispatch(setArticleArr(res.data)),
     );

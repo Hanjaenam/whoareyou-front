@@ -5,6 +5,8 @@ import PhotoSlider from 'components/Article/PhotoSlider';
 import CommentList from 'components/Article/CommentList';
 import Top from 'components/Article/Top';
 import Content from 'components/Article/Content';
+import { useSelector } from 'react-redux';
+import { AppState } from 'store/reducer';
 
 const Container = styled.article`
   position: relative;
@@ -25,12 +27,15 @@ const Container = styled.article`
   }
 `;
 
-export default () => (
-  <Container>
-    <Top />
-    <PhotoSlider />
-    <Content />
-    <CommentList />
-    <Bottom />
-  </Container>
-);
+export default () => {
+  const isLogged = useSelector((state: AppState) => state.user.id !== -1);
+  return (
+    <Container>
+      <Top />
+      <PhotoSlider />
+      <Content />
+      <CommentList />
+      {isLogged ? <Bottom /> : null}
+    </Container>
+  );
+};

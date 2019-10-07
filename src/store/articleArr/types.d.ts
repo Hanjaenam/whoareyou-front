@@ -105,6 +105,7 @@ export type ActionTypes =
   | RemoveBookmark;
 
 export interface ICreator {
+  id: number;
   name: string;
   avatar: string;
 }

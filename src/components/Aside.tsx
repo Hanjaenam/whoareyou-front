@@ -123,7 +123,7 @@ const Aside = ({ modal }: IProps) => {
               </SLink>
             </Item>
             <Item>
-              <SLink to="/like">
+              <SLink to="/favorite">
                 <Icon icon={faThumbsUp} />
                 <span>좋아요 표시한 글</span>
               </SLink>
