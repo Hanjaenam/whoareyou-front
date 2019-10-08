@@ -13,12 +13,8 @@ import {
 
 export type SetArticleArrPayl = State[];
 export type RemoveArticlePayl = number;
-export interface CreateCommentPayl {
+export interface CreateCommentPayl extends IComment {
   index: number;
-  id: number;
-  content: string;
-  creator: string;
-  createdAt: string;
 }
 export interface RemoveCommentPayl {
   articleIndex: number;
@@ -26,12 +22,7 @@ export interface RemoveCommentPayl {
 }
 export type ExpandCommentsPayl = {
   index: number;
-  comments: {
-    id: number;
-    creator: string;
-    content: string;
-    createdAt: string;
-  }[];
+  comments: IComment[];
 };
 
 export interface SetCommentPayl {
@@ -117,9 +108,10 @@ export interface IPhoto {
 
 export interface IComment {
   id: number;
-  creator: string;
   content: string;
   createdAt: string;
+  creator: string;
+  creatorId: number;
 }
 export interface State {
   id: number;

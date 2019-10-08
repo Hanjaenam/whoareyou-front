@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 import { NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock } from '@fortawesome/free-regular-svg-icons';
-import { faFireAlt, faThumbsUp, faBookmark } from '@fortawesome/free-solid-svg-icons';
+import { faThumbsUp, faBookmark } from '@fortawesome/free-solid-svg-icons';
 import { useSelector } from 'react-redux';
 import { AppState } from 'store/reducer';
 

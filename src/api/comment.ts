@@ -6,9 +6,9 @@ const commentAxios = getAxios({
 });
 
 export default {
-  getAll: ({ articleId }: { articleId: number }) =>
+  getAll: ({ page, articleId }: { page: number; articleId: number }) =>
     commentAxios({
-      url: `/${articleId}/comment`,
+      url: `/${articleId}/comment?page=${page}`,
       method: 'GET',
       headers: {
         authorization: `Token ${window.localStorage.getItem('token')}`,

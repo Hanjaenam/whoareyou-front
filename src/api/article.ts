@@ -6,9 +6,11 @@ const articleAxios = getAxios({
 
 export default {
   getAll: ({
+    page,
     isLogged,
     category,
   }: {
+    page: number;
     isLogged: boolean;
     category: 'latest' | 'favorite' | 'bookmark';
   }) => {
@@ -16,7 +18,7 @@ export default {
       ? { authorization: `Token ${window.localStorage.getItem('token')}` }
       : undefined;
     return articleAxios({
-      url: `/${category}`,
+      url: `/${category}?page=${page}`,
       method: 'GET',
       headers,
     });

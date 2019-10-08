@@ -19,7 +19,7 @@ import TextArea from 'react-autosize-textarea';
 import Button from 'components/Common/Button';
 import { ArticleContext } from 'context/article';
 import commentApi from 'api/comment';
-import { Create } from 'types/apiRes/comment';
+import { IComment } from 'store/articleArr/types';
 import {
   createComment,
   createLike,
@@ -100,17 +100,16 @@ const CustomTextArea = styled(TextArea)`
 
 export default () => {
   const data = useContext(ArticleContext);
-  const isLogged = useSelector((state: AppState) => state.user.id !== -1);
   const { value: comment, setValue: setComment } = useInputWithSet();
   const [wrtieComnt, setWriteComnt] = useState(false);
-  const { process, loading } = useApi(commentApi.create, 'home');
+  const { process } = useApi(commentApi.create, 'home');
   const { isLiked, likeNumber, isBookmarked, id, commentNumber } = useSelector(
     (state: AppState) => state.articleArr[data.index],
   );
   const dispatch = useDispatch();
 
-  const onCreate = () =>
-    process({ articleId: id, content: comment }).then((res: { data: Create }) => {
+  const onCreateComment = () =>
+    process({ articleId: id, content: comment }).then((res: { data: IComment }) => {
       setComment('');
       setWriteComnt(false);
       dispatch(createComment({ index: data.index, ...res.data }));
@@ -158,7 +157,7 @@ export default () => {
             value={comment}
             onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setComment(e.target.value)}
           />
-          <Button icon={faPlus} theme="noBg" onClick={onCreate} />
+          <Button icon={faPlus} theme="noBg" onClick={onCreateComment} />
         </TextAreaContainer>
       )}
     </>

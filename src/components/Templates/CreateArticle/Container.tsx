@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { DropResult } from 'react-beautiful-dnd';
 import { useApi } from 'hooks';
 import articleApi from 'api/article';

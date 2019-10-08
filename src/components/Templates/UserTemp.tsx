@@ -5,9 +5,9 @@ import linkCss from 'styles/mixins/link';
 import MyAvatar from 'components/User/Avatar';
 import { MainHeightAboveLg, mainHeightBelowLg, articleContainer } from 'styles/mixins/etc';
 import { UserContext } from 'pages/User';
-import tempAvatar from 'assets/avatar.png';
 import { useSelector } from 'react-redux';
 import { AppState } from 'store/reducer';
+import avatarCss from 'styles/mixins/avatar';
 
 const Container = styled.div`
   display: flex;
@@ -40,10 +40,8 @@ const InfoContainer = styled.div`
   }
 `;
 
-const OtherAvatar = styled.img`
-  width: ${props => props.theme.avatarSize.user};
-  height: ${props => props.theme.avatarSize.user};
-  border-radius: ${props => props.theme.borderRadius.avatar};
+const OtherAvatar = styled.div<{ url: null | string }>`
+  ${props => avatarCss({ url: props.url, page: 'user' })};
 `;
 
 const TextContainer = styled.div`
@@ -130,11 +128,7 @@ export default ({ children }: IProps) => {
     <Container>
       <Top>
         <InfoContainer>
-          {isMe ? (
-            <MyAvatar page="user" />
-          ) : (
-            <OtherAvatar src={(otherUser && otherUser.avatar) || tempAvatar} />
-          )}
+          {isMe ? <MyAvatar page="user" /> : <OtherAvatar url={otherUser && otherUser.avatar} />}
           <TextContainer>
             <NameContainer>
               <Name>{isMe ? name : otherUser && otherUser.name}</Name>

@@ -108,15 +108,17 @@ interface IProps {
   creator: string;
   content: string;
   createdAt: string;
+  creatorId: number;
+  push: (path: string) => void;
 }
 
-export default ({ id, index, creator, content, createdAt }: IProps) => {
+export default ({ id, index, creator, content, createdAt, creatorId, push }: IProps) => {
   const data = useContext(ArticleContext);
   const dispatch = useDispatch();
   const comment = useInput(content);
   const [isEdit, setEdit] = useState(false);
-  const { process, loading } = useApi(commentApi.remove, 'home');
-  const { process: processPatch, loading: patchLoading } = useApi(commentApi.patch, 'home');
+  const { process } = useApi(commentApi.remove, 'home');
+  const { process: processPatch } = useApi(commentApi.patch, 'home');
   const { id: articleId } = useSelector((state: AppState) => state.articleArr[data.index]);
   const { name } = useSelector((state: AppState) => state.user);
 
@@ -126,8 +128,6 @@ export default ({ id, index, creator, content, createdAt }: IProps) => {
       dispatch(removeComment({ articleIndex: data.index, index })),
     );
   };
-
-  const onEdit = () => setEdit(!isEdit);
 
   const onEditConfirm = () =>
     processPatch({ articleId, id, content: comment.value }).then(() => {
@@ -142,10 +142,10 @@ export default ({ id, index, creator, content, createdAt }: IProps) => {
   };
 
   return (
-    <Container key={id}>
+    <Container>
       <DataContainer>
         <ContentContainer>
-          <Author>{creator}</Author>
+          <Author onClick={() => push(`/user/${creatorId}`)}>{creator}</Author>
           {isEdit ? (
             <InputContainer>
               <Input autoFocus {...comment} onKeyUp={onKeyUp} />
@@ -159,7 +159,7 @@ export default ({ id, index, creator, content, createdAt }: IProps) => {
         </ContentContainer>
         {creator === name ? (
           <ButtonContainer>
-            <EditButton onClick={onEdit}>
+            <EditButton onClick={() => setEdit(!isEdit)}>
               <FontAwesomeIcon
                 icon={isEdit ? faTimes : faPen}
                 style={{ fontSize: isEdit ? '1.2rem' : '1rem' }}

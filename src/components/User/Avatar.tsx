@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
-import tempAvatar from 'assets/avatar.png';
 import userApi from 'api/user';
 import { useDispatch, useSelector } from 'react-redux';
 import { useApi } from 'hooks';
@@ -8,10 +7,7 @@ import { setMessage } from 'store/notification/actions';
 import { patchUser } from 'store/user/actions';
 import Loader from 'components/Common/Loader';
 import { AppState } from 'store/reducer';
-
-interface IProps {
-  page: 'user' | 'userEdit';
-}
+import avatarCss from 'styles/mixins/avatar';
 
 interface IAvatar {
   url: string | null;
@@ -20,26 +16,17 @@ interface IAvatar {
 }
 
 const Avatar = styled.div<IAvatar>`
+  ${props => avatarCss({ url: props.url, page: props.page })}
   position: relative;
-  border-radius: ${props => props.theme.borderRadius.avatar};
-  border: 1px solid ${props => props.theme.colors.secondary};
-  background-image: ${props => (props.url ? `url(${props.url})` : `url(${tempAvatar})`)};
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
   overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: ${props => props.theme.avatarSize[props.page].xl};
-  height: ${props => props.theme.avatarSize[props.page].xl};
   > button {
     border-bottom-right-radius: ${props => (props.page === 'user' ? '35px' : '45p')};
     border-bottom-left-radius: ${props => (props.page === 'user' ? '35px' : '45p')};
   }
   @media screen and (max-width: ${props => props.theme.breakpoints.md}) {
-    width: ${props => props.theme.avatarSize[props.page].md};
-    height: ${props => props.theme.avatarSize[props.page].md};
     > button {
       border-bottom-right-radius: ${props => (props.page === 'user' ? '25px' : '35px')};
       border-bottom-left-radius: ${props => (props.page === 'user' ? '25px' : '35px')};
@@ -86,6 +73,10 @@ const Text = styled.p`
 const Input = styled.input<{ ref: React.MutableRefObject<undefined> }>`
   display: none;
 `;
+
+interface IProps {
+  page: 'user' | 'userEdit';
+}
 
 export default ({ page }: IProps) => {
   const inputRef = useRef<HTMLInputElement>();

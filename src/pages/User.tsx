@@ -12,19 +12,19 @@ import Article from 'components/Article';
 import { setArticleArr } from 'store/articleArr/actions';
 import { Helmet } from 'react-helmet';
 
-interface IProps {
-  match: { params: { id: string } };
-}
-
 interface IUserContext {
   isMe: boolean;
-  otherUser: Basic | undefined;
+  otherUser: Basic | null;
 }
 
 export const UserContext = createContext<IUserContext>({
   isMe: false,
-  otherUser: undefined,
+  otherUser: null,
 });
+
+interface IProps {
+  match: { params: { id: string } };
+}
 
 export default ({
   match: {
@@ -35,7 +35,7 @@ export default ({
   const { articleArr } = useSelector((state: AppState) => state);
   const dispatch = useDispatch();
 
-  const [otherUser, setUser] = useState<Basic>();
+  const [otherUser, setUser] = useState<Basic | null>(null);
   const isMe = useSelector((state: AppState) => state.user.id === Number(id));
   const myName = useSelector((state: AppState) => state.user.name);
 

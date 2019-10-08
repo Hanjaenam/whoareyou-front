@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import { blueColorClick } from 'styles/mixins/etc';
 import { ArticleContext } from 'context/article';
@@ -20,54 +21,62 @@ const CommentNumber = styled.span`
   font-weight: 500;
   user-select: none;
   display:inline-block;
-  margin-top: ${props => props.theme.gap.small};
-  margin-left: ${props => props.theme.gap.tiny};
-  margin-bottom: ${props => props.theme.gap.tiny};
+  margin:${props => props.theme.gap.tiny};
 `;
 
-export default () => {
+interface IProps {
+  history: {
+    push: (path: string) => void;
+  };
+}
+
+const CommentList = ({ history: { push } }: IProps) => {
   const data = useContext(ArticleContext);
   const { comments, commentNumber, id: articleId } = useSelector(
     (state: AppState) => state.articleArr[data.index],
   );
-  const { process, loading } = useApi(commentApi.getAll, 'home');
-  const [expand, setExpand] = useState(false);
-  const [processed, setProcessed] = useState(false);
+  const { process } = useApi(commentApi.getAll, 'home');
+  const [state, setState] = useState({
+    expand: false,
+    processed: false,
+    page: 0,
+  });
   const dispatch = useDispatch();
 
   // 2번째 펼치기 이후부턴 api 사용하지 않도록
-  const getAllComment = () =>
-    processed
-      ? setExpand(true)
-      : process({ articleId }).then((res: { data: GetAll }) => {
+  const expandComment = () =>
+    state.processed
+      ? setState(s => ({ ...s, expand: true }))
+      : process({ page: state.page, articleId }).then((res: { data: GetAll }) => {
           dispatch(expandComments({ index: data.index, comments: res.data }));
-          setExpand(true);
-          setProcessed(true);
+          setState(s => ({ ...s, expand: true, processed: true }));
         });
 
   return (
     <Container>
-      {comments.map(
-        (
-          comment: { id: number; creator: string; content: string; createdAt: string },
-          index: number,
-        ) =>
-          !expand && index >= 3 ? null : (
-            <Comment
-              key={comment.id}
-              id={comment.id}
-              index={index}
-              creator={comment.creator}
-              content={comment.content}
-              createdAt={comment.createdAt}
-            />
-          ),
+      {comments.map((comment, index) =>
+        !state.expand && index >= 3 ? null : (
+          <Comment
+            key={comment.id}
+            id={comment.id}
+            index={index}
+            content={comment.content}
+            createdAt={comment.createdAt}
+            creator={comment.creator}
+            creatorId={comment.creatorId}
+            push={push}
+          />
+        ),
       )}
       {commentNumber <= 3 ? null : (
-        <CommentNumber onClick={expand ? () => setExpand(false) : getAllComment}>
-          {expand ? '댓글 접기' : '댓글 더 보기'}
+        <CommentNumber
+          onClick={state.expand ? () => setState(s => ({ ...s, expand: false })) : expandComment}
+        >
+          {state.expand ? '댓글 접기' : '댓글 더 보기'}
         </CommentNumber>
       )}
     </Container>
   );
 };
+
+export default withRouter(CommentList);

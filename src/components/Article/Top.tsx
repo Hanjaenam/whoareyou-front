@@ -97,10 +97,6 @@ const Top = ({ history: { push } }: IProps) => {
     });
   };
 
-  const onClickCreator = () => {
-    push(`/user/${creator.id}`);
-  };
-
   return (
     <>
       {loading && (
@@ -110,9 +106,12 @@ const Top = ({ history: { push } }: IProps) => {
       )}
       <Container>
         <CreatorContainer>
-          <Avatar url={isMe ? avatar : creator.avatar} onClick={onClickCreator} />
+          <Avatar
+            url={isMe ? avatar : creator.avatar}
+            onClick={() => push(`/user/${creator.id}`)}
+          />
           <div>
-            <CreatorName onClick={onClickCreator}>{creator.name}</CreatorName>
+            <CreatorName onClick={() => push(`/user/${creator.id}`)}>{creator.name}</CreatorName>
             <CreatedAt>{moment(createdAt).fromNow()}</CreatedAt>
           </div>
         </CreatorContainer>
