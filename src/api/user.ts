@@ -25,9 +25,9 @@ export default {
       },
     }),
 
-  getArticleOnCreator: ({ id }: { id: number }) =>
+  getArticleOnCreator: ({ page, id }: { page: number; id: number }) =>
     userAxios({
-      url: `/${id}/article`,
+      url: `/${id}/article?page=${page}`,
       method: 'GET',
       headers: {
         authorization: `Token ${window.localStorage.getItem('token')}`,

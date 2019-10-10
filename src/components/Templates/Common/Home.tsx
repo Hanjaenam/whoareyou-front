@@ -24,6 +24,7 @@ const Layout = styled.div`
   flex: 1;
   display: flex;
   margin-top: ${props => props.theme.height.header};
+  overflow: scroll;
   @media screen and (max-width: ${props => props.theme.breakpoints.md}) {
     margin-top: ${props => props.theme.height.header};
   }

@@ -18,13 +18,12 @@ const Routes = () => {
   const isLogged = useSelector((state: AppState) => state.user.id !== -1);
   return isLogged ? (
     <Switch>
-      <Route exact path="/" component={ArticleList} />
       <Route path="/user/edit" component={UserEdit} />
       <Route path="/user/:id" component={User} />
       <Route path="/new" component={CreateArticle} />
       <Route path="/edit" component={ArticleEdit} />
       <Route path="/:category" component={ArticleList} />
-      <Redirect from="*" to="/" />
+      <Redirect from="*" to="/latest" />
     </Switch>
   ) : (
     <Switch>
@@ -32,7 +31,8 @@ const Routes = () => {
       <Route path="/register" component={Register} />
       <Route path="/findPassword" component={FindPassword} />
       <Route path="/callback" component={OAuthCallBack} />
-      <Route path="/latest" component={ArticleList} />
+      <Route path="/user/:id" component={User} />
+      <Route path="/:category" component={ArticleList} />
       <Redirect from="*" to="/" />
     </Switch>
   );

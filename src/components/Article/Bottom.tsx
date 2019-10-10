@@ -11,7 +11,6 @@ import {
   faCommentDots,
 } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { basic } from 'styles/mixins/button';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'store/reducer';
 import { useInputWithSet, useApi } from 'hooks';
@@ -33,7 +32,6 @@ import bookmarkApi from 'api/bookmark';
 const Container = styled.div`
   display: flex;
   border-top: 1px solid ${props => props.theme.colors.secondary};
-  padding: ${props => props.theme.gap.tiny};
   > div + div {
     margin-left: ${props => props.theme.gap.tiny};
   }
@@ -50,7 +48,15 @@ const Number = styled.span`
 `;
 
 const FunButton = styled.div<{ disabled?: boolean; active?: boolean }>`
-  ${basic({ padding: 'small' })}
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: ${props => props.theme.gap.small};
+  transition: 0.2s;
+  @media screen and (max-width: ${props => props.theme.breakpoints.sm}) {
+    padding: ${props => props.theme.gap.tiny};
+  }
   ${props =>
     props.disabled
       ? css`
@@ -60,13 +66,12 @@ const FunButton = styled.div<{ disabled?: boolean; active?: boolean }>`
         `
       : css`
           &:hover {
-            background-color: ${props.theme.colors.aside()};
+            opacity: 0.85;
           }
           &:active {
             transform: scale(0.98);
           }
         `}
-    
   ${props =>
     props.active &&
     css`
@@ -75,7 +80,7 @@ const FunButton = styled.div<{ disabled?: boolean; active?: boolean }>`
       > span {
         color: white;
       }
-    `}
+    `};
 `;
 
 const TextAreaContainer = styled.div`

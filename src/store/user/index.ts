@@ -19,11 +19,13 @@ export default (state = initialState, action: ActionTypes): State => {
     }
     case PATCH: {
       const {
-        payload: { name, avatar },
+        payload: { name, avatar, introduce },
       } = action;
       return {
         ...state,
-        name: name === undefined ? state.name : name,
+        name: name === undefined || name === state.name ? state.name : name,
+        introduce:
+          introduce === undefined || introduce === state.introduce ? state.introduce : introduce,
         avatar: avatar === undefined ? state.avatar : avatar,
       };
     }

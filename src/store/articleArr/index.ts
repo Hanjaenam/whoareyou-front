@@ -1,7 +1,7 @@
 import { fromJS } from 'immutable';
 import { ActionTypes, State, IComment } from './types';
 import {
-  SET_ARTICLE_ARR,
+  PUSH_ARTICLE,
   REMOVE_ARTICLE,
   CREATE_COMMENT,
   REMOVE_COMMENT,
@@ -11,14 +11,18 @@ import {
   REMOVE_LIKE,
   CREATE_BOOKMARK,
   REMOVE_BOOKMARK,
+  SET_ARTICLE,
 } from './actions';
 
 const initialState: State[] = [];
 
 export default (state = initialState, action: ActionTypes): State[] => {
   switch (action.type) {
-    case SET_ARTICLE_ARR: {
+    case SET_ARTICLE: {
       return action.payload;
+    }
+    case PUSH_ARTICLE: {
+      return [...state, ...action.payload];
     }
     case REMOVE_ARTICLE: {
       const { payload } = action;

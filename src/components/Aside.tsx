@@ -103,7 +103,7 @@ const Aside = ({ modal }: IProps) => {
     <Container contract={contract} modal={modal}>
       <Menu>
         <Item>
-          <SLink exact to={isLogged ? '/' : '/latest'}>
+          <SLink to="/latest">
             <Icon icon={faClock} />
             <span>최신</span>
           </SLink>

@@ -1,14 +1,16 @@
 import {
-  SetArticleArrPayl,
+  PushArticlePayl,
   ActionTypes,
   RemoveArticlePayl,
   CreateCommentPayl,
   RemoveCommentPayl,
   ExpandCommentsPayl,
   SetCommentPayl,
+  SetArticlePayl,
 } from './types';
 
-export const SET_ARTICLE_ARR = 'articleArr/SET_ARTICLE_ARR';
+export const SET_ARTICLE = 'articleArr/SET_ARTICLE';
+export const PUSH_ARTICLE = 'articleArr/PUSH_ARTICLE';
 export const REMOVE_ARTICLE = 'articleArr/REMOVE_ARTICLE';
 export const CREATE_COMMENT = 'articleArr/CREATE_COMMENT';
 export const REMOVE_COMMENT = 'articleArr/REMOVE_COMMENT';
@@ -19,8 +21,12 @@ export const REMOVE_LIKE = 'articleArr/REMOVE_LIKE';
 export const CREATE_BOOKMARK = 'articleArr/CREATE_BOOKMARK';
 export const REMOVE_BOOKMARK = 'articleArr/REMOVE_BOOKMARK';
 
-export const setArticleArr = (payload: SetArticleArrPayl): ActionTypes => ({
-  type: SET_ARTICLE_ARR,
+export const setArticle = (payload: SetArticlePayl): ActionTypes => ({
+  type: SET_ARTICLE,
+  payload,
+});
+export const pushArticle = (payload: PushArticlePayl): ActionTypes => ({
+  type: PUSH_ARTICLE,
   payload,
 });
 export const removeArticle = (payload: RemoveArticlePayl): ActionTypes => ({

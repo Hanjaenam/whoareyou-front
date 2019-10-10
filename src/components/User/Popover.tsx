@@ -48,7 +48,7 @@ const LogOut = styled.div`
   ${buttonEffect}
 `;
 
-export default () => {
+const Popover = () => {
   const dispatch = useDispatch();
   const { id } = useSelector((state: AppState) => state.user);
   const userPopover = useSelector((state: AppState) => state.header.visible.userPopover);
@@ -75,3 +75,5 @@ export default () => {
     </Container>
   ) : null;
 };
+
+export default Popover;

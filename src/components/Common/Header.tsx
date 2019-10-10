@@ -150,7 +150,7 @@ export default () => {
     <Container>
       <Flex>
         <Button icon={faBars} theme="noBg" onClick={onBarsClick} />
-        <CustomLink to={username ? '/' : '/latest'}>WhoRU</CustomLink>
+        <CustomLink to="/latest">WhoRU</CustomLink>
       </Flex>
       <Right>
         <Flex>

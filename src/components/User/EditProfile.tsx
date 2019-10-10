@@ -64,8 +64,8 @@ export default () => {
 
   const onClick = () =>
     process({ name: username.value, introduce: introduce.value }).then(() => {
-      dispatch(setMessage({ type: 'success', value: '수정되었습니다.' }));
       dispatch(patchUser({ name: username.value, introduce: introduce.value }));
+      dispatch(setMessage({ type: 'success', value: '수정되었습니다.' }));
     });
 
   const disabled = () => {

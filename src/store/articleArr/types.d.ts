@@ -1,5 +1,5 @@
 import {
-  SET_ARTICLE_ARR,
+  PUSH_ARTICLE,
   REMOVE_ARTICLE,
   CREATE_COMMENT,
   REMOVE_COMMENT,
@@ -9,9 +9,11 @@ import {
   REMOVE_LIKE,
   CREATE_BOOKMARK,
   REMOVE_BOOKMARK,
+  SET_ARTICLE,
 } from './actions';
 
-export type SetArticleArrPayl = State[];
+export type SetArticlePayl = State[];
+export type PushArticlePayl = State[];
 export type RemoveArticlePayl = number;
 export interface CreateCommentPayl extends IComment {
   index: number;
@@ -33,9 +35,13 @@ export interface SetCommentPayl {
   };
 }
 
-interface SetArticleArr {
-  type: typeof SET_ARTICLE_ARR;
-  payload: SetArticleArrPayl;
+interface SetArticle {
+  type: typeof SET_ARTICLE;
+  payload: SetArticlePayl;
+}
+interface PushArticle {
+  type: typeof PUSH_ARTICLE;
+  payload: PushArticlePayl;
 }
 
 interface RemoveArticle {
@@ -84,7 +90,8 @@ interface RemoveBookmark {
 }
 
 export type ActionTypes =
-  | SetArticleArr
+  | SetAritcle
+  | PushArticle
   | RemoveArticle
   | CreateComment
   | RemoveComment

@@ -6,11 +6,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'store/reducer';
 import { Basic } from 'types/apiRes/user';
 import userApi from 'api/user';
-import { useApi } from 'hooks';
 import ArticleProvider from 'context/article';
 import Article from 'components/Article';
-import { setArticleArr } from 'store/articleArr/actions';
+import { setArticle, pushArticle } from 'store/articleArr/actions';
 import { Helmet } from 'react-helmet';
+import { ARTICLE_LIMIT } from 'constant';
 
 interface IUserContext {
   isMe: boolean;
@@ -31,23 +31,43 @@ export default ({
     params: { id },
   },
 }: IProps) => {
-  const { process, loading, success } = useApi(userApi.getArticleOnCreator, 'home');
   const { articleArr } = useSelector((state: AppState) => state);
+  const [page, setPage] = useState(0);
   const dispatch = useDispatch();
 
   const [otherUser, setUser] = useState<Basic | null>(null);
   const isMe = useSelector((state: AppState) => state.user.id === Number(id));
   const myName = useSelector((state: AppState) => state.user.name);
 
+  const onScroll = () => {
+    const { scrollHeight, clientHeight } = document.body;
+    const { scrollY } = window;
+    const loadHeight = scrollHeight - clientHeight - 100;
+    if (loadHeight <= scrollY && articleArr.length === ARTICLE_LIMIT * (page + 1))
+      setPage(page + 1);
+  };
+
   useEffect(() => {
     // 내가 아닐 경우에만 정보 가져오기
     if (!isMe) {
       userApi.getOne({ id: Number(id) }).then(({ data }: { data: Basic }) => setUser(data));
     }
-    process({ id: Number(id) }).then((res: { data: ArticleRes[] }) =>
-      dispatch(setArticleArr(res.data)),
-    );
   }, []);
+
+  useEffect(() => {
+    userApi
+      .getArticleOnCreator({ page, id: Number(id) })
+      .then((res: { data: ArticleRes[] }) =>
+        dispatch(page === 0 ? setArticle(res.data) : pushArticle(res.data)),
+      );
+  }, [page]);
+
+  useEffect(() => {
+    window.addEventListener('scroll', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+    };
+  }, [page, articleArr]);
 
   return (
     <HomeTemplate>
@@ -58,13 +78,11 @@ export default ({
           </Helmet>
           <UserContext.Provider value={{ isMe, otherUser }}>
             <UserTemplate>
-              {!loading &&
-                success &&
-                articleArr.map((article: ArticleRes, index: number) => (
-                  <ArticleProvider key={article.id} index={index}>
-                    <Article />
-                  </ArticleProvider>
-                ))}
+              {articleArr.map((article: ArticleRes, index: number) => (
+                <ArticleProvider key={article.id} index={index}>
+                  <Article />
+                </ArticleProvider>
+              ))}
             </UserTemplate>
           </UserContext.Provider>
         </>

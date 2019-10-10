@@ -17,3 +17,5 @@ export const FIND_PASSWORD = {
     PLACEHOLDER: '새 비밀번호 입력',
   },
 };
+
+export const ARTICLE_LIMIT = 10;
