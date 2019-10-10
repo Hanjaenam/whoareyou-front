@@ -5,6 +5,8 @@ import { Status } from 'types/hooks';
 import { AppState } from 'store/reducer';
 import { AxiosPromise, AxiosError } from 'axios';
 import { AuthContext } from 'components/Templates/Common/Auth';
+import { State } from 'store/articleArr/types';
+import { ARTICLE_LIMIT } from 'constant';
 
 const isDev = process.env.NODE_ENV;
 
@@ -115,4 +117,24 @@ export const useApi = <T, K extends keyof T>(
     );
   };
   return { ...status, process };
+};
+
+export const useScrollOnLoad = (articleArr: State[]) => {
+  const [page, setPage] = useState(0);
+  const onScroll = () => {
+    const { scrollHeight, clientHeight } = document.body;
+    const { scrollY } = window;
+    const loadHeight = scrollHeight - clientHeight - 100;
+    if (loadHeight <= scrollY && articleArr.length === ARTICLE_LIMIT * (page + 1))
+      setPage(page + 1);
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+    };
+  }, [page, articleArr]);
+
+  return { page, setPage };
 };

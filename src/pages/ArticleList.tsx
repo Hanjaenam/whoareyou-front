@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from 'store/reducer';
 import { pushArticle, setArticle } from 'store/articleArr/actions';
 import { Helmet } from 'react-helmet';
-import { ARTICLE_LIMIT } from 'constant';
+import { useScrollOnLoad } from 'hooks';
 
 interface IProps {
   match: {
@@ -29,17 +29,9 @@ export default ({
   history: { replace },
 }: IProps) => {
   const { articleArr } = useSelector((state: AppState) => state);
-  const [page, setPage] = useState(0);
   const isLogged = useSelector((state: AppState) => state.user.id !== -1);
   const dispatch = useDispatch();
-
-  const onScroll = () => {
-    const { scrollHeight, clientHeight } = document.body;
-    const { scrollY } = window;
-    const loadHeight = scrollHeight - clientHeight - 250;
-    if (loadHeight <= scrollY && articleArr.length === ARTICLE_LIMIT * (page + 1))
-      setPage(page + 1);
-  };
+  const { page, setPage } = useScrollOnLoad(articleArr);
 
   useEffect(() => {
     if (page !== 0) {
@@ -50,14 +42,7 @@ export default ({
   }, [page]);
 
   useEffect(() => {
-    window.addEventListener('scroll', onScroll);
-    return () => {
-      window.removeEventListener('scroll', onScroll);
-    };
-  }, [page, articleArr]);
-
-  useEffect(() => {
-    if (page !== 0) setPage(0);
+    setPage(0);
     if (category === 'latest' || category === 'favorite' || category === 'bookmark') {
       articleApi.getAll({ page: 0, isLogged, category }).then((res: { data: ArticleRes[] }) => {
         dispatch(setArticle(res.data));

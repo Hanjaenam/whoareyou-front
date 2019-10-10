@@ -90,7 +90,7 @@ interface RemoveBookmark {
 }
 
 export type ActionTypes =
-  | SetAritcle
+  | SetArticle
   | PushArticle
   | RemoveArticle
   | CreateComment
