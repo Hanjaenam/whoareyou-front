@@ -6,16 +6,10 @@ import { AppState } from 'store/reducer';
 import AsideModal from 'components/AsideModal';
 import Header from 'components/Common/Header';
 
-interface IProps {
-  children: ReactNode;
-}
-
 const Container = styled.div`
   position: relative;
-  /* overflow: hidden; */
   display: flex;
   flex-direction: column;
-  height: 100vh;
   max-width: 2000px;
   margin: 0 auto;
 `;
@@ -24,7 +18,6 @@ const Layout = styled.div`
   flex: 1;
   display: flex;
   margin-top: ${props => props.theme.height.header};
-  overflow: scroll;
   @media screen and (max-width: ${props => props.theme.breakpoints.md}) {
     margin-top: ${props => props.theme.height.header};
   }
@@ -45,6 +38,10 @@ const Main = styled.main<{ contractAside: boolean }>`
     margin-left: 0;
   }
 `;
+
+interface IProps {
+  children: ReactNode;
+}
 
 export default ({ children }: IProps) => {
   const contractAside = useSelector((state: AppState) => state.header.contract.aside);

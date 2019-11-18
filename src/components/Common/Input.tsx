@@ -12,6 +12,7 @@ interface IProps {
   type?: string;
   value: string;
   id?: string;
+  [key: string]: any;
 }
 
 interface Input {
@@ -38,6 +39,7 @@ export default ({
   type = 'text',
   value,
   id,
+  ...rest
 }: IProps) => (
   <Input
     disabled={disabled}
@@ -50,5 +52,6 @@ export default ({
     onKeyUp={onKeyUp}
     styles={{ padding }}
     id={id}
+    {...rest}
   />
 );

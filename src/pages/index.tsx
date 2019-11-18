@@ -7,3 +7,4 @@ export { default as UserEdit } from './UserEdit';
 export { default as OAuthCallBack } from './OAuthCallBack';
 export { default as CreateArticle } from './CreateArticle';
 export { default as ArticleEdit } from './ArticleEdit';
+export { default as Follow } from './Follow';

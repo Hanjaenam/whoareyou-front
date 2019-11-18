@@ -33,7 +33,7 @@ const myTheme: DefaultTheme = {
     huge: '1.4rem',
   },
   gap: {
-    tiny: '5px',
+    tiny: '7.5px',
     small: '10px',
     medium: '15px',
     large: '25px',
@@ -52,7 +52,7 @@ const myTheme: DefaultTheme = {
   width: {
     max: {
       authMain: '550px',
-      input: '355px',
+      input: '300px',
     },
     min: {
       input: '330px',
@@ -75,6 +75,8 @@ const myTheme: DefaultTheme = {
     black: 2,
     asideModal: 3,
   },
+  boxShadow:
+    '0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.4)',
 };
 
 export { myTheme };

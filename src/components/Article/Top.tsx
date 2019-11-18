@@ -1,21 +1,21 @@
 import React, { useContext } from 'react';
-import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
-import Button from 'components/Common/Button';
-import tempAvatar from 'assets/avatar.png';
-import { faExpand, faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
-import moment from 'moment';
+import { withRouter } from 'react-router-dom';
+import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { UserContext } from 'pages/User';
 import { useApi } from 'hooks';
-import articleApi from 'api/article';
 import { useDispatch, useSelector } from 'react-redux';
 import { ArticleContext } from 'context/article';
 import { AppState } from 'store/reducer';
 import { removeArticle } from 'store/articleArr/actions';
 import { setMessage } from 'store/notification/actions';
 import { setEditArticle } from 'store/editArticle/actions';
-import Loader from 'components/Common/Loader';
 import { black } from 'styles/mixins/etc';
+import Button from 'components/Common/Button';
+import tempAvatar from 'assets/avatar.png';
+import moment from 'moment';
+import articleApi from 'api/article';
+import Loader from 'components/Common/Loader';
 
 const Container = styled.div`
   display: flex;
@@ -129,7 +129,6 @@ const Top = ({ history: { push } }: IProps) => {
               />
             </>
           )}
-          <Button icon={faExpand} theme="noBg" onClick={() => null} />
         </Func>
       </Container>
     </>

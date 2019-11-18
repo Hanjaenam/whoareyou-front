@@ -2,5 +2,4 @@ import axios from 'axios';
 
 const serverURL = '/api';
 
-export default ({ baseURL }: { baseURL: '/auth' | '/article' | '/user' }) =>
-  axios.create({ baseURL: serverURL + baseURL });
+export default ({ baseURL }: { baseURL: string }) => axios.create({ baseURL: serverURL + baseURL });

@@ -1,13 +1,17 @@
-import React, { ReactNode, useContext, useMemo } from 'react';
+import React, { ReactNode, useContext, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import linkCss from 'styles/mixins/link';
 import MyAvatar from 'components/User/Avatar';
 import { MainHeightAboveLg, mainHeightBelowLg, articleContainer } from 'styles/mixins/etc';
 import { UserContext } from 'pages/User';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'store/reducer';
 import avatarCss from 'styles/mixins/avatar';
+import Button from 'components/Common/Button';
+import followApi from 'api/follow';
+import { useApi } from 'hooks';
+import { PushFollow, RemoveFollow } from 'store/user/actions';
 
 const Container = styled.div`
   display: flex;
@@ -116,14 +120,31 @@ interface IProps {
 export default ({ children }: IProps) => {
   const { isMe, otherUser } = useContext(UserContext);
   const { name, introduce } = useSelector((state: AppState) => state.user);
-
-  const getIntroduce = useMemo(() => {
-    const placeholder = '소개글이 없습니다...';
-    if (isMe) return introduce || placeholder;
-    if (otherUser) return otherUser.introduce || placeholder;
-    return placeholder;
-  }, [isMe ? introduce : otherUser && otherUser.introduce]);
-
+  const isLogged = useSelector((state: AppState) => state.user.id !== -1);
+  const { loading: cLoading, process: cProcess } = useApi(followApi.create, 'home');
+  const { loading: rLoading, process: rProcess } = useApi(followApi.remove, 'home');
+  const [_isFollow, setIsFollow] = useState(otherUser && otherUser.isFollow);
+  const dispatch = useDispatch();
+  const handleCreate = () => {
+    if (otherUser === null) return;
+    cProcess({ whom: otherUser.id }).then(() => {
+      setIsFollow(1);
+      dispatch(PushFollow({ id: otherUser.id, name: otherUser.name, avatar: otherUser.avatar }));
+    });
+  };
+  const handleRemove = () => {
+    if (otherUser === null) return;
+    if (!window.confirm('팔로우를 취소하시겠습니까?')) return;
+    rProcess({ whom: otherUser.id }).then(() => {
+      setIsFollow(null);
+      dispatch(RemoveFollow({ id: otherUser.id }));
+    });
+  };
+  const getIntroduce = () => {
+    const noIntroduce = '소개글이 없습니다...';
+    if (isMe) return introduce || noIntroduce;
+    return (otherUser && otherUser.introduce) || noIntroduce;
+  };
   return (
     <Container>
       <Top>
@@ -132,9 +153,21 @@ export default ({ children }: IProps) => {
           <TextContainer>
             <NameContainer>
               <Name>{isMe ? name : otherUser && otherUser.name}</Name>
-              {isMe && <EditProfile to="/user/edit">프로필 수정</EditProfile>}
+              {isMe ? (
+                <EditProfile to="/user/edit">프로필 수정</EditProfile>
+              ) : (
+                isLogged && (
+                  <Button
+                    theme={_isFollow === 1 ? 'border' : 'withBg'}
+                    onClick={_isFollow === 1 ? handleRemove : handleCreate}
+                    loading={_isFollow === 1 ? rLoading : cLoading}
+                  >
+                    {_isFollow === 1 ? '팔로잉' : '팔로우'}
+                  </Button>
+                )
+              )}
             </NameContainer>
-            <Introduce>{getIntroduce}</Introduce>
+            <Introduce>{getIntroduce()}</Introduce>
           </TextContainer>
         </InfoContainer>
         <Nav>

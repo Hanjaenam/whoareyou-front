@@ -1,5 +1,5 @@
 import { ActionTypes, State } from './types';
-import { LOG_IN, PATCH, LOG_OUT } from './actions';
+import { LOG_IN, PATCH, LOG_OUT, PUSH_FOLLOW, REMOVE_FOLLOW } from './actions';
 
 const initialState: State = {
   id: -1,
@@ -8,6 +8,7 @@ const initialState: State = {
   avatar: null,
   introduce: null,
   createdAt: '',
+  follows: null,
 };
 
 export default (state = initialState, action: ActionTypes): State => {
@@ -32,6 +33,19 @@ export default (state = initialState, action: ActionTypes): State => {
     case LOG_OUT: {
       window.localStorage.removeItem('token');
       return initialState;
+    }
+    case PUSH_FOLLOW: {
+      const { payload } = action;
+      return {
+        ...state,
+        follows: state.follows && [...state.follows, payload],
+      };
+    }
+    case REMOVE_FOLLOW: {
+      return {
+        ...state,
+        follows: state.follows && state.follows.filter(follow => follow.id !== action.payload.id),
+      };
     }
     default:
       return state;

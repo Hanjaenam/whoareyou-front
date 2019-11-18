@@ -93,7 +93,7 @@ export const useApi = <T, K extends keyof T>(
    * 4. 로직이 각각 다른 promise함수들 finally     : 맨 마지막으로 호출된다.
    */
   const process = (__0: T): Promise<any> => {
-    setStatus(s => ({ failure: false, success: false, loading: true }));
+    setStatus({ failure: false, success: false, loading: true });
     return new Promise<any>((res, rej) =>
       api(__0)
         .then(value => {
@@ -121,18 +121,19 @@ export const useApi = <T, K extends keyof T>(
 
 export const useScrollOnLoad = (articleArr: State[]) => {
   const [page, setPage] = useState(0);
-  const onScroll = () => {
+  const handleScroll = () => {
     const { scrollHeight, clientHeight } = document.body;
     const { scrollY } = window;
-    const loadHeight = scrollHeight - clientHeight - 100;
-    if (loadHeight <= scrollY && articleArr.length === ARTICLE_LIMIT * (page + 1))
+    const loadHeight = scrollHeight - clientHeight - 712;
+    if (loadHeight <= scrollY && articleArr.length === ARTICLE_LIMIT * (page + 1)) {
       setPage(page + 1);
+    }
   };
 
   useEffect(() => {
-    window.addEventListener('scroll', onScroll);
+    window.addEventListener('scroll', handleScroll);
     return () => {
-      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, [page, articleArr]);
 

@@ -116,6 +116,7 @@ export default () => {
   const onLogIn = () =>
     process({ email: email.value, password: password.value })
       .then(({ data }: { data: LogInRes }) => {
+        console.log(data);
         dispatch(logIn(data));
         dispatch(setMessage({ type: 'success', value: '환영합니다!' }));
       })

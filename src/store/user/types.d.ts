@@ -1,4 +1,4 @@
-import { LOG_IN, PATCH, LOG_OUT } from './actions';
+import { LOG_IN, PATCH, LOG_OUT, PUSH_FOLLOW, REMOVE_FOLLOW } from './actions';
 
 // payload
 export interface LogInPayl extends State {
@@ -10,6 +10,16 @@ export interface PatchPayl {
   avatar?: string;
   googleId?: string;
   naverId?: string;
+}
+
+export interface PushFollowPayl {
+  id: number;
+  name: string;
+  avatar: string | null;
+}
+
+export interface RemoveFollowPayl {
+  id: number;
 }
 // action
 interface LogIn {
@@ -23,7 +33,18 @@ interface Patch {
 interface LogOut {
   type: typeof LOG_OUT;
 }
-export type ActionTypes = LogIn | Patch | LogOut;
+
+interface PushFollow {
+  type: typeof PUSH_FOLLOW;
+  payload: PushFollowPayl;
+}
+
+interface RemoveFollow {
+  type: typeof REMOVE_FOLLOW;
+  payload: RemoveFollowPayl;
+}
+
+export type ActionTypes = LogIn | Patch | LogOut | PushFollow | RemoveFollow;
 // state
 export interface State {
   id: number;
@@ -32,4 +53,11 @@ export interface State {
   avatar: string | null;
   introduce: string | null;
   createdAt: string;
+  follows:
+    | {
+        id: number;
+        name: string;
+        avatar: string | null;
+      }[]
+    | null;
 }

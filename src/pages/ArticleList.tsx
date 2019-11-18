@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import HomeTemplate from 'components/Templates/Common/Home';
 import ArticleTemplate from 'components/Templates/Article';
 import articleApi from 'api/article';
@@ -33,6 +33,11 @@ export default ({
   const dispatch = useDispatch();
   const { page, setPage } = useScrollOnLoad(articleArr);
 
+  const initPage = () => {
+    window.scrollTo(0, 0);
+    setPage(0);
+  };
+
   useEffect(() => {
     if (page !== 0) {
       articleApi.getAll({ page, isLogged, category }).then((res: { data: ArticleRes[] }) => {
@@ -42,7 +47,7 @@ export default ({
   }, [page]);
 
   useEffect(() => {
-    setPage(0);
+    initPage();
     if (category === 'latest' || category === 'favorite' || category === 'bookmark') {
       articleApi.getAll({ page: 0, isLogged, category }).then((res: { data: ArticleRes[] }) => {
         dispatch(setArticle(res.data));

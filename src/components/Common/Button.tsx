@@ -45,6 +45,7 @@ const Icon = styled(FontAwesomeIcon)`
   user-select: none;
 `;
 
+// theme, onClick 필수
 export default ({
   className,
   padding = 'small',

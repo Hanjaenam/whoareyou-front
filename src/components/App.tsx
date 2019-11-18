@@ -4,8 +4,8 @@ import { HashRouter as Router } from 'react-router-dom';
 import userApi from 'api/user';
 import { logIn } from 'store/user/actions';
 import { AxiosError } from 'axios';
-import { Basic } from 'types/apiRes/user';
 import Notification from 'components/Common/Notification';
+import { State } from 'store/user/types';
 import Routes from './Routes';
 
 export default () => {
@@ -20,7 +20,7 @@ export default () => {
     if (token) {
       userApi
         .getMe()
-        .then(({ data }: { data: Basic }) => dispatch(logIn(data)))
+        .then(({ data }: { data: State }) => dispatch(logIn(data)))
         .catch((err: AxiosError) => {
           if (err.response && err.response.status === 401) window.localStorage.removeItem('token');
         })

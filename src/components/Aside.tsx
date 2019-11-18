@@ -6,6 +6,7 @@ import { faClock } from '@fortawesome/free-regular-svg-icons';
 import { faThumbsUp, faBookmark } from '@fortawesome/free-solid-svg-icons';
 import { useSelector } from 'react-redux';
 import { AppState } from 'store/reducer';
+import TempAvatar from 'assets/avatar.png';
 
 interface IProps {
   modal?: boolean;
@@ -20,14 +21,12 @@ const Icon = styled(FontAwesomeIcon)`
 
 const Item = styled.li``;
 
-const SLink = styled(NavLink)`
+const linkCss = css`
   display: flex;
   align-items: center;
   cursor: pointer;
   text-decoration: none;
   user-select: none;
-  padding: ${props => props.theme.gap.medium} ${props => props.theme.gap.large};
-  font-size: ${props => props.theme.fontSize.medium};
   border-right: 3px solid transparent;
   &:hover {
     background-color: ${props => props.theme.colors.aside({ r: '-20', g: '-20', b: '-20' })};
@@ -44,11 +43,19 @@ const SLink = styled(NavLink)`
   }
 `;
 
+const SLink = styled(NavLink)`
+  ${linkCss}
+  padding: ${props => props.theme.gap.medium} ${props => props.theme.gap.large};
+  font-size: ${props => props.theme.fontSize.medium};
+`;
+
 const Line = styled.div`
   height: 1px;
   background-color: ${props => props.theme.colors.secondary};
   margin: ${props => props.theme.gap.tiny} 0;
 `;
+
+const FollowContainer = styled.div``;
 
 const Text = styled.p`
   padding: ${props => props.theme.gap.tiny} ${props => props.theme.gap.large};
@@ -71,7 +78,7 @@ const contractCss = css`
       text-align: center;
     }
   }
-  ${Text}, ${Line} {
+  ${FollowContainer}, ${Line} {
     display: none;
   }
 `;
@@ -80,7 +87,6 @@ const Container = styled.aside<{ contract: boolean; modal?: boolean }>`
   height: ${props => `calc(100vh - ${props.theme.height.header})`};
   width: ${props => props.theme.width.aside.xl};
   background-color: ${props => props.theme.colors.aside()};
-
   ${props =>
     !props.modal &&
     css`
@@ -96,9 +102,24 @@ const Container = styled.aside<{ contract: boolean; modal?: boolean }>`
     `}
 `;
 
+const FollowLink = styled(NavLink)`
+  ${linkCss};
+  padding: ${props => props.theme.gap.tiny} ${props => props.theme.gap.medium};
+`;
+
+const FollowAvatar = styled.img`
+  width: 35px;
+  height: 35px;
+  border-radius: ${props => props.theme.borderRadius.avatar};
+  margin-right: ${props => props.theme.gap.small};
+`;
+
+const FollowName = styled.p``;
+
 const Aside = ({ modal }: IProps) => {
   const contract = useSelector((state: AppState) => state.header.contract.aside);
   const isLogged = useSelector((state: AppState) => state.user.id !== -1);
+  const { follows } = useSelector((state: AppState) => state.user);
   return (
     <Container contract={contract} modal={modal}>
       <Menu>
@@ -108,12 +129,6 @@ const Aside = ({ modal }: IProps) => {
             <span>최신</span>
           </SLink>
         </Item>
-        {/* <Item>
-          <SLink to="/tag">
-            <Icon icon={faFireAlt} />
-            <span>인기</span>
-          </SLink>
-        </Item> */}
         {isLogged && (
           <>
             <Item>
@@ -129,7 +144,16 @@ const Aside = ({ modal }: IProps) => {
               </SLink>
             </Item>
             <Line />
-            <Text>팔로우</Text>
+            <FollowContainer>
+              <Text>팔로우</Text>
+              {follows &&
+                follows.map(follow => (
+                  <FollowLink key={follow.id} to={`/user/${follow.id}`}>
+                    <FollowAvatar src={follow.avatar || TempAvatar} />
+                    <FollowName>{follow.name}</FollowName>
+                  </FollowLink>
+                ))}
+            </FollowContainer>
           </>
         )}
       </Menu>

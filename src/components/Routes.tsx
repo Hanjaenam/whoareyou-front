@@ -10,6 +10,7 @@ import {
   OAuthCallBack,
   CreateArticle,
   ArticleEdit,
+  Follow,
 } from 'pages';
 import { useSelector } from 'react-redux';
 import { AppState } from 'store/reducer';
@@ -22,6 +23,7 @@ const Routes = () => {
       <Route path="/user/:id" component={User} />
       <Route path="/new" component={CreateArticle} />
       <Route path="/edit" component={ArticleEdit} />
+      <Route path="/users" component={Follow} />
       <Route path="/:category" component={ArticleList} />
       <Redirect from="*" to="/latest" />
     </Switch>
@@ -31,6 +33,7 @@ const Routes = () => {
       <Route path="/register" component={Register} />
       <Route path="/findPassword" component={FindPassword} />
       <Route path="/callback" component={OAuthCallBack} />
+      <Route path="/users" component={Follow} />
       <Route path="/user/:id" component={User} />
       <Route path="/:category" component={ArticleList} />
       <Redirect from="*" to="/" />

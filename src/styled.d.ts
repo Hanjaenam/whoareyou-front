@@ -69,5 +69,6 @@ declare module 'styled-components' {
       nav: string;
     };
     zIndex: { header: number; black: number; asideModal: number };
+    boxShadow: string;
   }
 }

@@ -6,6 +6,14 @@ const userAxios = getAxios({
 });
 
 export default {
+  getAll: () =>
+    userAxios({
+      url: '/',
+      method: 'GET',
+      headers: {
+        authorization: `Token ${window.localStorage.getItem('token')}`,
+      },
+    }),
   // headers 를 create에 정의하면 OAuth2 login 이 되지 않는다.
   getMe: () =>
     userAxios({
@@ -67,6 +75,14 @@ export default {
       url: '/changePassword',
       method: 'PATCH',
       data: { prePassword, newPassword },
+      headers: {
+        authorization: `Token ${window.localStorage.getItem('token')}`,
+      },
+    }),
+  search: ({ name }: { name: string }) =>
+    userAxios({
+      url: `/search?name=${name}`,
+      method: 'GET',
       headers: {
         authorization: `Token ${window.localStorage.getItem('token')}`,
       },

@@ -4,18 +4,17 @@ import UserTemplate from 'components/Templates/UserTemp';
 import { State as ArticleRes } from 'store/articleArr/types';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'store/reducer';
-import { Basic } from 'types/apiRes/user';
+import { OtherUser } from 'types/apiRes/user';
 import userApi from 'api/user';
 import ArticleProvider from 'context/article';
 import Article from 'components/Article';
 import { setArticle, pushArticle } from 'store/articleArr/actions';
 import { Helmet } from 'react-helmet';
-import { ARTICLE_LIMIT } from 'constant';
 import { useScrollOnLoad } from 'hooks';
 
 interface IUserContext {
   isMe: boolean;
-  otherUser: Basic | null;
+  otherUser: OtherUser | null;
 }
 
 export const UserContext = createContext<IUserContext>({
@@ -35,17 +34,22 @@ export default ({
   const { articleArr } = useSelector((state: AppState) => state);
   const dispatch = useDispatch();
 
-  const [otherUser, setUser] = useState<Basic | null>(null);
+  const [otherUser, setUser] = useState<OtherUser | null>(null);
   const isMe = useSelector((state: AppState) => state.user.id === Number(id));
   const myName = useSelector((state: AppState) => state.user.name);
 
   const { page, setPage } = useScrollOnLoad(articleArr);
 
-  useEffect(() => {
-    // 내가 아닐 경우에만 정보 가져오기
+  const initPage = () => {
+    window.scrollTo(0, 0);
     setPage(0);
+  };
+
+  useEffect(() => {
+    initPage();
+    // 내가 아닐 경우에만 정보 가져오기
     if (!isMe) {
-      userApi.getOne({ id: Number(id) }).then(({ data }: { data: Basic }) => setUser(data));
+      userApi.getOne({ id: Number(id) }).then(({ data }: { data: OtherUser }) => setUser(data));
     }
     userApi
       .getArticleOnCreator({ page: 0, id: Number(id) })
@@ -58,7 +62,6 @@ export default ({
         .getArticleOnCreator({ page, id: Number(id) })
         .then((res: { data: ArticleRes[] }) => dispatch(pushArticle(res.data)));
   }, [page]);
-
   return (
     <HomeTemplate>
       {(isMe || otherUser) && (

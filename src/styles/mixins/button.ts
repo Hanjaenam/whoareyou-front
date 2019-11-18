@@ -66,6 +66,7 @@ ${basic({ padding })}
 ${disabled && _disabled('withBg')}
 ${loading && _loading}
   background-color: ${props => props.theme.colors[color]};
+  border:1px solid transparent;
   > span {
     color: white;
   }
